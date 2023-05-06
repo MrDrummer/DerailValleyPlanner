@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using DerailValleyPlanner.Data;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace DerailValleyPlanner;
 
@@ -14,6 +16,9 @@ public static class MauiProgram
 
         builder.Services.AddMauiBlazorWebView();
 
+        builder.Services.AddDbContext<JobContext>(options =>
+            options.UseSqlite("Data Source=Dvp.db;"));
+
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();
         builder.Logging.AddDebug();
@@ -21,6 +26,15 @@ public static class MauiProgram
 
         builder.Services.AddSingleton<WeatherForecastService>();
 
-        return builder.Build();
+        var app = builder.Build();
+
+        using var scope = app.Services.CreateScope();
+        var services = scope.ServiceProvider;
+
+        var context = services.GetRequiredService<JobContext>();
+        context.Database.EnsureDeleted();
+        context.Database.EnsureCreated();
+
+        return app;
     }
 }
