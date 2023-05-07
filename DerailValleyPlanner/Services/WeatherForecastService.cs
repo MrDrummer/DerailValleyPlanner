@@ -1,4 +1,5 @@
-namespace DerailValleyPlanner.Data;
+using DerailValleyPlanner.Data;
+namespace DerailValleyPlanner.Services;
 
 public class WeatherForecastService
 {

@@ -13,8 +13,8 @@
         <EnableDefaultCssItems>false</EnableDefaultCssItems>
 
         <!-- Display name -->
-        <ApplicationTitle>DerailValleyPlanner</ApplicationTitle>
-
+        <ApplicationTitle>Derail Valley Planner</ApplicationTitle>
+        
         <!-- App Identifier -->
         <ApplicationId>com.companyname.derailvalleyplanner</ApplicationId>
         <ApplicationIdGuid>FB3B614E-1A49-48A1-BA67-3DDCD73B1F1B</ApplicationIdGuid>
@@ -33,7 +33,8 @@
 
     <ItemGroup>
         <!-- App Icon -->
-        <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+<!--        <MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />-->
+        <MauiIcon Include="Resources\AppIcon\appicon.svg" TintColor="#b7410e" Color="#71797E" />
 
         <!-- Splash Screen -->
         <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
@@ -53,10 +54,6 @@
         <PackageReference Include="Microsoft.Data.Sqlite" Version="7.0.5" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.5" />
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Pages\Job\" />
     </ItemGroup>
 
 </Project>

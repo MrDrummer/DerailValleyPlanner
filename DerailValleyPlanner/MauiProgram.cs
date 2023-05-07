@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using DerailValleyPlanner.Data;
+using DerailValleyPlanner.Services;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -15,9 +16,22 @@ public static class MauiProgram
             .ConfigureFonts(fonts => { fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular"); });
 
         builder.Services.AddMauiBlazorWebView();
+        
+        // const Environment.SpecialFolder folder = Environment.SpecialFolder.LocalApplicationData;
+        // var path = Environment.GetFolderPath(folder);
+        var path = AppDomain.CurrentDomain.BaseDirectory;
+        var dbPath = Path.Join(path, "dvp.db");
+        
+        Console.WriteLine($"dbPath : {dbPath}");
 
-        builder.Services.AddDbContext<JobContext>(options =>
-            options.UseSqlite("Data Source=Dvp.db;"));
+        builder.Services.AddDbContext<PlannerContext>((_, options) =>
+        {
+            options.UseSqlite($"Data Source={dbPath};");
+            // options.UseSqlite($"Data Source=dvp.db"));
+            options
+                .EnableDetailedErrors()
+                .EnableSensitiveDataLogging();
+        });
 
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();
@@ -31,7 +45,7 @@ public static class MauiProgram
         using var scope = app.Services.CreateScope();
         var services = scope.ServiceProvider;
 
-        var context = services.GetRequiredService<JobContext>();
+        var context = services.GetRequiredService<PlannerContext>();
         context.Database.EnsureDeleted();
         context.Database.EnsureCreated();
 

@@ -1,6 +1,7 @@
 ﻿@page "/fetchdata"
 
 @using DerailValleyPlanner.Data
+@using DerailValleyPlanner.Services
 @inject WeatherForecastService ForecastService
 
 <h1>Weather forecast</h1>
@@ -36,12 +37,18 @@ else
         }
         </tbody>
     </table>
+    <button class="btn btn-primary" @onclick="GetForecast">Refresh</button>
 }
 
 @code {
     private WeatherForecast[] forecasts;
 
     protected override async Task OnInitializedAsync()
+    {
+        await GetForecast();
+    }
+
+    async Task GetForecast()
     {
         forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
     }

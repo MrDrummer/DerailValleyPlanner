@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DerailValleyPlanner.Data;
 
-public class JobContext : DbContext
+public class PlannerContext : DbContext
 {
-    public JobContext(DbContextOptions<JobContext> options)
+    public PlannerContext(DbContextOptions<PlannerContext> options)
         : base(options)
     {
     }
