@@ -21,7 +21,7 @@ using System.Xml.Serialization;
 [System.Diagnostics.DebuggerStepThroughAttribute()]
 [System.ComponentModel.DesignerCategoryAttribute("code")]
 [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true)]
-[System.Xml.Serialization.XmlRootAttribute(Namespace="", IsNullable=false)]
+[System.Xml.Serialization.XmlRootAttribute(ElementName = "planner", Namespace="", IsNullable=false)]
 public partial class Config {
     
     private DesignatorConfig[] designatorField;

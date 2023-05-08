@@ -84,7 +84,7 @@ internal abstract class Program
 
             foreach (var designator in config.designator)
             {
-                Console.WriteLine("name: {0}, code: {1}, value: {2}", designator.name, designator.code, designator.Value);
+                Console.WriteLine("name: {0}, code: {1}", designator.name, designator.code);
             }
         }
         catch (Exception ex)
