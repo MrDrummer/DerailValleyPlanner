@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DerailValleyPlanner", "DerailValleyPlanner\DerailValleyPlanner.csproj", "{F163115C-5F37-43A3-B3F6-E036ECF685D8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XMLConfigTest", "XMLConfigTest\XMLConfigTest.csproj", "{5C37733D-067F-4CC5-8D63-F8C9C4BC184E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{F163115C-5F37-43A3-B3F6-E036ECF685D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F163115C-5F37-43A3-B3F6-E036ECF685D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F163115C-5F37-43A3-B3F6-E036ECF685D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C37733D-067F-4CC5-8D63-F8C9C4BC184E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C37733D-067F-4CC5-8D63-F8C9C4BC184E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C37733D-067F-4CC5-8D63-F8C9C4BC184E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C37733D-067F-4CC5-8D63-F8C9C4BC184E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
