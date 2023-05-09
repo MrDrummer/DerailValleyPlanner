@@ -6,4 +6,9 @@ public partial class MainPage : ContentPage
     {
         InitializeComponent();
     }
+
+    public void SomeCommand()
+    {
+        Console.WriteLine("Some command");
+    }
 }
