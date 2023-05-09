@@ -3,6 +3,7 @@
 @using Microsoft.Extensions.Logging
 @using DerailValleyPlanner.Data
 @inject ILogger<Create> Logger
+@inject NavigationManager NavManager
 
 <h3>Add Job</h3>
 
@@ -64,6 +65,7 @@
         Logger.LogInformation("Consist ID: {ConsistId}", _job.ConsistId);
         Context.Jobs.Add(_job);
         await Context.SaveChangesAsync();
+        NavManager.NavigateTo("/job");
     }
 
 }

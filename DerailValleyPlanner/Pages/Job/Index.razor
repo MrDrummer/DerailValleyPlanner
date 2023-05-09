@@ -1,9 +1,11 @@
-﻿@page "/job/index"
+﻿@page "/job"
 @using DerailValleyPlanner.Models
 @using DerailValleyPlanner.Data
 @using Microsoft.EntityFrameworkCore
+@inject NavigationManager NavManager
 <h3>Index</h3>
 
+<button class="btn btn-primary" @onclick="GoToCreatePage">New</button>
 @if (_jobs == null)
 {
     <p>
@@ -38,7 +40,7 @@ else
                 <td>@job.FromTrack</td>
                 <td>@job.ToYard</td>
                 <td>@job.ToTrack</td>
-                <td>@job.Mass kg</td>
+                <td>@job.Mass t</td>
                 <td>@job.Length m</td>
                 <td>@job.Wagons</td>
                 <td>$@job.Pays</td>
@@ -63,5 +65,10 @@ else
     async Task GetJobs()
     {
         _jobs = await Context.Jobs.ToListAsync();
+    }
+
+    void GoToCreatePage()
+    {
+        NavManager.NavigateTo("/job/create");
     }
 }
