@@ -1,0 +1,71 @@
+﻿@page "/job/edit"
+@using DerailValleyPlanner.Models
+@using Microsoft.Extensions.Logging
+@using DerailValleyPlanner.Data
+@inject ILogger<Create> Logger
+@inject NavigationManager NavManager
+
+<h3>Edit Job</h3>
+
+<EditForm Model="@_job" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="mb-3">
+        <label for="job-consist-id">Consist ID:</label><br/>
+        <InputText class="form-control" id="job-consist-id" @bind-Value="_job.ConsistId" />
+    </div>
+    <div class="mb-3">
+        <label for="job-from-yard">From Yard:</label><br/>
+        <InputText class="form-control" id="job-from-yard" @bind-Value="_job.FromYard" />
+    </div>
+    <div class="mb-3">
+        <label for="job-from-track">From Track:</label><br/>
+        <InputText class="form-control" id="job-from-track" @bind-Value="_job.FromTrack" />
+    </div>
+    <div class="mb-3">
+        <label for="job-to-yard">To Yard:</label><br/>
+        <InputText class="form-control" id="job-to-yard" @bind-Value="_job.ToYard" />
+    </div>
+    <div class="mb-3">
+        <label for="job-to-track">To Track:</label><br/>
+        <InputText class="form-control" id="job-to-track" @bind-Value="_job.ToTrack" />
+    </div>
+    <div class="mb-3">
+        <label for="job-mass">Mass:</label><br/>
+        <InputNumber class="form-control" TValue="int" id="job-mass" @bind-Value="_job.Mass" />
+    </div>
+    <div class="mb-3">
+        <label for="job-length">Length:</label><br/>
+        <InputNumber class="form-control" TValue="int" id="job-length" @bind-Value="_job.Length" />
+    </div>
+    <div class="mb-3">
+        <label for="job-wagons">Wagon Count:</label><br/>
+        <InputNumber class="form-control" TValue="int" id="job-wagons" @bind-Value="_job.Wagons" />
+    </div>
+    <div class="mb-3">
+        <label for="job-pays">Pays:</label><br/>
+        <InputNumber class="form-control" TValue="int" id="job-pays" @bind-Value="_job.Pays" />
+    </div>
+    <div class="mb-3">
+        <label for="job-description">Description:</label><br/>
+        <InputTextArea class="form-control" id="job-description" @bind-Value="_job.Description" />
+    </div>
+    
+    <button class="btn btn-primary" type="submit">Submit</button>
+</EditForm>
+
+@code {
+    private Job _job = new();
+
+    [Inject]
+    private PlannerContext Context { get; set; }
+
+    private async Task HandleValidSubmit()
+    {
+        Logger.LogInformation("Consist ID: {ConsistId}", _job.ConsistId);
+        Context.Jobs.Add(_job);
+        await Context.SaveChangesAsync();
+        NavManager.NavigateTo("/job");
+    }
+
+}
