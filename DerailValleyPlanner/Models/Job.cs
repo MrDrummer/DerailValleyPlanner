@@ -1,13 +1,12 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
 
 namespace DerailValleyPlanner.Models;
 
 public class Job
 {
-    // [key]
     // Primary Key
+    [Key]
     public int JobId { set; get; }
     
     // ID as seen in-game

@@ -1,0 +1,67 @@
+﻿@page "/job/index"
+@using DerailValleyPlanner.Models
+@using DerailValleyPlanner.Data
+@using Microsoft.EntityFrameworkCore
+<h3>Index</h3>
+
+@if (_jobs == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Internal ID</th>
+            <th>Consist ID</th>
+            <th>From Yard</th>
+            <th>From Track</th>
+            <th>To Yard</th>
+            <th>To Track</th>
+            <th>Mass</th>
+            <th>Length</th>
+            <th>Wagon Count</th>
+            <th>Pays</th>
+            <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var job in _jobs)
+        {
+            <tr>
+                <td>@job.JobId</td>
+                <td>@job.ConsistId</td>
+                <td>@job.FromYard</td>
+                <td>@job.FromTrack</td>
+                <td>@job.ToYard</td>
+                <td>@job.ToTrack</td>
+                <td>@job.Mass kg</td>
+                <td>@job.Length m</td>
+                <td>@job.Wagons</td>
+                <td>$@job.Pays</td>
+                <td>@job.Description</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Job> _jobs;
+
+    [Inject]
+    private PlannerContext Context { get; set; }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await GetJobs();
+    }
+
+    async Task GetJobs()
+    {
+        _jobs = await Context.Jobs.ToListAsync();
+    }
+}
