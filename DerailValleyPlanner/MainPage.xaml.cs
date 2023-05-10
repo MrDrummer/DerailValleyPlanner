@@ -1,14 +1,20 @@
-﻿namespace DerailValleyPlanner;
+﻿using System.Windows.Input;
+
+namespace DerailValleyPlanner;
 
 public partial class MainPage : ContentPage
 {
     public MainPage()
     {
         InitializeComponent();
-    }
 
-    public void SomeCommand()
+        OnOpenCommandClick = new Command<string>(async (s) => await OpenFile(s));
+    }
+    
+    public ICommand OnOpenCommandClick { get; private set; }
+
+    public async Task OpenFile(string item)
     {
-        Console.WriteLine("Some command");
+        Console.WriteLine(item);
     }
 }

@@ -1,7 +1,9 @@
 ﻿@page "/job"
+
 @using DerailValleyPlanner.Models
 @using DerailValleyPlanner.Data
 @using Microsoft.EntityFrameworkCore
+
 @inject NavigationManager NavManager
 <h3>Index</h3>
 
@@ -16,19 +18,19 @@ else
 {
     <table class="table">
         <thead>
-        <tr>
-            <th>Internal ID</th>
-            <th>Consist ID</th>
-            <th>From Yard</th>
-            <th>From Track</th>
-            <th>To Yard</th>
-            <th>To Track</th>
-            <th>Mass</th>
-            <th>Length</th>
-            <th>Wagon Count</th>
-            <th>Pays</th>
-            <th>Description</th>
-        </tr>
+            <tr>
+                <th>Internal ID</th>
+                <th>Consist ID</th>
+                <th>From Yard</th>
+                <th>From Track</th>
+                <th>To Yard</th>
+                <th>To Track</th>
+                <th>Mass</th>
+                <th>Length</th>
+                <th>Wagon Count</th>
+                <th>Pays</th>
+                <th>Description</th>
+            </tr>
         </thead>
         <tbody>
         @foreach (var job in _jobs)

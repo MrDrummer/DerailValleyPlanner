@@ -7,35 +7,9 @@
 
     <ContentPage.MenuBarItems>
         <MenuBarItem Text="File">
-            <MenuFlyoutItem Text="Do thing"
-                            Command="{Binding SomeCommand}" />
+            <MenuFlyoutItem Text="Open"
+                            Command="{Binding OnOpenCommandClick}" />
         </MenuBarItem>
-    <!--     <MenuBarItem Text="Locations"> -->
-    <!--         <MenuFlyoutSubItem Text="Change Location"> -->
-    <!--             <MenuFlyoutItem Text="Redmond, USA" -->
-    <!--                             Command="{Binding ChangeLocationCommand}" -->
-    <!--                             CommandParameter="Redmond" /> -->
-    <!--             <MenuFlyoutItem Text="London, UK" -->
-    <!--                             Command="{Binding ChangeLocationCommand}" -->
-    <!--                             CommandParameter="London" /> -->
-    <!--             <MenuFlyoutItem Text="Berlin, DE" -->
-    <!--                             Command="{Binding ChangeLocationCommand}" -->
-    <!--                             CommandParameter="Berlin"/> -->
-    <!--         </MenuFlyoutSubItem> -->
-    <!--         <MenuFlyoutSeparator />             -->
-    <!--         <MenuFlyoutItem Text="Add Location" -->
-    <!--                         Command="{Binding AddLocationCommand}" /> -->
-    <!--         <MenuFlyoutItem Text="Edit Location" -->
-    <!--                         Command="{Binding EditLocationCommand}" /> -->
-    <!--         <MenuFlyoutItem Text="Remove Location" -->
-    <!--                         Command="{Binding RemoveLocationCommand}" /> -->
-    <!--     </MenuBarItem> -->
-    <!--     <MenuBarItem Text="View"> -->
-    <!--         <MenuFlyoutItem Text="Refresh" -->
-    <!--                         Command="{Binding RefreshCommand}" /> -->
-    <!--         <MenuFlyoutItem Text="Change Theme" -->
-    <!--                         Command="{Binding ChangeThemeCommand}" /> -->
-    <!--     </MenuBarItem> -->
     </ContentPage.MenuBarItems>
     
     <BlazorWebView x:Name="blazorWebView" HostPage="wwwroot/index.html">
