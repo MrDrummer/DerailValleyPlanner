@@ -1,8 +1,14 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace DerailValleyPlanner.Models;
 
+// TODO: Save consist ID as Type and Number (Last two parts)
+// TODO: Use Yard code instead of name
+// TODO: Use Track number instead of string
+
+// [PrimaryKey(nameof(JobId))]
 public class Job
 {
     // Primary Key
@@ -11,36 +17,28 @@ public class Job
     
     // ID as seen in-game
     [Required]
-    [StringLength(10, ErrorMessage = "Format: XXX-YYY-NN")]
-    [RegularExpression("\\w{2,3}-\\w{2,3}-\\d{2}")]
+    [StringLength(10, ErrorMessage = "Format: XXX-YY-NN")]
+    [RegularExpression("\\w{2,3}-\\w{2}-\\d{1,2}")]
     [DisplayName("Consist ID")]
     public string ConsistId { get; set; }
     
     // Dropdown based on config
     [Required]
-    [MinLength(4)]
-    [MaxLength(20)]
     [DisplayName("From Yard")]
     public string FromYard { get; set; }
     
     // Dropdown based on the yard selected
     [Required]
-    [MinLength(4)]
-    [MaxLength(20)]
     [DisplayName("From Track")]
     public string FromTrack { get; set; }
     
     // Dropdown based on config
     [Required]
-    [MinLength(4)]
-    [MaxLength(20)]
     [DisplayName("To Yard")]
     public string ToYard { get; set; }
     
     // Dropdown based on the yard selected
     [Required]
-    [MinLength(4)]
-    [MaxLength(20)]
     [DisplayName("To Track")]
     public string ToTrack { get; set; }
     
@@ -54,7 +52,7 @@ public class Job
     [Range(10, 10000, 
         ErrorMessage = "Value for {0} must be between {1} and {2}.")]
     [DisplayName("Length")]
-    public int Length { get; set; }
+    public double Length { get; set; }
     
     [Required]
     [Range(1, 200, 
@@ -66,6 +64,7 @@ public class Job
     [Range(10, 100000, 
         ErrorMessage = "Value for {0} must be between {1} and {2}.")]
     [DisplayName("Pays")]
+    [DisplayFormat(DataFormatString = "{0:C0}")]
     public int Pays { get; set; }
     
     // Free-form text to help identify the wagons.
@@ -73,4 +72,23 @@ public class Job
     [MaxLength(1000)]
     [DisplayName("Description")]
     public string Description { get; set; }
+
+    public double MassPerWagon => Math.Round((double)Mass / Wagons, 2);
+
+    public int? FromIndex => Stops.FirstOrDefault(s => s.Type == Stop.Kind.Load)?.StopId;
+    
+    public int? ToIndex => Stops.FirstOrDefault(s => s.Type == Stop.Kind.Unload)?.StopId;
+
+    public IEnumerable<Stop> Stops { get; set; }
+
+    // Note: this is important so the select can compare pizzas
+    public override bool Equals(object o) {
+        var other = o as Job;
+        return other?.JobId==JobId;
+    }
+
+    // Note: this is important so the select can compare pizzas
+    public override int GetHashCode() => JobId.GetHashCode();
+
+    public override string ToString() => ConsistId;
 }

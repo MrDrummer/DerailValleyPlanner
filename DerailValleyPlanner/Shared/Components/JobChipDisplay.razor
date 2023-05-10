@@ -1,0 +1,15 @@
+﻿@using DerailValleyPlanner.Models
+
+<MudTooltip Placement="Placement.Left" Arrow="true" Color="Color.Dark">
+    <ChildContent>
+        <MudChip Color="Color.Dark">@Job.ConsistId</MudChip>
+    </ChildContent>
+    <TooltipContent>
+        <YardDisplay YardCode="@Job.FromYard" /> <MudIcon Icon="fas fa-right"></MudIcon> <YardDisplay YardCode="@Job.ToYard" />
+    </TooltipContent>
+</MudTooltip>
+
+@code {
+    [Parameter]
+    public Job Job { get; set; }
+}

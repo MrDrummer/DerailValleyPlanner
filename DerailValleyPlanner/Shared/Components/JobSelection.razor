@@ -1,0 +1,92 @@
+﻿@using Microsoft.EntityFrameworkCore
+@using DerailValleyPlanner.Data
+@using DerailValleyPlanner.Models
+@using System.Collections.ObjectModel
+@using System.Linq
+@using ABI.System.Collections.Generic
+
+<MudSelect T="Job" MultiSelectionTextFunc="@(new Func<List<string>, string>(GetMultiSelectionText))" Label="@Label" SelectedValues="@Jobs" SelectedValuesChanged="@JobsChanged" MultiSelection="true" Disabled="@Disabled" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter">
+    @foreach (var job in _jobList)
+    {
+        <MudSelectItem T="Job" Value="@job">@job.ConsistId</MudSelectItem>
+    }
+</MudSelect>
+
+@code {
+    [Inject]
+    private PlannerContext PlannerContext { get; set; }
+    
+    [Parameter]
+    public string Label { get; set; }
+    
+    [Parameter]
+    public bool Disabled { get; set; }
+
+    [Parameter]
+    public Stop.Kind? Type { get; set; }
+
+    [Parameter]
+    public IEnumerable<Job> Jobs { get; set; }
+
+    private IEnumerable<Job> TempJobs { get; set; }
+    
+    [Parameter]
+    public string Yard { get; set; }
+    
+    [Parameter]
+    public EventCallback<IEnumerable<Job>> JobsChanged { get; set; }
+
+    private IEnumerable<Job> _jobList = new HashSet<Job>();
+
+    private string _yardCache = null;
+    private Stop.Kind? _typeCache = null;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        if (_yardCache == null) await GetJobs();
+    }
+    
+
+    protected override async void OnParametersSet()
+    {
+        if (_yardCache == Yard || _typeCache == Type) return;
+        _yardCache = Yard;
+        _typeCache = Type;
+        await GetJobs();
+    }
+
+    async Task GetJobs()
+    {
+        var jobs = PlannerContext.Jobs;
+        IQueryable<Job> query;
+        
+        switch (Type)
+        {
+            case Stop.Kind.Load:
+                query = jobs.Where(j => j.FromYard == Yard);
+                break;
+            case Stop.Kind.Unload:
+                query = jobs.Where(j => j.ToYard == Yard);
+                break;
+            case Stop.Kind.Via:
+            default:
+                _jobList = new HashSet<Job>();
+                await JobsChanged.InvokeAsync(new HashSet<Job>());
+                StateHasChanged();
+                return;
+        }
+        
+        _jobList = await query.ToListAsync();
+        StateHasChanged();
+        // _jobList = await PlannerContext.Jobs.ToListAsync();
+    }
+    
+    Func<Job, string> _converter = p => p?.ConsistId;
+
+    private string GetMultiSelectionText(List<string> selectedValues)
+    {
+        return selectedValues.Count > 0
+            ? string.Join(", ", selectedValues.Select(x => x))
+            : "Nothing Selected";
+    }
+}

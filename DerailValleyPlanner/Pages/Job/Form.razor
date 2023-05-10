@@ -1,0 +1,98 @@
+﻿@page "/job/create"
+@page "/job/edit/{JobId:int}"
+
+@using DerailValleyPlanner.Models
+@using DerailValleyPlanner.Data
+@using DerailValleyPlanner.Services
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.Extensions.Logging
+
+@inject ILogger<Form> Logger
+@inject NavigationManager NavManager
+@inject ConfigService Config
+
+<EditForm Model="@_job" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator/>
+    <MudGrid>
+        <MudItem xs="12">
+            <MudCard>
+                <MudCardHeader>
+                    <MudText Typo="Typo.h3" Align="Align.Center">
+                        Add Job
+                    </MudText>
+                </MudCardHeader>
+                <MudCardContent>
+                    @if (!success)
+                    {
+                        <MudText Color="@Color.Error">
+                            <ValidationSummary />
+                        </MudText>
+                    }
+                    <MudTextField Label="Consist ID" @bind-Value="_job.ConsistId" Mask="@_consistIdMask"></MudTextField>
+                    <YardSelection Label="From Yard" @bind-Yard="_job.FromYard" Exclude="@_job.ToYard"></YardSelection>
+                    <TrackSelection Label="From Track" Yard="@_job.FromYard" @bind-Track="_job.FromTrack"></TrackSelection>
+                    <YardSelection Label="To Yard" @bind-Yard="_job.ToYard" Exclude="@_job.FromYard"></YardSelection>
+                    <TrackSelection Label="To Track" Yard="@_job.ToYard" @bind-Track="_job.ToTrack"></TrackSelection>
+                    <MudNumericField Label="Mass" @bind-Value="_job.Mass"></MudNumericField>
+                    <MudNumericField Label="Length" @bind-Value="_job.Length"></MudNumericField>
+                    <MudNumericField Label="Wagon Count" @bind-Value="_job.Wagons"></MudNumericField>
+                    <MudNumericField Label="Pays" @bind-Value="_job.Pays"></MudNumericField>
+                    <MudTextField Label="Description" @bind-Value="_job.Description"></MudTextField>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">@(_create ? "Add" : "Update")</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+</EditForm>
+
+@code {
+    [Parameter] public int? JobId { get; set; }
+
+    private readonly PatternMask _consistIdMask = new ("aa-aa-00");
+    
+    bool success;
+    private Job _job;
+    private bool _create;
+
+    [Inject]
+    private PlannerContext Context { get; set; }
+    
+    
+    protected override async Task OnInitializedAsync()
+    {
+        if (JobId == null)
+        {
+            _create = true;
+            _job = new Job();
+        }
+        else
+        {
+            _create = false;
+            _job = await Context.Jobs.FirstOrDefaultAsync(j => j.JobId == JobId);
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        Console.WriteLine("HI MOM!");
+        Logger.LogInformation("Consist ID: {ConsistId}", _job.ConsistId);
+        Logger.LogInformation("Config: {Config}", Config.GetType());
+
+        // Config.Yards
+        if (_create)
+        {
+            Context.Jobs.Add(_job);
+        }
+        else
+        {
+            Context.Jobs.Update(_job);
+        }
+        await Context.SaveChangesAsync();
+        success = true;
+        StateHasChanged();
+        NavManager.NavigateTo("/job");
+    }
+
+}

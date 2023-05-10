@@ -1,16 +1,31 @@
 ﻿@page "/counter"
+<MudSelect T="Pizza" ToStringFunc="@converter" @bind-SelectedValues="@pizzas" MultiSelection="true" Label="Select your pizza" AnchorOrigin="Origin.BottomCenter" Variant="Variant.Outlined" >
+    <MudSelectItem T="Pizza" Value="@(new Pizza() { Name="Cardinale"})"/>
+    <MudSelectItem T="Pizza" Value="@(new Pizza() { Name="Diavolo"})" />
+    <MudSelectItem T="Pizza" Value="@(new Pizza() { Name="Margarita"})" />
+    <MudSelectItem T="Pizza" Value="@(new Pizza() { Name="Spinaci"})" />
+</MudSelect>
 
-<h1>Counter</h1>
-
-<p role="status">Current count: @currentCount</p>
-
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
-
+<MudText Typo="Typo.h6" Class="mud-width-full">Pizzas Selected:</MudText>
+<MudText Typo="Typo.caption" Class="mud-width-full">@pizzas.Count()</MudText>
 @code {
-    private int currentCount = 0;
-
-    private void IncrementCount()
+    IEnumerable<Pizza> pizzas = new HashSet<Pizza>
     {
-        currentCount++;
+        new () { Name="Cardinale" }
+    };
+    public class Pizza
+    {
+        public string Name { get; set; }
+
+        // Note: this is important so the select can compare pizzas
+        public override bool Equals(object o) {
+            var other = o as Pizza;
+            return other?.Name==Name;
+        }
+
+        // Note: this is important so the select can compare pizzas
+        public override int GetHashCode() => Name.GetHashCode();
     }
+
+    Func<Pizza,string> converter = p => p?.Name;
 }

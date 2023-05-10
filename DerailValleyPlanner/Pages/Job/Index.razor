@@ -1,11 +1,13 @@
 ﻿@page "/job"
+
 @using DerailValleyPlanner.Models
 @using DerailValleyPlanner.Data
 @using Microsoft.EntityFrameworkCore
-@inject NavigationManager NavManager
-<h3>Index</h3>
 
-<button class="btn btn-primary" @onclick="GoToCreatePage">New</button>
+@inject NavigationManager NavManager
+<MudText Typo="Typo.h3">Jobs</MudText>
+
+<MudButton OnClick="GoToCreatePage" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">New</MudButton>
 @if (_jobs == null)
 {
     <p>
@@ -14,49 +16,53 @@
 }
 else
 {
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Internal ID</th>
-            <th>Consist ID</th>
-            <th>From Yard</th>
-            <th>From Track</th>
-            <th>To Yard</th>
-            <th>To Track</th>
-            <th>Mass</th>
-            <th>Length</th>
-            <th>Wagon Count</th>
-            <th>Pays</th>
-            <th>Description</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var job in _jobs)
-        {
-            <tr>
-                <td>@job.JobId</td>
-                <td>@job.ConsistId</td>
-                <td>@job.FromYard</td>
-                <td>@job.FromTrack</td>
-                <td>@job.ToYard</td>
-                <td>@job.ToTrack</td>
-                <td>@job.Mass t</td>
-                <td>@job.Length m</td>
-                <td>@job.Wagons</td>
-                <td>$@job.Pays</td>
-                <td>@job.Description</td>
-            </tr>
-        }
-        </tbody>
-    </table>
+    <MudDataGrid
+        Filterable="true"
+        Items="@_jobs"
+        T="Job"
+        Groupable="false"
+        Dense="true">
+        <Columns>
+            @* <PropertyColumn Property="j => j.JobId" Title="Internal ID" /> *@
+            <PropertyColumn Property="j => j.ConsistId" Title="Consist ID"/>
+            <PropertyColumn Property="j => j.FromIndex" Title="From Index"/>
+            <PropertyColumn Property="j => j.FromYard" Title="From Yard">
+                <CellTemplate>
+                    <YardDisplay YardCode="@context.Item.FromYard" Short="true"></YardDisplay>
+                </CellTemplate>
+            </PropertyColumn>
+            <PropertyColumn Property="j => j.FromTrack" Title="From Track"/>
+            <PropertyColumn Property="j => j.ToIndex" Title="To Index"/>
+            <PropertyColumn Property="j => j.ToYard" Title="To Yard">
+                <CellTemplate>
+                    <YardDisplay YardCode="@context.Item.ToYard" Short="true"></YardDisplay>
+                </CellTemplate>
+            </PropertyColumn>
+            <PropertyColumn Property="j => j.ToTrack" Title="To Track"/>
+            <PropertyColumn Property="j => j.Mass.ToString() + 't'" Title="Mass"/>
+            <PropertyColumn Property="j => j.Length.ToString() + 'm'" Title="Length"/>
+            <PropertyColumn Property="j => j.Wagons" Title="Wagon Count"/>
+            <PropertyColumn Property="j => '$' + j.Pays.ToString()" Title="Pays"/>
+            <PropertyColumn Property="j => j.Description" Title="Description"/>
+            <PropertyColumn Property="j => j.MassPerWagon.ToString() + 't'" Title="Mass Per Wagon"/>
+            <TemplateColumn CellClass="d-flex justify-end" Sortable="false" Filterable="false">
+                <CellTemplate>
+                    <MudMenu Icon="fad fa-ellipsis-vertical" AnchorOrigin="Origin.BottomLeft" TransformOrigin="Origin.TopLeft">
+                        <MudMenuItem OnClick="() => GoToEditPage(context)" Icon="fas fa-pencil" IconSize="Size.Small">Edit</MudMenuItem>
+                        <MudMenuItem OnClick="() => DeleteJob(context)" Icon="fad fa-trash" IconSize="Size.Small" Disabled="@context.Item.Stops.Any()">Delete</MudMenuItem>
+                    </MudMenu>
+                </CellTemplate>
+            </TemplateColumn>
+        </Columns>
+    </MudDataGrid>
 }
 
 @code {
-    private List<Job> _jobs;
+    private IEnumerable<Job> _jobs;
 
     [Inject]
-    private PlannerContext Context { get; set; }
-    
+    private PlannerContext PlannerContext { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         await GetJobs();
@@ -64,11 +70,25 @@ else
 
     async Task GetJobs()
     {
-        _jobs = await Context.Jobs.ToListAsync();
+        _jobs = await PlannerContext.Jobs.Include(j => j.Stops).ToListAsync();
+    }
+
+    async Task DeleteJob(CellContext<Job> context)
+    {
+        PlannerContext.Jobs.Remove(context.Item);
+        await PlannerContext.SaveChangesAsync();
+        StateHasChanged();
     }
 
     void GoToCreatePage()
     {
         NavManager.NavigateTo("/job/create");
     }
+
+    void GoToEditPage(CellContext<Job> context)
+    {
+        
+        NavManager.NavigateTo($"/job/edit/{context.Item.JobId}");
+    }
+
 }

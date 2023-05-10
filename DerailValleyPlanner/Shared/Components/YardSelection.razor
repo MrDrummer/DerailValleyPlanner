@@ -1,0 +1,44 @@
+﻿@using DerailValleyPlanner.Services
+
+@inject ConfigService Config
+
+<MudSelect T="string" Label="@Label" Value="Yard" ValueChanged="YardChanged" Disabled="@Disabled" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter">
+    @foreach (var yard in _yardList)
+    {
+        <MudSelectItem Value="@yard.Code" Disabled="@(yard.Code == Exclude)">@yard.Name (@yard.Code)</MudSelectItem>
+    }
+</MudSelect>
+
+@code {
+    [Parameter]
+    public string Label { get; set; }
+    
+    [Parameter]
+    public bool Disabled { get; set; }
+    
+    [Parameter]
+    public string Exclude { get; set; }
+
+    [Parameter]
+    public string Yard { get; set; }
+    
+    [Parameter]
+    public EventCallback<string> YardChanged { get; set; }
+
+    private List<YardListItem> _yardList;
+
+    protected override void OnInitialized()
+    {
+        _yardList = Config.Yards.Select(y => new YardListItem
+        {
+            Name = y.Name,
+            Code = y.Code
+        }).ToList();
+    }
+
+    private class YardListItem
+    {
+        public string Name { get; set; }
+        public string Code { get; set; }
+    }
+}

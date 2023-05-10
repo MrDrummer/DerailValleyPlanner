@@ -2,6 +2,7 @@
 using DerailValleyPlanner.Data;
 using DerailValleyPlanner.Services;
 using Microsoft.EntityFrameworkCore;
+using MudBlazor.Services;
 
 
 namespace DerailValleyPlanner;
@@ -17,10 +18,11 @@ public static class MauiProgram
 
         builder.Services.AddMauiBlazorWebView();
         
-        // const Environment.SpecialFolder folder = Environment.SpecialFolder.LocalApplicationData;
-        // var path = Environment.GetFolderPath(folder);
-        var path = AppDomain.CurrentDomain.BaseDirectory;
-        var dbPath = Path.Join(path, "dvp.db");
+        const Environment.SpecialFolder folder = Environment.SpecialFolder.MyDocuments;
+        var path = Environment.GetFolderPath(folder);
+        // var path = AppDomain.CurrentDomain.BaseDirectory;
+        // const string path = "./";
+        var dbPath = Path.Combine(path, "dvp.db");
         
         Console.WriteLine($"dbPath : {dbPath}");
 
@@ -45,6 +47,8 @@ public static class MauiProgram
 #endif
 
         builder.Services.AddSingleton<WeatherForecastService>();
+        builder.Services.AddSingleton<ConfigService>();
+        builder.Services.AddMudServices();
 
         var app = builder.Build();
 
@@ -52,7 +56,7 @@ public static class MauiProgram
         var services = scope.ServiceProvider;
 
         var context = services.GetRequiredService<PlannerContext>();
-        context.Database.EnsureDeleted();
+        // context.Database.EnsureDeleted();
         context.Database.EnsureCreated();
 
         return app;

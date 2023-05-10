@@ -1,7 +1,7 @@
 # This workflow will build a .NET project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 
-name: Build .NET NAUI App (CI)
+name: Build .NET MAUI App (CI)
 
 on:
   push:
@@ -15,12 +15,26 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 7.0.x
-    - name: Install .NET Maui
-      run: dotnet workload install maui
-    - name: Build
-      run: dotnet build -c Release -f net7.0-windows10.0.19041.0
+      - uses: actions/checkout@v3
+
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 7.0.x
+
+      - name: Install .NET Maui
+        run: dotnet workload install maui
+
+#      - name: Restore NuGet packages
+#        run: dotnet restore ${{ env.PROJECT_PATH }} --ignore-failed-sources
+        
+      - name: Build
+        run: dotnet build DerailValleyPlanner/DerailValleyPlanner.csproj -c Release -f net7.0-windows10.0.19041.0
+
+#      - name: Upload installer assets
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: Assets
+#          path: |
+#            Installer/Assets/*
+#          retention-days: 60
