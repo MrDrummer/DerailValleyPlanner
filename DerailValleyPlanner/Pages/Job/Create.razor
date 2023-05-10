@@ -52,6 +52,8 @@
     </div>
     
     <button class="btn btn-primary" type="submit">Submit</button>
+    
+    <MyComponent Job="_job"></MyComponent>
 </EditForm>
 
 @code {
@@ -59,7 +61,7 @@
 
     [Inject]
     private PlannerContext Context { get; set; }
-
+    
     private async Task HandleValidSubmit()
     {
         Logger.LogInformation("Consist ID: {ConsistId}", _job.ConsistId);

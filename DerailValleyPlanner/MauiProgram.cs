@@ -2,6 +2,7 @@
 using DerailValleyPlanner.Data;
 using DerailValleyPlanner.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 
 namespace DerailValleyPlanner;
@@ -11,11 +12,21 @@ public static class MauiProgram
     public static MauiApp CreateMauiApp()
     {
         var builder = MauiApp.CreateBuilder();
+        
         builder
             .UseMauiApp<App>()
             .ConfigureFonts(fonts => { fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular"); });
 
         builder.Services.AddMauiBlazorWebView();
+        builder.Configuration.AddXmlFile("Configs/Config.xml", optional: false);
+        // builder.Services.Configure<Config>(config => Configure);
+        builder.Services.AddOptions<Config>();
+
+
+        builder.Services.AddSingleton<Config>(provider => {
+            return new Config();
+        });
+
         
         // const Environment.SpecialFolder folder = Environment.SpecialFolder.LocalApplicationData;
         // var path = Environment.GetFolderPath(folder);
