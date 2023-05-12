@@ -16,41 +16,21 @@
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Internal ID</th>
-                <th>Consist ID</th>
-                <th>From Yard</th>
-                <th>From Track</th>
-                <th>To Yard</th>
-                <th>To Track</th>
-                <th>Mass</th>
-                <th>Length</th>
-                <th>Wagon Count</th>
-                <th>Pays</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody>
-        @foreach (var job in _jobs)
-        {
-            <tr>
-                <td>@job.JobId</td>
-                <td>@job.ConsistId</td>
-                <td>@job.FromYard</td>
-                <td>@job.FromTrack</td>
-                <td>@job.ToYard</td>
-                <td>@job.ToTrack</td>
-                <td>@job.Mass t</td>
-                <td>@job.Length m</td>
-                <td>@job.Wagons</td>
-                <td>$@job.Pays</td>
-                <td>@job.Description</td>
-            </tr>
-        }
-        </tbody>
-    </table>
+    <MudDataGrid Items="@_jobs" Filterable="true" SortMode="SortMode.Multiple" Groupable="false">
+        <Columns>
+            <PropertyColumn Property="j => j.JobId" Title="Internal ID" />
+            <PropertyColumn Property="j => j.ConsistId" Title="Consist ID"/>
+            <PropertyColumn Property="j => j.FromYard" Title="From Yard"/>
+            <PropertyColumn Property="j => j.FromTrack" Title="From Track"/>
+            <PropertyColumn Property="j => j.ToYard" Title="To Yard"/>
+            <PropertyColumn Property="j => j.ToTrack" Title="To Track"/>
+            <PropertyColumn Property="j => j.Mass.ToString() + 't'" Title="Mass"/>
+            <PropertyColumn Property="j => j.Length.ToString() + 'm'" Title="Length"/>
+            <PropertyColumn Property="j => j.Wagons" Title="Wagon Count"/>
+            <PropertyColumn Property="j => '$' + j.Pays.ToString()"  Title="Pays"/>
+            <PropertyColumn Property="j => j.Description" Title="Description"/>
+        </Columns>
+    </MudDataGrid>
 }
 
 @code {
