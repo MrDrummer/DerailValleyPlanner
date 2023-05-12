@@ -2,6 +2,7 @@
 using DerailValleyPlanner.Data;
 using DerailValleyPlanner.Services;
 using Microsoft.EntityFrameworkCore;
+using MudBlazor.Services;
 
 
 namespace DerailValleyPlanner;
@@ -45,6 +46,7 @@ public static class MauiProgram
 #endif
 
         builder.Services.AddSingleton<WeatherForecastService>();
+        builder.Services.AddMudServices();
 
         var app = builder.Build();
 
