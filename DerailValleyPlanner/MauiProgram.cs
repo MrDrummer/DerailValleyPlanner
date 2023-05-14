@@ -46,6 +46,7 @@ public static class MauiProgram
 #endif
 
         builder.Services.AddSingleton<WeatherForecastService>();
+        builder.Services.AddSingleton<ConfigService>();
         builder.Services.AddMudServices();
 
         var app = builder.Build();

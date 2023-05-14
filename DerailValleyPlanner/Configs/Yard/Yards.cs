@@ -26,22 +26,22 @@ using System.Xml.Serialization;
 [XmlRoot(ElementName = "planner", Namespace="", IsNullable=false)]
 public class Config {
     
-    private DesignatorConfig[] _designatorField;
+    private List<DesignatorConfig> _designatorsField;
     
-    private YardConfig[] _yardField;
+    private List<YardConfig> _yardsField;
     
     /// <remarks/>
     [XmlElement("designator")]
-    public DesignatorConfig[] Designator {
-        get => _designatorField;
-        set => _designatorField = value;
+    public List<DesignatorConfig> Designators {
+        get => _designatorsField;
+        set => _designatorsField = value;
     }
     
     /// <remarks/>
     [XmlElement("yard")]
-    public YardConfig[] Yard {
-        get => _yardField;
-        set => _yardField = value;
+    public List<YardConfig> Yards {
+        get => _yardsField;
+        set => _yardsField = value;
     }
 }
 
@@ -89,26 +89,28 @@ public class DesignatorConfig {
 [XmlType(AnonymousType=true)]
 public class YardConfig {
     
-    private YardDirectionConfig[] _directionField;
+    private List<YardDirectionConfig> _directionsField;
     
-    private YardGroupConfig[] _groupField;
+    private List<YardGroupConfig> _groupsField;
     
     private string _nameField;
     
     private string _codeField;
     
+    private string _colorField;
+    
     /// <remarks/>
     [XmlElement("direction")]
-    public YardDirectionConfig[] Direction {
-        get => _directionField;
-        set => _directionField = value;
+    public List<YardDirectionConfig> Directions {
+        get => _directionsField;
+        set => _directionsField = value;
     }
     
     /// <remarks/>
     [XmlElement("group")]
-    public YardGroupConfig[] Group {
-        get => _groupField;
-        set => _groupField = value;
+    public List<YardGroupConfig> Groups {
+        get => _groupsField;
+        set => _groupsField = value;
     }
     
     /// <remarks/>
@@ -123,6 +125,13 @@ public class YardConfig {
     public string Code {
         get => _codeField;
         set => _codeField = value;
+    }
+    
+    /// <remarks/>
+    [XmlAttribute()]
+    public string Color {
+        get => _colorField;
+        set => _colorField = value;
     }
 }
 
@@ -163,7 +172,7 @@ public class YardGroupConfig {
     
     private string _noteField;
     
-    private YardGroupTrackConfig[] _trackField;
+    private List<YardGroupTrackConfig> _tracksField;
     
     private string _nameField;
     
@@ -177,9 +186,9 @@ public class YardGroupConfig {
     
     /// <remarks/>
     [XmlElement("track")]
-    public YardGroupTrackConfig[] Track {
-        get => _trackField;
-        set => _trackField = value;
+    public List<YardGroupTrackConfig> Tracks {
+        get => _tracksField;
+        set => _tracksField = value;
     }
     
     /// <remarks/>
@@ -207,7 +216,7 @@ public class YardGroupTrackConfig {
     
     private string _noteField;
     
-    private string[] _textField;
+    private List<string> _textField;
     
     private sbyte _idField;
     
@@ -225,7 +234,7 @@ public class YardGroupTrackConfig {
     
     /// <remarks/>
     [XmlText()]
-    public string[] Text {
+    public List<string> Text {
         get => _textField;
         set => _textField = value;
     }

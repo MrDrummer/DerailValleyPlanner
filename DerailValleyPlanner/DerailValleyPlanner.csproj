@@ -58,7 +58,13 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Configs\" />
+        <Folder Include="./Configs" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Update="Configs\Yard\Yards.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
 </Project>

@@ -2,10 +2,12 @@
 
 @using DerailValleyPlanner.Models
 @using DerailValleyPlanner.Data
+@using DerailValleyPlanner.Services
 @using Microsoft.Extensions.Logging
 
 @inject ILogger<Create> Logger
 @inject NavigationManager NavManager
+@inject ConfigService Config
 
 <h3>Add Job</h3>
 
@@ -64,7 +66,12 @@
 
     private async Task HandleValidSubmit()
     {
+        Console.WriteLine("HI MOM!");
         Logger.LogInformation("Consist ID: {ConsistId}", _job.ConsistId);
+        Logger.LogInformation("Config: {Config}", Config.Config.Designators.Count);
+        
+        // Config.Yards
+        
         Context.Jobs.Add(_job);
         await Context.SaveChangesAsync();
         NavManager.NavigateTo("/job");
