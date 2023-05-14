@@ -8,7 +8,7 @@ namespace DerailValleyPlanner.Services;
 public class ConfigService
 {
     public Config Config;
-    private List<Yard> _yards;
+    private List<Yard> Yards { get; set; }
     
     public ConfigService()
     {
@@ -31,18 +31,6 @@ public class ConfigService
 
     private void LoadYards()
     {
-        _yards = Config.Yards.Select(y => new Yard(y)).ToList();
-    }
-
-    public List<Yard> Yards
-    {
-        set
-        {
-            _yards = value;
-        }
-        get
-        {
-            return _yards;
-        }
+        Yards = Config.Yards.Select(y => new Yard(y)).ToList();
     }
 }
