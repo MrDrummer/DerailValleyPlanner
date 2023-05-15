@@ -1,5 +1,4 @@
 ﻿using DerailValleyPlanner.Configs.Yard;
-using DerailValleyPlanner.Services;
 
 namespace DerailValleyPlanner.Models;
 
@@ -10,9 +9,11 @@ public class Yard
     public string Color { get; set; }
     public List<string> Directions { get; set; }
     public List<Group> Groups { get; set; }
+    public List<DesignatorConfig> DesignatorConfig { get; set; }
 
-    public Yard(YardConfig yardConfig)
+    public Yard(List<DesignatorConfig> designatorConfig, YardConfig yardConfig)
     {
+        DesignatorConfig = designatorConfig;
         Name = yardConfig.Name;
         Code = yardConfig.Code;
         Color = yardConfig.Color;

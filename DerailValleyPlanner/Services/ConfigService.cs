@@ -31,6 +31,6 @@ public class ConfigService
 
     private void LoadYards()
     {
-        Yards = Config.Yards.Select(y => new Yard(y)).ToList();
+        Yards = Config.Yards.Select(y => new Yard(Config.Designators, y)).ToList();
     }
 }
