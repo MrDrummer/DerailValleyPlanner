@@ -59,7 +59,19 @@
 </EditForm>
 
 @code {
-    private Job _job = new();
+    private Job _job = new()
+    {
+        ConsistId = "AA-BB-11",
+        FromYard = "abcd",
+        FromTrack = "abcd",
+        ToYard = "abcd",
+        ToTrack = "abcd",
+        Mass = 10,
+        Length = 10,
+        Pays = 10,
+        Wagons = 10,
+        Description = "abcd"
+    };
 
     [Inject]
     private PlannerContext Context { get; set; }
