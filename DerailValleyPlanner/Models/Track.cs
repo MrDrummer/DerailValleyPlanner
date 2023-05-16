@@ -12,15 +12,17 @@ public class Track
     public string TypeCode { get; set; }
     
 
-    public Track(Yard yard, YardGroupTrackConfig trackConfig)
+    public Track(Yard yard, Group group, YardGroupTrackConfig trackConfig)
     {
         Console.WriteLine(trackConfig.Direction == null);
         Id = trackConfig.Id;
         Note = trackConfig.Note;
         Yard = yard;
-        Directions = trackConfig.Direction == null
-            ? yard.Directions
-            : new List<string> { trackConfig.Direction };
+        Directions = trackConfig.Direction != null
+            ? new List<string> { trackConfig.Direction }
+            : group.Directions.Count > 0
+                ? group.Directions
+                : yard.Directions;
         var des = yard.DesignatorConfig.Find(d => d.Code == trackConfig.Type);
         TypeName = des.Name;
         TypeCode = des.Code;
