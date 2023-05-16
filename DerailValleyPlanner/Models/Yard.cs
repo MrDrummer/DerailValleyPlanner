@@ -17,7 +17,7 @@ public class Yard
         Name = yardConfig.Name;
         Code = yardConfig.Code;
         Color = yardConfig.Color;
-        Groups = yardConfig.Groups.Select(g => new Group(this, g)).ToList();
         Directions = yardConfig.Directions.Select(d => d.Type).ToList();
+        Groups = yardConfig.Groups.Select(g => new Group(this, g)).ToList();
     }
 }
