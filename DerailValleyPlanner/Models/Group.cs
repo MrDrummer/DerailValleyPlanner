@@ -8,6 +8,7 @@ public class Group
     public string Code { get; set; }
     private Yard Yard { get; set; }
     public List<Track> Tracks { get; set; }
+    public List<YardDirectionConfig> Directions { get; set; }
 
     public Group(Yard yard, YardGroupConfig groupConfig)
     {
@@ -15,5 +16,8 @@ public class Group
         Name = groupConfig.Name;
         Code = groupConfig.Code;
         Tracks = groupConfig.Tracks.Select(t => new Track(Yard, t)).ToList();
+        Directions = groupConfig.Directions.Count == 0
+            ? yard.Directions
+            : groupConfig.Directions;
     }
 }

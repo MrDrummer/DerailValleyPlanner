@@ -170,11 +170,20 @@ public class YardGroupConfig {
     
     private string _noteField;
     
+    private List<YardDirectionConfig> _directionsField;
+    
     private List<YardGroupTrackConfig> _tracksField;
     
     private string _nameField;
     
     private string _codeField;
+    
+    /// <remarks/>
+    [XmlElement("direction")]
+    public List<YardDirectionConfig> Directions {
+        get => _directionsField;
+        set => _directionsField = value;
+    }
     
     /// <remarks/>
     public string Note {
