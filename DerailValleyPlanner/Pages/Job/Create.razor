@@ -80,7 +80,7 @@
     {
         Console.WriteLine("HI MOM!");
         Logger.LogInformation("Consist ID: {ConsistId}", _job.ConsistId);
-        Logger.LogInformation("Config: {Config}", Config.Config.Designators.Count);
+        Logger.LogInformation("Config: {Config}", Config.GetType());
         
         // Config.Yards
         
