@@ -7,7 +7,7 @@ namespace DerailValleyPlanner.Services;
 
 public class ConfigService
 {
-    public Config Config;
+    private Config _config;
     private List<Yard> Yards { get; set; }
     
     public ConfigService()
@@ -25,12 +25,12 @@ public class ConfigService
     {
         var serializer = new XmlSerializer(typeof(Config));
         using var reader = new StreamReader(path);
-        Config = (Config)serializer.Deserialize(reader);
+        _config = (Config)serializer.Deserialize(reader);
         LoadYards();
     }
 
     private void LoadYards()
     {
-        Yards = Config.Yards.Select(y => new Yard(Config.Designators, y)).ToList();
+        Yards = _config.Yards.Select(y => new Yard(_config.Designators, y)).ToList();
     }
 }
