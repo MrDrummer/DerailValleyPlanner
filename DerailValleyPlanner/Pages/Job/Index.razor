@@ -7,7 +7,7 @@
 @inject NavigationManager NavManager
 <h3>Index</h3>
 
-<button class="btn btn-primary" @onclick="GoToCreatePage">New</button>
+<MudButton OnClick="GoToCreatePage" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">New</MudButton>
 @if (_jobs == null)
 {
     <p>

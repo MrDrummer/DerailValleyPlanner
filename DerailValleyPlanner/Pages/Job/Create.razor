@@ -9,56 +9,48 @@
 @inject NavigationManager NavManager
 @inject ConfigService Config
 
-<h3>Add Job</h3>
-
-<EditForm Model="@_job" OnValidSubmit="@HandleValidSubmit">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-    <div class="mb-3">
-        <label for="job-consist-id">Consist ID:</label><br/>
-        <InputText class="form-control" id="job-consist-id" @bind-Value="_job.ConsistId" />
-    </div>
-    <div class="mb-3">
-        <label for="job-from-yard">From Yard:</label><br/>
-        <InputText class="form-control" id="job-from-yard" @bind-Value="_job.FromYard" />
-    </div>
-    <div class="mb-3">
-        <label for="job-from-track">From Track:</label><br/>
-        <InputText class="form-control" id="job-from-track" @bind-Value="_job.FromTrack" />
-    </div>
-    <div class="mb-3">
-        <label for="job-to-yard">To Yard:</label><br/>
-        <InputText class="form-control" id="job-to-yard" @bind-Value="_job.ToYard" />
-    </div>
-    <div class="mb-3">
-        <label for="job-to-track">To Track:</label><br/>
-        <InputText class="form-control" id="job-to-track" @bind-Value="_job.ToTrack" />
-    </div>
-    <div class="mb-3">
-        <label for="job-mass">Mass:</label><br/>
-        <InputNumber class="form-control" TValue="int" id="job-mass" @bind-Value="_job.Mass" />
-    </div>
-    <div class="mb-3">
-        <label for="job-length">Length:</label><br/>
-        <InputNumber class="form-control" TValue="int" id="job-length" @bind-Value="_job.Length" />
-    </div>
-    <div class="mb-3">
-        <label for="job-wagons">Wagon Count:</label><br/>
-        <InputNumber class="form-control" TValue="int" id="job-wagons" @bind-Value="_job.Wagons" />
-    </div>
-    <div class="mb-3">
-        <label for="job-pays">Pays:</label><br/>
-        <InputNumber class="form-control" TValue="int" id="job-pays" @bind-Value="_job.Pays" />
-    </div>
-    <div class="mb-3">
-        <label for="job-description">Description:</label><br/>
-        <InputTextArea class="form-control" id="job-description" @bind-Value="_job.Description" />
-    </div>
-    
-    <button class="btn btn-primary" type="submit">Submit</button>
+<EditForm Model="@_job" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator/>
+    <MudGrid>
+        <MudItem xs="12">
+            <MudCard>
+                <MudText Typo="Typo.h3" Align="Align.Center">
+                    Add Job
+                </MudText>
+            </MudCard>
+        </MudItem>
+@if (!success)
+{
+        <MudItem xs="12">
+                <MudText Color="@Color.Error">
+                    <ValidationSummary />
+                </MudText>
+        </MudItem>
+}
+        <MudItem xs="12">
+            <MudCard>
+                <MudCardContent>
+                    <MudTextField Label="Consist ID" @bind-Value="_job.ConsistId"></MudTextField>
+                    <MudTextField Label="From Yard" @bind-Value="_job.FromYard"></MudTextField>
+                    <MudTextField Label="From Track" @bind-Value="_job.FromTrack"></MudTextField>
+                    <MudTextField Label="To Yard" @bind-Value="_job.ToYard"></MudTextField>
+                    <MudTextField Label="To Track" @bind-Value="_job.ToTrack"></MudTextField>
+                    <MudNumericField Label="Mass" @bind-Value="_job.Mass"></MudNumericField>
+                    <MudNumericField Label="Length" @bind-Value="_job.Length"></MudNumericField>
+                    <MudNumericField Label="Wagon Count" @bind-Value="_job.Wagons"></MudNumericField>
+                    <MudNumericField Label="Pays" @bind-Value="_job.Pays"></MudNumericField>
+                    <MudTextField Label="Description" @bind-Value="_job.Description"></MudTextField>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Register</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
 </EditForm>
 
 @code {
+    bool success;
     private Job _job = new()
     {
         ConsistId = "AA-BB-11",
@@ -86,6 +78,8 @@
         
         Context.Jobs.Add(_job);
         await Context.SaveChangesAsync();
+        success = true;
+        StateHasChanged();
         NavManager.NavigateTo("/job");
     }
 
