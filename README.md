@@ -11,3 +11,4 @@
    1. Get the xaml bindings working for the file menu dropdown
 5. Add Locos config file
    1. Since mods can add locos, this needs to be configurable by the user
+6. Change nav menu to be tabs along the top of the window
