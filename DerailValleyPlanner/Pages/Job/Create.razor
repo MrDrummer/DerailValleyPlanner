@@ -1,8 +1,10 @@
 ﻿@page "/job/create"
+@page "/job/edit/{JobId:int}"
 
 @using DerailValleyPlanner.Models
 @using DerailValleyPlanner.Data
 @using DerailValleyPlanner.Services
+@using Microsoft.EntityFrameworkCore
 @using Microsoft.Extensions.Logging
 
 @inject ILogger<Create> Logger
@@ -50,23 +52,41 @@
 </EditForm>
 
 @code {
+    [Parameter] public int? JobId { get; set; }
+    
     bool success;
-    private Job _job = new()
-    {
-        ConsistId = "AA-BB-11",
-        FromYard = "abcd",
-        FromTrack = "abcd",
-        ToYard = "abcd",
-        ToTrack = "abcd",
-        Mass = 10,
-        Length = 10,
-        Pays = 10,
-        Wagons = 10,
-        Description = "abcd"
-    };
+    private Job _job;
+    private bool _create;
 
     [Inject]
     private PlannerContext Context { get; set; }
+    
+    
+    protected override async Task OnInitializedAsync()
+    {
+        if (JobId == null)
+        {
+            _create = true;
+            _job = new Job
+            {
+                ConsistId = "AA-BB-11",
+                FromYard = "abcd",
+                FromTrack = "abcd",
+                ToYard = "abcd",
+                ToTrack = "abcd",
+                Mass = 10,
+                Length = 10,
+                Pays = 10,
+                Wagons = 10,
+                Description = "abcd"
+            };
+        }
+        else
+        {
+            _create = false;
+            _job = await Context.Jobs.FirstOrDefaultAsync(j => j.JobId == JobId);
+        }
+    }
 
     private async Task HandleValidSubmit()
     {
@@ -75,8 +95,14 @@
         Logger.LogInformation("Config: {Config}", Config.GetType());
         
         // Config.Yards
-        
-        Context.Jobs.Add(_job);
+        if (_create)
+        {
+            Context.Jobs.Add(_job);
+        }
+        else
+        {
+            Context.Jobs.Update(_job);
+        }
         await Context.SaveChangesAsync();
         success = true;
         StateHasChanged();
