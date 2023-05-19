@@ -5,7 +5,7 @@
 @using Microsoft.EntityFrameworkCore
 
 @inject NavigationManager NavManager
-<h3>Index</h3>
+<MudText Typo="Typo.h3">Jobs</MudText>
 
 <MudButton OnClick="GoToCreatePage" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">New</MudButton>
 @if (_jobs == null)
@@ -29,6 +29,14 @@ else
             <PropertyColumn Property="j => j.Wagons" Title="Wagon Count"/>
             <PropertyColumn Property="j => '$' + j.Pays.ToString()"  Title="Pays"/>
             <PropertyColumn Property="j => j.Description" Title="Description"/>
+            <TemplateColumn CellClass="d-flex justify-end">
+                <CellTemplate>
+                    <MudMenu Icon="fad fa-ellipsis-vertical" AnchorOrigin="Origin.BottomLeft" TransformOrigin="Origin.TopLeft">
+                        <MudMenuItem>Edit</MudMenuItem>
+                        <MudMenuItem>Delete</MudMenuItem>
+                    </MudMenu>
+                </CellTemplate>
+            </TemplateColumn>
         </Columns>
     </MudDataGrid>
 }
