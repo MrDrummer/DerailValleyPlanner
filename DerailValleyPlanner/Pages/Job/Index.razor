@@ -27,12 +27,12 @@ else
             <PropertyColumn Property="j => j.Mass.ToString() + 't'" Title="Mass"/>
             <PropertyColumn Property="j => j.Length.ToString() + 'm'" Title="Length"/>
             <PropertyColumn Property="j => j.Wagons" Title="Wagon Count"/>
-            <PropertyColumn Property="j => '$' + j.Pays.ToString()"  Title="Pays"/>
+            <PropertyColumn Property="j => '$' + j.Pays.ToString()" Title="Pays"/>
             <PropertyColumn Property="j => j.Description" Title="Description"/>
             <TemplateColumn CellClass="d-flex justify-end">
                 <CellTemplate>
                     <MudMenu Icon="fad fa-ellipsis-vertical" AnchorOrigin="Origin.BottomLeft" TransformOrigin="Origin.TopLeft">
-                        <MudMenuItem>Edit</MudMenuItem>
+                        <MudMenuItem OnClick="() => GoToEditPage(context)">Edit</MudMenuItem>
                         <MudMenuItem>Delete</MudMenuItem>
                     </MudMenu>
                 </CellTemplate>
@@ -60,5 +60,10 @@ else
     void GoToCreatePage()
     {
         NavManager.NavigateTo("/job/create");
+    }
+
+    void GoToEditPage(CellContext<Job> context)
+    {
+        NavManager.NavigateTo($"/job/edit/{context.Item.JobId}");
     }
 }

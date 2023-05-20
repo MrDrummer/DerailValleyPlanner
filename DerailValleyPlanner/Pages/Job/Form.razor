@@ -16,22 +16,18 @@
     <MudGrid>
         <MudItem xs="12">
             <MudCard>
-                <MudText Typo="Typo.h3" Align="Align.Center">
-                    Add Job
-                </MudText>
-            </MudCard>
-        </MudItem>
+                <MudCardHeader>
+                    <MudText Typo="Typo.h3" Align="Align.Center">
+                        Add Job
+                    </MudText>
+                </MudCardHeader>
+                <MudCardContent>
 @if (!success)
 {
-        <MudItem xs="12">
-                <MudText Color="@Color.Error">
-                    <ValidationSummary />
-                </MudText>
-        </MudItem>
+                    <MudText Color="@Color.Error">
+                        <ValidationSummary />
+                    </MudText>
 }
-        <MudItem xs="12">
-            <MudCard>
-                <MudCardContent>
                     <MudTextField Label="Consist ID" @bind-Value="_job.ConsistId"></MudTextField>
                     <MudTextField Label="From Yard" @bind-Value="_job.FromYard"></MudTextField>
                     <MudTextField Label="From Track" @bind-Value="_job.FromTrack"></MudTextField>
@@ -44,7 +40,7 @@
                     <MudTextField Label="Description" @bind-Value="_job.Description"></MudTextField>
                 </MudCardContent>
                 <MudCardActions>
-                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Register</MudButton>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">@(_create ? "Add" : "Update")</MudButton>
                 </MudCardActions>
             </MudCard>
         </MudItem>
