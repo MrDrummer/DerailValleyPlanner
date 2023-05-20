@@ -7,7 +7,7 @@
     <designator name="Passenger Transfer" code="LP" />
     <designator name="Passenger Storage" code="SP" />
     <designator name="Parking" code="P" />
-    <yard name="Steel Mill" code="SM" color="#000">
+    <yard name="Steel Mill" code="SM" color="#7B8291">
         <direction type="northeast"/>
         <direction type="southwest"/>
         <group name="Overview" code="A">
@@ -28,7 +28,7 @@
             <track id="8" type="S" />
         </group>
     </yard>
-    <yard name="Farm" code="FM" color="#000">
+    <yard name="Farm" code="FM" color="#DCAA4A">
         <direction type="northeast" />
         <direction type="southwest" />
         <group name="Overview" code="A">
@@ -45,7 +45,7 @@
             <track id="7" type="P" />
         </group>
     </yard>
-    <yard name="Food Factory" code="FF" color="#000">
+    <yard name="Food Factory" code="FF" color="#76A7E1">
         <direction type="northeast" />
         <direction type="southwest" />
         <group name="Overview" code="A">
@@ -79,7 +79,7 @@
             <track id="4" type="S" />
         </group>
     </yard>
-    <yard name="Goods Factory" code="GF" color="#000">
+    <yard name="Goods Factory" code="GF" color="#C97FA0">
         <direction type="southwest" />
         <group name="Overview" code="A">
             <track id="2" type="S" />
@@ -107,7 +107,7 @@
             <track id="6" type="I" />
         </group>
     </yard>
-    <yard name="City South West" code="CSW" color="#000">
+    <yard name="City South West" code="CSW" color="#A7A7A7">
         <direction type="northeast" />
         <direction type="east" />
         <group name="Overview" code="A">
@@ -132,7 +132,7 @@
             <track id="6" type="L" />
         </group>
     </yard>
-    <yard name="Harbor" code="CSW" color="#000">
+    <yard name="Harbor" code="HB" color="#806B91">
         <direction type="west" />
         <direction type="east" />
         <group name="Overview" code="A">
@@ -191,5 +191,35 @@
             <track id="6" type="S" />
             <track id="7" type="S" />
         </group>
+    </yard>
+    <yard name="Machine Factory" code="MF" color="#DB895A">
+        
+    </yard>
+    <yard name="Coal Mine" code="CM" color="#686968">
+
+    </yard>
+    <yard name="Iron Mine East" code="IME" color="#B56962">
+
+    </yard>
+    <yard name="Iron Mine West" code="IMW" color="#985946">
+
+    </yard>
+    <yard name="Forest Central" code="FRC" color="#91B668">
+
+    </yard>
+    <yard name="Forest South" code="FRS" color="#609260">
+
+    </yard>
+    <yard name="Sawmill West" code="SW" color="#CBA886">
+
+    </yard>
+    <yard name="Oil North" code="OWN" color="#605D54">
+
+    </yard>
+    <yard name="Oil Central" code="OWC" color="#555A60">
+
+    </yard>
+    <yard name="Military Base" code="MB" color="#988C5E">
+
     </yard>
 </planner>
