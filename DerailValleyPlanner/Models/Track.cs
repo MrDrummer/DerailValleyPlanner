@@ -10,6 +10,7 @@ public class Track
     public string Note { get; set; }
     public string TypeName { get; set; }
     public string TypeCode { get; set; }
+    public string Display { get; set; }
     
 
     public Track(Yard yard, Group group, YardGroupTrackConfig trackConfig)
@@ -26,5 +27,6 @@ public class Track
         var des = yard.DesignatorConfig.Find(d => d.Code == trackConfig.Type);
         TypeName = des.Name;
         TypeCode = des.Code;
+        Display = $"{group.Code}-{Id}-{TypeCode}";
     }
 }
