@@ -22,17 +22,19 @@
                     </MudText>
                 </MudCardHeader>
                 <MudCardContent>
-@if (!success)
-{
-                    <MudText Color="@Color.Error">
-                        <ValidationSummary />
-                    </MudText>
-}
-                    <MudTextField Label="Consist ID" @bind-Value="_job.ConsistId"></MudTextField>
-                    <MudTextField Label="From Yard" @bind-Value="_job.FromYard"></MudTextField>
-                    <MudTextField Label="From Track" @bind-Value="_job.FromTrack"></MudTextField>
-                    <MudTextField Label="To Yard" @bind-Value="_job.ToYard"></MudTextField>
-                    <MudTextField Label="To Track" @bind-Value="_job.ToTrack"></MudTextField>
+                    @if (!success)
+                    {
+                        <MudText Color="@Color.Error">
+                            <ValidationSummary />
+                        </MudText>
+                    }
+                    <MudTextField Label="Consist ID" @bind-Value="_job.ConsistId" Mask="@_consistIdMask"></MudTextField>
+                    <YardSelection Label="From Yard" @bind-Yard="_job.FromYard" Exclude="@_job.ToYard"></YardSelection>
+                    <TrackSelection Label="From Track" Yard="@_job.FromYard" @bind-Track="_job.FromTrack"></TrackSelection>
+                    @* <MudTextField Label="From Track" @bind-Value="_job.FromTrack" Mask="@_trackMask"></MudTextField> *@
+                    <YardSelection Label="To Yard" @bind-Yard="_job.ToYard" Exclude="@_job.FromYard"></YardSelection>
+                    <TrackSelection Label="To Track" Yard="@_job.ToYard" @bind-Track="_job.ToTrack"></TrackSelection>
+                    @* <MudTextField Label="To Track" @bind-Value="_job.ToTrack" Mask="@_trackMask"></MudTextField> *@
                     <MudNumericField Label="Mass" @bind-Value="_job.Mass"></MudNumericField>
                     <MudNumericField Label="Length" @bind-Value="_job.Length"></MudNumericField>
                     <MudNumericField Label="Wagon Count" @bind-Value="_job.Wagons"></MudNumericField>
@@ -49,6 +51,9 @@
 
 @code {
     [Parameter] public int? JobId { get; set; }
+
+    private readonly PatternMask _consistIdMask = new ("aa-aa-00");
+    private readonly PatternMask _trackMask = new ("a-0-a");
     
     bool success;
     private Job _job;
@@ -63,19 +68,7 @@
         if (JobId == null)
         {
             _create = true;
-            _job = new Job
-            {
-                ConsistId = "AA-BB-11",
-                FromYard = "abcd",
-                FromTrack = "abcd",
-                ToYard = "abcd",
-                ToTrack = "abcd",
-                Mass = 10,
-                Length = 10,
-                Pays = 10,
-                Wagons = 10,
-                Description = "abcd"
-            };
+            _job = new Job();
         }
         else
         {
@@ -89,7 +82,7 @@
         Console.WriteLine("HI MOM!");
         Logger.LogInformation("Consist ID: {ConsistId}", _job.ConsistId);
         Logger.LogInformation("Config: {Config}", Config.GetType());
-        
+
         // Config.Yards
         if (_create)
         {

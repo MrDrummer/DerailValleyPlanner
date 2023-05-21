@@ -8,7 +8,7 @@ namespace DerailValleyPlanner.Services;
 public class ConfigService
 {
     private Config _config;
-    private List<Yard> Yards { get; set; }
+    public List<Yard> Yards { get; set; }
     
     public ConfigService()
     {

@@ -1,0 +1,51 @@
+﻿@using DerailValleyPlanner.Services
+
+@inject ConfigService Config
+
+<MudSelect T="string" Label="@Label" Value="Track" ValueChanged="TrackChanged" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter">
+    @foreach (var track in _trackList)
+    {
+        <MudSelectItem Value="@track">@track</MudSelectItem>
+    }
+</MudSelect>
+
+@code {
+    [Parameter]
+    public string Label { get; set; }
+
+    [Parameter]
+    public string Track { get; set; }
+
+    [Parameter]
+    public string Yard { get; set; }
+    private string _yardCache { get; set; }
+    
+    [Parameter]
+    public EventCallback<string> TrackChanged { get; set; }
+
+    private List<string> _trackList = new();
+
+    protected override void OnInitialized()
+    {
+        _yardCache = Yard;
+        SetTrackList();
+    }
+
+    protected override void OnParametersSet()
+    {
+        if (_yardCache != Yard)
+        {
+            SetTrackList();
+        }
+    }
+
+    private void SetTrackList()
+    {
+        if (Yard == null) return;
+        _trackList = Config.Yards
+            .Find(y => y.Name == Yard)
+            .Tracks
+            .Select(t => t.Display)
+            .ToList();
+    }
+}
