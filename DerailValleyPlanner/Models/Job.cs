@@ -11,36 +11,28 @@ public class Job
     
     // ID as seen in-game
     [Required]
-    [StringLength(10, ErrorMessage = "Format: XXX-YYY-NN")]
-    [RegularExpression("\\w{2,3}-\\w{2,3}-\\d{2}")]
+    [StringLength(10, ErrorMessage = "Format: XXX-YY-NN")]
+    [RegularExpression("\\w{2,3}-\\w{2}-\\d{1,2}")]
     [DisplayName("Consist ID")]
     public string ConsistId { get; set; }
     
     // Dropdown based on config
     [Required]
-    [MinLength(4)]
-    [MaxLength(20)]
     [DisplayName("From Yard")]
     public string FromYard { get; set; }
     
     // Dropdown based on the yard selected
     [Required]
-    [MinLength(4)]
-    [MaxLength(20)]
     [DisplayName("From Track")]
     public string FromTrack { get; set; }
     
     // Dropdown based on config
     [Required]
-    [MinLength(4)]
-    [MaxLength(20)]
     [DisplayName("To Yard")]
     public string ToYard { get; set; }
     
     // Dropdown based on the yard selected
     [Required]
-    [MinLength(4)]
-    [MaxLength(20)]
     [DisplayName("To Track")]
     public string ToTrack { get; set; }
     
