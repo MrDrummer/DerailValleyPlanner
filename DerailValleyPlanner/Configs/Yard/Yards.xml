@@ -193,33 +193,178 @@
         </group>
     </yard>
     <yard name="Machine Factory &amp; Town" code="MF" color="#DB895A">
-        
+        <direction type="north"/>
+        <direction type="south"/>
+        <group name="Overview" code="A">
+            <direction type="south"/>
+            <track id="1" type="P" />
+        </group>
+        <group name="Transfer Yard" code="B">
+            <track id="1" type="S" />
+            <track id="2" type="O" />
+            <track id="4" type="O" />
+            <track id="5" type="O" />
+            <track id="6" type="S" />
+        </group>
+        <group name="Loading Yard" code="C">
+            <track id="1" type="L" />
+            <track id="2" type="S" />
+            <track id="3" type="I" />
+            <track id="4" type="I" />
+        </group>
+        <group name="Passenger Station" code="D">
+            <track id="1" type="LP" />
+            <track id="2" type="LP" />
+            <track id="4" type="SP" />
+        </group>
+        <group name="Military Base" code="E">
+            <note>Tracks are dead-ends</note>
+            <track id="1" type="O" />
+            <track id="2" type="S" />
+            <track id="3" type="I" />
+            <track id="4" type="L" />
+        </group>
     </yard>
     <yard name="Coal Mine" code="CM" color="#686968">
-
+        <direction type="north"/>
+        <group name="Overview" code="A">
+            <track id="1" type="P" />
+            <track id="3" type="L" />
+        </group>
+        <group name="Output Yard" code="B">
+            <track id="1" type="I" />
+            <track id="2" type="O" />
+            <track id="3" type="O" />
+            <track id="5" type="S" />
+        </group>
+        <group name="Storage Yard" code="C">
+            <track id="1" type="S" />
+            <track id="3" type="S" />
+        </group>
     </yard>
     <yard name="Iron Ore Mine East" code="IME" color="#B56962">
-
+        <direction type="south"/>
+        <group name="Overview" code="A">
+            <track id="1" type="L" />
+            <track id="2" type="P" />
+        </group>
+        <group name="Output Yard" code="B">
+            <track id="1" type="S" />
+            <track id="2" type="O" />
+            <track id="4" type="O" />
+        </group>
+        <group name="Output Yard" code="C">
+            <track id="1" type="S" />
+            <track id="2" type="O" />
+            <track id="4" type="I" />
+        </group>
     </yard>
     <yard name="Iron Ore Mine West" code="IMW" color="#985946">
-
+        <direction type="southeast"/>
+        <direction type="northwest"/>
+        <group name="Output Yard" code="B">
+            <track id="1" type="S" />
+            <track id="2" type="I" />
+            <track id="3" type="O" />
+            <track id="4" type="O" />
+            <track id="6" type="O" />
+            <track id="7" type="S" />
+            <track id="8" type="L" />
+        </group>
     </yard>
     <yard name="Forest Central" code="FRC" color="#91B668">
-
+        <direction type="south"/>
+        <group name="Output Yard" code="B">
+            <track id="1" type="L" />
+            <track id="2" type="O" />
+            <track id="4" type="S" />
+        </group>
+        <group name="Output Yard" code="C">
+            <note>Dead end, with a joining track long enough for a steamer.</note>
+            <track id="1" type="S" />
+            <track id="2" type="S" />
+            <track id="4" type="O" />
+        </group>
     </yard>
     <yard name="Forest South" code="FRS" color="#609260">
-
+        <direction type="north"/>
+        <direction type="south"/>
+        <group name="Overview" code="A">
+            <track id="1" type="P" direction="south"/>
+        </group>
+        <group name="Yard" code="B">
+            <track id="1" type="L"/>
+            <track id="2" type="O"/>
+            <track id="3" type="O"/>
+            <track id="5" type="O"/>
+            <track id="6" type="S"/>
+            <track id="7" type="S"/>
+        </group>
     </yard>
     <yard name="Sawmill West" code="SW" color="#CBA886">
-
+        <direction type="northwest"/>
+        <direction type="southeast"/>
+        <group name="Overview" code="A">
+            <track id="1" type="P" direction="northwest"/>
+            <track id="2" type="P" direction="northwest"/>
+        </group>
+        <group name="Loading Yard" code="B">
+            <track id="1" type="S"/>
+            <track id="3" type="I"/>
+            <track id="4" type="L"/>
+        </group>
+        <group name="Loading Yard" code="C">
+            <track id="1" type="O"/>
+            <track id="3" type="I"/>
+            <track id="4" type="S"/>
+        </group>
     </yard>
     <yard name="Oil Well North" code="OWN" color="#605D54">
-
+        <direction type="southwest"/>
+        <group name="Overview" code="A">
+            <track id="1" type="P" />
+        </group>
+        <group name="Transfer Yard" code="B">
+            <note>Dead end, with a joining track long enough for a steamer.</note>
+            <track id="2" type="S"/>
+            <track id="3" type="O"/>
+            <track id="4" type="O"/>
+            <track id="5" type="O"/>
+            <track id="6" type="L"/>
+        </group>
+        <group name="Auxiliary Yard" code="C">
+            <track id="1" type="S"/>
+            <track id="3" type="O"/>
+        </group>
     </yard>
     <yard name="Oil Well Central" code="OWC" color="#555A60">
-
+        <direction type="west"/>
+        <direction type="east"/>
+        <group name="Overview" code="A">
+            <track id="1" type="L" />
+            <track id="2" type="S" />
+            <track id="3" type="S" />
+        </group>
+        <group name="Yard" code="B">
+            <track id="1" type="O"/>
+            <track id="3" type="O"/>
+            <track id="4" type="O"/>
+            <track id="5" type="O"/>
+            <track id="6" type="S"/>
+        </group>
     </yard>
     <yard name="Military Base" code="MB" color="#988C5E">
-
+        <direction type="east"/>
+        <group name="Overview" code="A">
+            <track id="1" type="L" />
+            <track id="2" type="S" />
+        </group>
+        <group name="Yard" code="B">
+            <track id="2" type="O"/>
+            <track id="3" type="O"/>
+            <track id="4" type="I"/>
+            <track id="5" type="O"/>
+            <track id="6" type="S"/>
+        </group>
     </yard>
 </planner>
