@@ -1,11 +1,14 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace DerailValleyPlanner.Models;
 
 // TODO: Save consist ID as Type and Number (Last two parts)
 // TODO: Use Yard code instead of name
 // TODO: Use Track number instead of string
+
+[PrimaryKey(nameof(JobId))]
 public class Job
 {
     // Primary Key

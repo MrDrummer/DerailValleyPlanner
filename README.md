@@ -4,11 +4,11 @@
 
 
 ## TODO
-1. Update Add Job form to use dropdowns in place of the yard & track text fields (based on config)
-2. Finish off adding Yards to Yards.xml config file
-3. Figure out database structure for storing Journeys
-4. Figure out Saving & Loading sqlite DB files(?)
-   1. Get the xaml bindings working for the file menu dropdown
-5. Add Locos config file
-   1. Since mods can add locos, this needs to be configurable by the user
-6. Change nav menu to be tabs along the top of the window
+- [X] ~~Update Add Job form to use dropdowns in place of the yard & track text fields (based on config)~~
+- [X] ~~Finish off adding Yards to Yards.xml config file~~
+- [X] ~~Figure out database structure for storing Journeys~~
+- [ ] Figure out Saving & Loading sqlite DB files(?)
+   - [ ] Get the xaml bindings working for the file menu dropdown
+- [ ] Add Locos config file
+   - [ ] Since mods can add locos, this needs to be configurable by the user
+- [ ] Change nav menu to be tabs along the top of the window
