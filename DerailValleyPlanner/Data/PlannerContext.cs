@@ -1,13 +1,16 @@
 ﻿using DerailValleyPlanner.Models;
+using DerailValleyPlanner.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace DerailValleyPlanner.Data;
 
 public class PlannerContext : DbContext
 {
-    public PlannerContext(DbContextOptions<PlannerContext> options)
+    private ConfigService _config;
+    public PlannerContext(DbContextOptions<PlannerContext> options, ConfigService Config)
         : base(options)
     {
+        _config = Config;
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -96,6 +99,16 @@ public class PlannerContext : DbContext
                 Pays = 25718,
                 Wagons = 13,
                 Description = "Steel"
+            }
+        );
+
+        modelBuilder.Entity<Stop>().HasData(
+            new Stop
+            {
+                Index = 1,
+                Type = Stop.Kind.Load,
+                Yard = _config.Yards.FirstOrDefault(y => y.Code == "SM"),
+                Note = "Arrive from the west, reverse in."
             }
         );
     }
