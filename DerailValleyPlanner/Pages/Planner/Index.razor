@@ -1,7 +1,89 @@
 ﻿@page "/planner"
-<h3>Planner</h3>
+@page "/planner/edit"
 
+@using DerailValleyPlanner.Models
+@using DerailValleyPlanner.Data
+@using Microsoft.EntityFrameworkCore
+@inject ISnackbar Snackbar
+@*
+- Will list all Yards and the summary for each (total jobs, wagons, length, mass and money totalled) load and unload
+- Allows child component? Or mode that allows selecting a yard to add?
+ *@
 
+<h3>Job Summary</h3>
+
+<MudTable
+    Items="@_stops"
+    T="Stop"
+    Dense="true"
+    Hover="true"
+    CanCancelEdit="true"
+    ReadOnly="@ReadOnly"
+    @bind-SelectedItem="selectedItem"
+    CommitEditTooltip="Commit Edit"
+    OnCommitEditClick="@(() => Snackbar.Add("Commit Edit Handler Invoked"))"
+    RowEditPreview="BackupItem"
+    RowEditCancel="ResetItemToOriginalValues"
+    RowEditCommit="ItemHasBeenCommitted"
+	ApplyButtonPosition="@TableApplyButtonPosition.End"
+	EditButtonPosition="@TableEditButtonPosition.End"
+	EditTrigger="@TableEditTrigger.EditButton"
+></MudTable>
 
 @code {
+    
+    [Inject]
+    private PlannerContext Context { get; set; }
+
+    private bool ReadOnly = true;
+
+    private Stop selectedItem = null;
+    private Stop EditCache;
+    private IEnumerable<Stop> _stops;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await GetStops();
+    }
+
+    async Task GetStops()
+    {
+        _stops = await Context.Stops.ToListAsync();
+    }
+
+    private void BackupItem(object _stop)
+    {
+        var stop = (Stop)_stop;
+        EditCache = new()
+        {
+            Index = stop.Index,
+            StopId = stop.StopId,
+            Type = stop.Type,
+            Jobs = stop.Jobs,
+            Yard = stop.Yard,
+            Note = stop.Note
+        };
+        StateHasChanged();
+    }
+
+    private void ItemHasBeenCommitted(object _stop)
+    {
+        var stop = (Stop)_stop;
+
+        Context.Stops.Update(stop);
+        
+        StateHasChanged();
+    }
+
+    private void ResetItemToOriginalValues(object _stop)
+    {
+        var stop = (Stop)_stop;
+        stop.Index = EditCache.Index;
+        stop.StopId = EditCache.StopId;
+        stop.Type = EditCache.Type;
+        stop.Jobs = EditCache.Jobs;
+        stop.Yard = EditCache.Yard;
+        stop.Note = EditCache.Note;
+        StateHasChanged();
+    }
 }

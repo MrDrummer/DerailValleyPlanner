@@ -101,4 +101,5 @@ public class PlannerContext : DbContext
     }
     
     public DbSet<Job> Jobs { get; set; }
+    public DbSet<Stop> Stops { get; set; }
 }
