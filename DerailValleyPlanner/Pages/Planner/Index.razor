@@ -9,8 +9,7 @@
 - Will list all Yards and the summary for each (total jobs, wagons, length, mass and money totalled) load and unload
 - Allows child component? Or mode that allows selecting a yard to add?
  *@
-
-<h3>Job Summary</h3>
+<MudText Typo="Typo.h3">Journey Planner</MudText>
 
 <MudTable
     Items="@_stops"
@@ -25,10 +24,23 @@
     RowEditPreview="BackupItem"
     RowEditCancel="ResetItemToOriginalValues"
     RowEditCommit="ItemHasBeenCommitted"
-	ApplyButtonPosition="@TableApplyButtonPosition.End"
-	EditButtonPosition="@TableEditButtonPosition.End"
-	EditTrigger="@TableEditTrigger.EditButton"
-></MudTable>
+    ApplyButtonPosition="@TableApplyButtonPosition.End"
+    EditButtonPosition="@TableEditButtonPosition.End"
+    EditTrigger="@TableEditTrigger.EditButton"
+>
+    <HeaderContent>
+        <MudTh>Index</MudTh>
+        <MudTh>Yard</MudTh>
+        <MudTh>Type</MudTh>
+        <MudTh>Note</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Index">@context.Index</MudTd>
+        <MudTd DataLabel="Yard">@context.Yard</MudTd>
+        <MudTd DataLabel="Type">@context.Type</MudTd>
+        <MudTd DataLabel="Note">@context.Note</MudTd>
+    </RowTemplate>
+</MudTable>
 
 @code {
     
@@ -54,7 +66,7 @@
     private void BackupItem(object _stop)
     {
         var stop = (Stop)_stop;
-        EditCache = new()
+        EditCache = new Stop
         {
             Index = stop.Index,
             StopId = stop.StopId,
