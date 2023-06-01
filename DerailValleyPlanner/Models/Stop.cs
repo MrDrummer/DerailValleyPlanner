@@ -6,7 +6,7 @@ namespace DerailValleyPlanner.Models;
 /**
  * Contains jobs
  */
-[PrimaryKey(nameof(StopId))]
+// [PrimaryKey(nameof(StopId))]
 public class Stop
 {
     public enum Kind
@@ -23,7 +23,7 @@ public class Stop
     public int Index { get; set; }
     
     [Required]
-    public Yard Yard { get; set; }
+    public string Yard { get; set; }
     
     [Required]
     public Kind Type { get; set; }

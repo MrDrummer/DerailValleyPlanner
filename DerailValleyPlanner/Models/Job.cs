@@ -8,7 +8,7 @@ namespace DerailValleyPlanner.Models;
 // TODO: Use Yard code instead of name
 // TODO: Use Track number instead of string
 
-[PrimaryKey(nameof(JobId))]
+// [PrimaryKey(nameof(JobId))]
 public class Job
 {
     // Primary Key
