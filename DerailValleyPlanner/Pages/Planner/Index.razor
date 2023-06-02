@@ -1,5 +1,5 @@
 ﻿@page "/planner"
-@page "/planner/{EditMode}"
+@* @page "/planner/{EditMode}" *@
 
 @using DerailValleyPlanner.Models
 @using DerailValleyPlanner.Data
@@ -10,6 +10,7 @@
 - Allows child component? Or mode that allows selecting a yard to add?
  *@
 <MudText Typo="Typo.h3">Journey Planner</MudText>
+<MudSwitch @bind-Checked="@ReadOnly">Edit Mode</MudSwitch>
 
 <MudTable
     Items="@_stops"
@@ -17,7 +18,7 @@
     Dense="true"
     Hover="true"
     CanCancelEdit="true"
-    ReadOnly="@ReadOnly"
+    ReadOnly="@(!ReadOnly)"
     @bind-SelectedItem="selectedItem"
     CommitEditTooltip="Commit Edit"
     OnCommitEditClick="@(() => Snackbar.Add("Commit Edit Handler Invoked"))"
@@ -42,7 +43,9 @@
     </RowTemplate>
     <RowEditingTemplate>
         <MudTd DataLabel="Index">Up Down</MudTd>
-        <MudTd DataLabel="Yard">Dropdown</MudTd>
+        <MudTd DataLabel="Yard">
+            <YardSelection @bind-Yard="@context.Yard"></YardSelection>
+        </MudTd>
         <MudTd DataLabel="Type">Dropdown</MudTd>
         <MudTd DataLabel="Note">Text box</MudTd>
     </RowEditingTemplate>
@@ -50,16 +53,15 @@
         <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" Class="pa-0" OnClick="@button.ButtonAction" Disabled="@button.ButtonDisabled" />
     </EditButtonContent>
 </MudTable>
-<MudSwitch @bind-Checked="@ReadOnly">Read Only</MudSwitch>
 
 @code {
     
     [Inject]
     private PlannerContext Context { get; set; }
     
-    [Parameter] public string EditMode { get; set; }
+    // [Parameter] public string EditMode { get; set; }
 
-    private bool ReadOnly;
+    private bool ReadOnly = true;
 
     private Stop selectedItem;
     private Stop EditCache;
@@ -75,9 +77,9 @@
         _stops = await Context.Stops.ToListAsync();
     }
 
-    private void BackupItem(object _stop)
+    private void BackupItem(object stopObj)
     {
-        var stop = (Stop)_stop;
+        var stop = (Stop)stopObj;
         EditCache = new Stop
         {
             Index = stop.Index,
@@ -90,18 +92,18 @@
         StateHasChanged();
     }
 
-    private void ItemHasBeenCommitted(object _stop)
+    private void ItemHasBeenCommitted(object stopObj)
     {
-        var stop = (Stop)_stop;
+        var stop = (Stop)stopObj;
 
         Context.Stops.Update(stop);
         
         StateHasChanged();
     }
 
-    private void ResetItemToOriginalValues(object _stop)
+    private void ResetItemToOriginalValues(object stopObj)
     {
-        var stop = (Stop)_stop;
+        var stop = (Stop)stopObj;
         stop.Index = EditCache.Index;
         stop.StopId = EditCache.StopId;
         stop.Type = EditCache.Type;
