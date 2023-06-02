@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DerailValleyPlanner.Models;
 
-[PrimaryKey(nameof(JobId), nameof(StopType))]
+// [PrimaryKey(nameof(JobId), nameof(StopType))]
 public class StopJob
 {
-    // [Key]
+    [Key]
     // [Column(Order = 1)]
-    // public int StopJobId { set; get; }
+    public int StopJobId { set; get; }
     
     // [Key]
     // [Column(Order = 2)]

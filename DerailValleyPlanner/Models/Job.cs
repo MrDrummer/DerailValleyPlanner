@@ -71,4 +71,6 @@ public class Job
     [MaxLength(1000)]
     [DisplayName("Description")]
     public string Description { get; set; }
+    
+    public ICollection<StopJob> Stops { get; set; }
 }

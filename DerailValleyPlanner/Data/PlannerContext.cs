@@ -140,8 +140,12 @@ public class PlannerContext : DbContext
                 Note = "Arrive from the West"
             }
         );
+
+        modelBuilder.Entity<StopJob>();
     }
     
     public DbSet<Job> Jobs { get; set; }
     public DbSet<Stop> Stops { get; set; }
+    
+    public DbSet<StopJob> StopJobs { get; set; }
 }

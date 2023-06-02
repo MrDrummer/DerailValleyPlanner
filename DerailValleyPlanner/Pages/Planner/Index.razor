@@ -1,5 +1,5 @@
 ﻿@page "/planner"
-@page "/planner/edit"
+@page "/planner/{EditMode:string}"
 
 @using DerailValleyPlanner.Models
 @using DerailValleyPlanner.Data
@@ -40,16 +40,28 @@
         <MudTd DataLabel="Type">@context.Type</MudTd>
         <MudTd DataLabel="Note">@context.Note</MudTd>
     </RowTemplate>
+    <RowEditingTemplate>
+        <MudTd DataLabel="Index">Up Down</MudTd>
+        <MudTd DataLabel="Yard">Dropdown</MudTd>
+        <MudTd DataLabel="Type">Dropdown</MudTd>
+        <MudTd DataLabel="Note">Text box</MudTd>
+    </RowEditingTemplate>
+    <EditButtonContent Context="button">
+        <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" Class="pa-0" OnClick="@button.ButtonAction" Disabled="@button.ButtonDisabled" />
+    </EditButtonContent>
 </MudTable>
+<MudSwitch @bind-Checked="@ReadOnly">Read Only</MudSwitch>
 
 @code {
     
     [Inject]
     private PlannerContext Context { get; set; }
+    
+    [Parameter] public string? EditMode { get; set; }
 
-    private bool ReadOnly = true;
+    private bool ReadOnly;
 
-    private Stop selectedItem = null;
+    private Stop selectedItem;
     private Stop EditCache;
     private IEnumerable<Stop> _stops;
     
