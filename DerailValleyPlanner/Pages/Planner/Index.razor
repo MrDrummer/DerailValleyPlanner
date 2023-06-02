@@ -1,5 +1,5 @@
 ﻿@page "/planner"
-@page "/planner/{EditMode:string}"
+@page "/planner/{EditMode}"
 
 @using DerailValleyPlanner.Models
 @using DerailValleyPlanner.Data
@@ -57,7 +57,7 @@
     [Inject]
     private PlannerContext Context { get; set; }
     
-    [Parameter] public string? EditMode { get; set; }
+    [Parameter] public string EditMode { get; set; }
 
     private bool ReadOnly;
 
