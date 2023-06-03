@@ -43,7 +43,7 @@
     {
         if (Yard == null) return;
         _trackList = Config.Yards
-            .Find(y => y.Name == Yard)
+            .Find(y => y.Code == Yard)
             .Tracks
             .Select(t => t.Display)
             .ToList();

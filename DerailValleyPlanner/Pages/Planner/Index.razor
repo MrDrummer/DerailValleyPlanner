@@ -30,13 +30,19 @@
     EditTrigger="@TableEditTrigger.EditButton"
 >
     <HeaderContent>
-        <MudTh>Index</MudTh>
+        @if (!ReadOnly)
+        {
+            <MudTh>Index</MudTh>
+        }
         <MudTh>Yard</MudTh>
         <MudTh>Type</MudTh>
         <MudTh>Note</MudTh>
     </HeaderContent>
     <RowTemplate>
-        <MudTd DataLabel="Index">@context.Index</MudTd>
+        @if (!ReadOnly)
+        {
+            <MudTd DataLabel="Index">@context.Index</MudTd>
+        }
         <MudTd DataLabel="Yard">@context.Yard</MudTd>
         <MudTd DataLabel="Type">@context.Type</MudTd>
         <MudTd DataLabel="Note">@context.Note</MudTd>
@@ -92,11 +98,13 @@
         StateHasChanged();
     }
 
-    private void ItemHasBeenCommitted(object stopObj)
+    private async void ItemHasBeenCommitted(object stopObj)
     {
         var stop = (Stop)stopObj;
 
         Context.Stops.Update(stop);
+        
+        await Context.SaveChangesAsync();
         
         StateHasChanged();
     }
@@ -112,4 +120,6 @@
         stop.Note = EditCache.Note;
         StateHasChanged();
     }
+    
+    
 }

@@ -5,7 +5,7 @@
 <MudSelect T="string" Label="@Label" Value="Yard" ValueChanged="YardChanged" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter">
     @foreach (var yard in _yardList)
     {
-        <MudSelectItem Value="@yard.Name" Disabled="@(yard.Name == Exclude)">@yard.Name (@yard.Code)</MudSelectItem>
+        <MudSelectItem Value="@yard.Code" Disabled="@(yard.Code == Exclude)">@yard.Name (@yard.Code)</MudSelectItem>
     }
 </MudSelect>
 
