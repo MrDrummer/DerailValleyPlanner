@@ -16,7 +16,14 @@
 }
 else
 {
-    <MudDataGrid T="Job" Items="@_jobs" Filterable="true" SortMode="SortMode.Multiple" Groupable="false">
+    <MudDataGrid
+        Items="@_jobs"
+        T="Job"
+        Filterable="true"
+        SortMode="SortMode.Multiple"
+        Groupable="false"
+        Dense="true"
+    >
         <Columns>
             <PropertyColumn Property="j => j.JobId" Title="Internal ID" />
             <PropertyColumn Property="j => j.ConsistId" Title="Consist ID"/>
