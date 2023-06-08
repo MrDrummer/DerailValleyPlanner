@@ -1,132 +1,117 @@
-﻿var myList = new ManagedList<Example>
+﻿using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.Text.Json;
+
+var list = new ManagedObservableCollection<Example>
 {
     new()
     {
         Key = 1,
         Index = 1,
+        Name = "Item 2",
     },
     new()
     {
         Key = 2,
         Index = 3,
+        Name = "Item 4",
     },
     new()
     {
         Key = 3,
-        Index = 5,
+        Index = 0,
+        Name = "Item 1",
     },
     new()
     {
         Key = 4,
         Index = 2,
+        Name = "Item 3",
     },
     new()
     {
         Key = 5,
         Index = 4,
-    },
+        Name = "Item 5",
+    }
+};
+
+var beforeSort = JsonSerializer.Serialize(list);
+Console.WriteLine($"Before Sort: {beforeSort}");
+
+list.Sort();
+
+var afterSort = JsonSerializer.Serialize(list);
+Console.WriteLine($"Before Sort: {afterSort}");
+
+list.CollectionChanged += (sender, args) =>
+{
+    if (args.Action != NotifyCollectionChangedAction.Replace) return;
+    Console.WriteLine($"Item at index {args.OldStartingIndex} to index {args.NewStartingIndex}");
+    
+    var afterOutput = JsonSerializer.Serialize(list[args.NewStartingIndex]);
+
+    Console.WriteLine($"ITEM UPDATED: {afterOutput}");
 };
 
 
-myList.Sort((e1, e2) => e1.Index.CompareTo(e2.Index));
-foreach (var el in myList)
+list.Move(0, 1);
+
+for (var i = 0; i < list.Count; i++)
 {
-    Console.WriteLine("ORIGINAL ORDER: Key: {0}, Index: {1}", el.Key, el.Index);
+    var item = list[i];
+    if (item.Index == i) continue;
+    var newItem = (Example)item.Clone();
+    newItem.Index = i;
+    list[i] = newItem;
 }
 
 
-// 0     2
-// V     V
-// 1, 4, 2, 5, 3
-// TO
-// 2, 1, 4, 5, 3
-// var affectedElements = myList.Move(0, 2);
+var afterOutput = JsonSerializer.Serialize(list);
 
-//       2     4
-//       V     V
-// 1, 4, 2, 5, 3
-// TO
-// 1, 4, 5, 3, 2
-// var affectedElements = myList.Move(2, 4);
+Console.WriteLine($"After Move: {afterOutput}");
 
 
-// 0           4
-// V           V
-// 1, 4, 2, 5, 3
-// TO
-// 4, 2, 5, 3, 1
-// var affectedElements = myList.Move(0, 4);
-
-
-//    1        4
-//    V        V
-// 1, 4, 2, 5, 3
-// TO
-// 1, 2, 5, 3, 4
-// var affectedElements = myList.Move(1, 4);
-
-//    1        4
-//    V        V
-// 1, 4, 2, 5, 3
-// TO
-// 1, 3, 4, 2, 5
-var affectedElements = myList.Move(4, 1);
-
-for (var i = 0; i < affectedElements.Count; i++)
-{
-    var el = affectedElements[i];
-    
-    // TODO: I think this - 1 may be + 1 if toIndex is greater than fromIndex
-    el.Index = (i + 1) + 0; // <- fromIndex (first arg sent to ManagedList.Move)
-}
-
-foreach (var el in affectedElements)
-{
-    Console.WriteLine("AFFECTED: Key: {0}, Index: {1}", el.Key, el.Index);
-}
-foreach (var el in myList)
-{
-    Console.WriteLine("NEW ORDER: Key: {0}, Index: {1}", el.Key, el.Index);
-}
-
-internal class ManagedList<T> : List<T>
-{
-    public ManagedList<T> Move(int fromIndex, int toIndex)
-    {
-        var output = new ManagedList<T>();
-        var itemBeingMoved = this[fromIndex];
-        RemoveAt(fromIndex);
-        Insert(toIndex, itemBeingMoved);
-        
-
-        // TODO: Fix assumption that fromIndex is always less than toIndex
-        for (var i = fromIndex; i <= toIndex; i++)
-        {
-            var obj = this[i];
-            
-            // var property = obj?.GetType().GetProperty("Index");
-            //
-            // var currentValue = property?.GetValue(obj, null);
-            //
-            // Console.WriteLine("currentValue: {0}", currentValue);
-            //
-            // if (currentValue == null || property == null) continue;
-            //
-            // property.SetValue(obj, (int)currentValue + 1 + fromIndex);
-            
-            output.Add(obj);
-        }
-
-        return output;
-    }
-}
-
-
-internal class Example
+internal class Example : IComparable<Example>, ICloneable
 {
     // Never changes
     public int Key { set; get; }
-    
+
     // Dynamically changed and updated in DB whenever position changed
     public int Index { set; get; }
+    public string Name { set; get; }
+
+    public int CompareTo(Example? other)
+    {
+        if (ReferenceEquals(this, other)) return 0;
+        if (ReferenceEquals(null, other)) return 1;
+        return Index.CompareTo(other.Index);
+    }
+    
+    #region ICloneable Members
+
+    public object Clone()
+    {
+        return MemberwiseClone();
+    }
+
+    #endregion
+}
+
+internal class ManagedObservableCollection<T> : ObservableCollection<T>
+{
+    public void Sort()
+    {
+        var index = 0;
+        foreach (var item in this.Order())
+        {
+            var oldIndex = IndexOf(item);
+            if (oldIndex != index)
+            {
+                MoveItem(oldIndex, index);
+            }
+
+            index++;
+        }
+    }
 }
