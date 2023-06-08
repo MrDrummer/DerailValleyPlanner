@@ -1,38 +1,48 @@
-﻿using System.Collections.ObjectModel;
-using System.Collections.Specialized;
+﻿// Example:
+// 1. Item 1
+// 2. Item 2
+// 3. Item 3
+// 4. Item 4
+//
+// If I want to move Item 1 after Item 2:
+// 
+// 1. Item 2
+// 2. Item 1
+// 3. Item 3
+// 4. Item 4
+//
+// I will then need to update both Item 1 and Item 2 to have a new Index value,
+// so that when it's sorted again, it's in the new order.
+
+
 using System.Text.Json;
 
-var list = new ManagedObservableCollection<Example>
+var list = new ManagedList<Example>
 {
     new()
     {
         Key = 1,
         Index = 1,
-        Name = "Item 2",
     },
     new()
     {
         Key = 2,
         Index = 3,
-        Name = "Item 4",
     },
     new()
     {
         Key = 3,
         Index = 0,
-        Name = "Item 1",
     },
     new()
     {
         Key = 4,
         Index = 2,
-        Name = "Item 3",
     },
     new()
     {
         Key = 5,
         Index = 4,
-        Name = "Item 5",
     }
 };
 
@@ -42,17 +52,7 @@ Console.WriteLine($"Before Sort: {beforeSort}");
 list.Sort();
 
 var afterSort = JsonSerializer.Serialize(list);
-Console.WriteLine($"Before Sort: {afterSort}");
-
-list.CollectionChanged += (sender, args) =>
-{
-    if (args.Action != NotifyCollectionChangedAction.Replace) return;
-    Console.WriteLine($"Item at index {args.OldStartingIndex} to index {args.NewStartingIndex}");
-    
-    var afterOutput = JsonSerializer.Serialize(list[args.NewStartingIndex]);
-
-    Console.WriteLine($"ITEM UPDATED: {afterOutput}");
-};
+Console.WriteLine($"After Sort/Before Move: {afterSort}");
 
 
 list.Move(0, 1);
@@ -61,9 +61,7 @@ for (var i = 0; i < list.Count; i++)
 {
     var item = list[i];
     if (item.Index == i) continue;
-    var newItem = (Example)item.Clone();
-    newItem.Index = i;
-    list[i] = newItem;
+    item.Index = i;
 }
 
 
@@ -72,14 +70,13 @@ var afterOutput = JsonSerializer.Serialize(list);
 Console.WriteLine($"After Move: {afterOutput}");
 
 
-internal class Example : IComparable<Example>, ICloneable
+internal class Example : IComparable<Example>
 {
     // Never changes
     public int Key { set; get; }
 
-    // Dynamically changed and updated in DB whenever position changed
+    // Dynamically changed and updated in DB whenever position within the list is changed
     public int Index { set; get; }
-    public string Name { set; get; }
 
     public int CompareTo(Example? other)
     {
@@ -87,31 +84,14 @@ internal class Example : IComparable<Example>, ICloneable
         if (ReferenceEquals(null, other)) return 1;
         return Index.CompareTo(other.Index);
     }
-    
-    #region ICloneable Members
-
-    public object Clone()
-    {
-        return MemberwiseClone();
-    }
-
-    #endregion
 }
 
-internal class ManagedObservableCollection<T> : ObservableCollection<T>
+internal class ManagedList<T> : List<T>
 {
-    public void Sort()
+    public void Move(int fromIndex, int toIndex)
     {
-        var index = 0;
-        foreach (var item in this.Order())
-        {
-            var oldIndex = IndexOf(item);
-            if (oldIndex != index)
-            {
-                MoveItem(oldIndex, index);
-            }
-
-            index++;
-        }
+        var itemBeingMoved = this[fromIndex];
+        RemoveAt(fromIndex);
+        Insert(toIndex, itemBeingMoved);
     }
 }
