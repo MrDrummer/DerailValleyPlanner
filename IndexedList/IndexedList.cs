@@ -1,6 +1,6 @@
 ﻿namespace IndexedList;
 
-public class IndexedList<T> : List<T> where T: Indexed
+public class IndexedList<T> : List<T> where T: IIndexed
 {
     public void Move(int fromIndex, int toIndex)
     {

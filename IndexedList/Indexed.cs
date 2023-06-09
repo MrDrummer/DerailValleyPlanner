@@ -1,9 +1,8 @@
 ﻿namespace IndexedList;
 
-public abstract class Indexed : IComparable<Indexed>
+public abstract class Indexed : IIndexed
 {
     public int Index { set; get; }
-    
     public int CompareTo(Indexed? other)
     {
         if (ReferenceEquals(this, other)) return 0;
