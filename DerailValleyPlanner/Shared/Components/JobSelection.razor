@@ -1,0 +1,41 @@
+﻿@using Microsoft.EntityFrameworkCore
+@using DerailValleyPlanner.Data
+@using DerailValleyPlanner.Models
+
+<MudSelect T="string" Label="@Label" Value="Job" ValueChanged="JobChanged" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter">
+    @foreach (var job in _jobList)
+    {
+        <MudSelectItem Value="@job.JobId">@job.Job.ConsistId</MudSelectItem>
+    }
+</MudSelect>
+
+@code {
+    
+    [Inject]
+    private PlannerContext PlannerContext { get; set; }
+    
+    [Parameter]
+    public string Label { get; set; }
+
+    [Parameter]
+    public string Job { get; set; }
+    
+    [Parameter]
+    public string Yard { get; set; }
+    
+    [Parameter]
+    public EventCallback<string> JobChanged { get; set; }
+
+    private List<StopJob> _jobList;
+
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await GetJobs();
+    }
+
+    async Task GetJobs()
+    {
+        _jobList = await PlannerContext.StopJobs.Where(sj => sj.Job.ToYard == Yard || sj.Job.FromYard == Yard).ToListAsync();
+    }
+}

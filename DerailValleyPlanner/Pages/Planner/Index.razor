@@ -11,7 +11,10 @@
  *@
 <MudText Typo="Typo.h3">Journey Planner</MudText>
 <MudSwitch @bind-Checked="@ReadOnly">Edit Mode</MudSwitch>
-
+@if (!ReadOnly)
+{
+    
+}
 <MudTable
     Items="@_stops"
     T="Stop"
@@ -30,10 +33,7 @@
     EditTrigger="@TableEditTrigger.EditButton"
 >
     <HeaderContent>
-        @if (!ReadOnly)
-        {
-            <MudTh>Index</MudTh>
-        }
+        <MudTh>Index</MudTh>
         <MudTh>Yard</MudTh>
         <MudTh>Type</MudTh>
         <MudTh>Note</MudTh>
@@ -43,10 +43,7 @@
         <MudTh>Pay</MudTh>
     </HeaderContent>
     <RowTemplate>
-        @if (!ReadOnly)
-        {
-            <MudTd DataLabel="Index">@context.Index</MudTd>
-        }
+        <MudTd DataLabel="Index">@context.Index</MudTd>
         <MudTd DataLabel="Yard">@context.Yard</MudTd>
         <MudTd DataLabel="Type">@context.Type</MudTd>
         <MudTd DataLabel="Note">@context.Note</MudTd>
@@ -64,6 +61,7 @@
         </MudTd>
         <MudTd DataLabel="Type">Dropdown</MudTd>
         <MudTd DataLabel="Note">Text box</MudTd>
+        <MudTd>Job Selector</MudTd>
     </RowEditingTemplate>
     <EditButtonContent Context="button">
         <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" Class="pa-0" OnClick="@button.ButtonAction" Disabled="@button.ButtonDisabled" />
