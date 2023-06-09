@@ -38,6 +38,44 @@ public class IndexedListTest
     }
 
     [Test]
+    public void FromList()
+    {
+        var before = new List<IndexedInstance>
+        {
+            new()
+            {
+                Index = 0,
+                Key = 0
+            },
+            new()
+            {
+                Index = 2,
+                Key = 2
+            },
+            new()
+            {
+                Index = 1,
+                Key = 1
+            },
+            new()
+            {
+                Index = 3,
+                Key = 3
+            },
+        };
+
+        var after = new IndexedList<IndexedInstance>(before);
+        
+        Assert.Multiple(() =>
+        {
+            Assert.That(before[0].Index, Is.EqualTo(after[0].Index));
+            Assert.That(before[1].Index, Is.EqualTo(after[1].Index));
+            Assert.That(before[2].Index, Is.EqualTo(after[2].Index));
+            Assert.That(before[3].Index, Is.EqualTo(after[3].Index));
+        });
+    }
+
+    [Test]
     public void Sort()
     {
         var before = new IndexedList<IndexedInstance>
