@@ -48,7 +48,9 @@
         <MudTd DataLabel="Note">@context.Note</MudTd>
     </RowTemplate>
     <RowEditingTemplate>
-        <MudTd DataLabel="Index">Up Down</MudTd>
+        <MudTd DataLabel="Index">
+            <MudNumericField Label="Index" @bind-Value="@context.Index"></MudNumericField>
+        </MudTd>
         <MudTd DataLabel="Yard">
             <YardSelection @bind-Yard="@context.Yard"></YardSelection>
         </MudTd>
@@ -63,7 +65,7 @@
 @code {
     
     [Inject]
-    private PlannerContext Context { get; set; }
+    private PlannerContext PlannerContext { get; set; }
     
     // [Parameter] public string EditMode { get; set; }
 
@@ -71,7 +73,7 @@
 
     private Stop selectedItem;
     private Stop EditCache;
-    private IEnumerable<Stop> _stops;
+    private IndexedList<Stop> _stops;
     
     protected override async Task OnInitializedAsync()
     {
@@ -80,7 +82,8 @@
 
     async Task GetStops()
     {
-        _stops = await Context.Stops.OrderBy(s => s.Index).ToListAsync();
+        var data = await PlannerContext.Stops.OrderBy(s => s.Index).ToListAsync();
+        _stops = new IndexedList<Stop>(data);
     }
 
     private void BackupItem(object stopObj)
@@ -100,11 +103,23 @@
 
     private async void ItemHasBeenCommitted(object stopObj)
     {
-        var stop = (Stop)stopObj;
+        var oldStop = EditCache;
+        var newStop = (Stop)stopObj;
 
-        Context.Stops.Update(stop);
+        if (oldStop.Index != newStop.Index)
+        {
+            _stops.Move(oldStop.Index, newStop.Index);
+            _stops.ActionOnUpdatedIndex(s =>
+            {
+                PlannerContext.Stops.Update(s);
+            });
+        }
+        else
+        {
+            PlannerContext.Stops.Update(newStop);
+        }
         
-        await Context.SaveChangesAsync();
+        await PlannerContext.SaveChangesAsync();
         
         StateHasChanged();
     }
