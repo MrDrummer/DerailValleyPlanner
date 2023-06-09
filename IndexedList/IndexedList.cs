@@ -1,5 +1,6 @@
 ﻿namespace IndexedList;
 
+// TODO: Investigate ListExtensions to add methods to the List class, rather than adding a layer.
 public class IndexedList<T> : List<T> where T: IIndexed
 {
     public IndexedList() {}

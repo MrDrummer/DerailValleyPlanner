@@ -37,6 +37,10 @@
         <MudTh>Yard</MudTh>
         <MudTh>Type</MudTh>
         <MudTh>Note</MudTh>
+        <MudTh>Mass</MudTh>
+        <MudTh>Length</MudTh>
+        <MudTh>Wagons</MudTh>
+        <MudTh>Pay</MudTh>
     </HeaderContent>
     <RowTemplate>
         @if (!ReadOnly)
@@ -46,6 +50,10 @@
         <MudTd DataLabel="Yard">@context.Yard</MudTd>
         <MudTd DataLabel="Type">@context.Type</MudTd>
         <MudTd DataLabel="Note">@context.Note</MudTd>
+        <MudTd DataLabel="TotalMass">@context.TotalMass</MudTd>
+        <MudTd DataLabel="TotalLength">@context.TotalLength</MudTd>
+        <MudTd DataLabel="TotalWagons">@context.TotalWagons</MudTd>
+        <MudTd DataLabel="TotalPay">@context.TotalPay</MudTd>
     </RowTemplate>
     <RowEditingTemplate>
         <MudTd DataLabel="Index">

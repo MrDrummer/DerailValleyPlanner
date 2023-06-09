@@ -36,8 +36,35 @@ public class Stop : Indexed
     
     public ICollection<StopJob> Jobs { get; set; }
     
-    // public int TotalMass { get; set; }
-    // public int TotalLength { get; set; }
-    // public int TotalWagons { get; set; }
-    // public int TotalPay { get; set; }
+    public int? TotalMass
+    {
+        get
+        {
+            return Jobs?.Sum(j => j.Job.Mass);
+        }
+    }
+    
+    public int? TotalLength
+    {
+        get
+        {
+            return Jobs?.Sum(j => j.Job.Length);
+        }
+    }
+    
+    public int? TotalWagons
+    {
+        get
+        {
+            return Jobs?.Sum(j => j.Job.Wagons);
+        }
+    }
+    
+    public int? TotalPay
+    {
+        get
+        {
+            return Jobs?.Sum(j => j.Job.Pays);
+        }
+    }
 }
