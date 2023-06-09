@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IndexedList", "IndexedList\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IndexedList.UnitTests", "IndexedList.UnitTests\IndexedList.UnitTests.csproj", "{03F5A92A-6D0A-465A-97A0-EA02101DE62F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ListTest", "ListTest\ListTest.csproj", "{029AC99B-70B9-499E-8CEF-05D3F65DBC60}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,6 +36,10 @@ Global
 		{03F5A92A-6D0A-465A-97A0-EA02101DE62F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{03F5A92A-6D0A-465A-97A0-EA02101DE62F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{03F5A92A-6D0A-465A-97A0-EA02101DE62F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{029AC99B-70B9-499E-8CEF-05D3F65DBC60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{029AC99B-70B9-499E-8CEF-05D3F65DBC60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{029AC99B-70B9-499E-8CEF-05D3F65DBC60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{029AC99B-70B9-499E-8CEF-05D3F65DBC60}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
