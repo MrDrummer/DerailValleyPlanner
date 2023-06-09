@@ -80,7 +80,7 @@
 
     async Task GetStops()
     {
-        _stops = await Context.Stops.ToListAsync();
+        _stops = await Context.Stops.OrderBy(s => s.Index).ToListAsync();
     }
 
     private void BackupItem(object stopObj)

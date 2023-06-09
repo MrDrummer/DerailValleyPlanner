@@ -106,7 +106,7 @@ public class PlannerContext : DbContext
             new Stop
             {
                 StopId = 1,
-                Index = 1,
+                Index = 3,
                 Type = Stop.Kind.Load,
                 // Yard = _config.Yards.FirstOrDefault(y => y.Code == "SM"),
                 Yard = "SM",
@@ -115,7 +115,7 @@ public class PlannerContext : DbContext
             new Stop
             {
                 StopId = 2,
-                Index = 2,
+                Index = 0,
                 Type = Stop.Kind.Unload,
                 // Yard = _config.Yards.FirstOrDefault(y => y.Code == "SM"),
                 Yard = "FF",
@@ -124,7 +124,7 @@ public class PlannerContext : DbContext
             new Stop
             {
                 StopId = 3,
-                Index = 3,
+                Index = 1,
                 Type = Stop.Kind.Via,
                 // Yard = _config.Yards.FirstOrDefault(y => y.Code == "SM"),
                 Yard = "MF",
@@ -133,7 +133,7 @@ public class PlannerContext : DbContext
             new Stop
             {
                 StopId = 4,
-                Index = 4,
+                Index = 2,
                 Type = Stop.Kind.Unload,
                 // Yard = _config.Yards.FirstOrDefault(y => y.Code == "SM"),
                 Yard = "FM",

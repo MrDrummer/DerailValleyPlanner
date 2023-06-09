@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using IndexedList;
 using Microsoft.EntityFrameworkCore;
 
 namespace DerailValleyPlanner.Models;
@@ -7,7 +8,7 @@ namespace DerailValleyPlanner.Models;
  * Contains jobs
  */
 // [PrimaryKey(nameof(StopId))]
-public class Stop
+public class Stop : Indexed
 {
     public enum Kind
     {
@@ -20,7 +21,8 @@ public class Stop
     public int StopId { set; get; }
     
     [Required]
-    public int Index { get; set; }
+    // TODO: Clarify if this "new" will allow the IndexedList to work?
+    public new int Index { get; set; }
     
     [Required]
     public string Yard { get; set; }
