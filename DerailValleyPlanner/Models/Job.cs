@@ -72,5 +72,5 @@ public class Job
     [DisplayName("Description")]
     public string Description { get; set; }
     
-    public ICollection<StopJob> Stops { get; set; }
+    public List<Job> Stops { get; set; }
 }

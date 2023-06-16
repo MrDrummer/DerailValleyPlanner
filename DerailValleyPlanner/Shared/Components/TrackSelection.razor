@@ -18,11 +18,11 @@
 
     [Parameter]
     public string Yard { get; set; }
-    private string YardCache { get; set; }
     
     [Parameter]
     public EventCallback<string> TrackChanged { get; set; }
 
+    private string YardCache { get; set; }
     private List<string> _trackList = new();
 
     protected override void OnInitialized()

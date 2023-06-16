@@ -141,11 +141,11 @@ public class PlannerContext : DbContext
             }
         );
 
-        modelBuilder.Entity<StopJob>();
+        // modelBuilder.Entity<StopJob>();
     }
     
     public DbSet<Job> Jobs { get; set; }
     public DbSet<Stop> Stops { get; set; }
     
-    public DbSet<StopJob> StopJobs { get; set; }
+    // public DbSet<StopJob> StopJobs { get; set; }
 }

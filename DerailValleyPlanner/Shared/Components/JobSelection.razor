@@ -1,32 +1,35 @@
 ﻿@using Microsoft.EntityFrameworkCore
 @using DerailValleyPlanner.Data
 @using DerailValleyPlanner.Models
-
-<MudSelect T="string" Label="@Label" Value="Job" ValueChanged="JobChanged" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter">
-    @foreach (var job in _jobList)
-    {
-        <MudSelectItem Value="@job.JobId">@job.Job.ConsistId</MudSelectItem>
-    }
-</MudSelect>
+@using System.Collections.ObjectModel
+@* SelectedValuesChanged="JobsChanged" *@
+@* <MudSelect T="IEnumerable<Job>" Label="@Label" @bind-SelectedValues="@Jobs" MultiSelection="true" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter"> *@
+@*     @foreach (var job in _jobList) *@
+@*     { *@
+@*         <MudSelectItem Value="@job.JobId">@job.ConsistId</MudSelectItem> *@
+@*     } *@
+@* </MudSelect> *@
 
 @code {
-    
     [Inject]
     private PlannerContext PlannerContext { get; set; }
     
     [Parameter]
     public string Label { get; set; }
+    
+    [Parameter]
+    public Stop.Kind Type { get; set; }
 
     [Parameter]
-    public string Job { get; set; }
+    public IEnumerable<Job> Jobs { get; set; }
     
     [Parameter]
     public string Yard { get; set; }
     
     [Parameter]
-    public EventCallback<string> JobChanged { get; set; }
+    public EventCallback<IEnumerable<Job>> JobsChanged { get; set; }
 
-    private List<StopJob> _jobList;
+    private IEnumerable<Job> _jobList;
 
     
     protected override async Task OnInitializedAsync()
@@ -36,6 +39,10 @@
 
     async Task GetJobs()
     {
-        _jobList = await PlannerContext.StopJobs.Where(sj => sj.Job.ToYard == Yard || sj.Job.FromYard == Yard).ToListAsync();
+        // _jobList = await PlannerContext.Jobs.Where(j =>
+        //     Type == Stop.Kind.Load
+        //         ? j.FromYard == Yard
+        //         : j.ToYard == Yard
+        //     ).ToListAsync();
     }
 }

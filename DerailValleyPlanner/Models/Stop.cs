@@ -34,13 +34,13 @@ public class Stop : Indexed
     [MaxLength(1000)]
     public string Note { get; set; }
     
-    public ICollection<StopJob> Jobs { get; set; }
+    public List<Job> Jobs { get; set; }
     
     public int? TotalMass
     {
         get
         {
-            return Jobs?.Sum(j => j.Job.Mass);
+            return Jobs?.Sum(j => j.Mass);
         }
     }
     
@@ -48,7 +48,7 @@ public class Stop : Indexed
     {
         get
         {
-            return Jobs?.Sum(j => j.Job.Length);
+            return Jobs?.Sum(j => j.Length);
         }
     }
     
@@ -56,7 +56,7 @@ public class Stop : Indexed
     {
         get
         {
-            return Jobs?.Sum(j => j.Job.Wagons);
+            return Jobs?.Sum(j => j.Wagons);
         }
     }
     
@@ -64,7 +64,7 @@ public class Stop : Indexed
     {
         get
         {
-            return Jobs?.Sum(j => j.Job.Pays);
+            return Jobs?.Sum(j => j.Pays);
         }
     }
 }
