@@ -20,9 +20,9 @@ public class Stop : Indexed
     [Key]
     public int StopId { set; get; }
     
-    [Required]
-    // TODO: Clarify if this "new" will allow the IndexedList to work?
-    public new int Index { get; set; }
+    // [Required]
+    // TODO: Clarify if this "new" will allow the Index in the base class to work?
+    // public int Index { get; set; }
     
     [Required]
     public string Yard { get; set; }

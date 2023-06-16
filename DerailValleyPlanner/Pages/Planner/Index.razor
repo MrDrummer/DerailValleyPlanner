@@ -4,6 +4,8 @@
 @using DerailValleyPlanner.Models
 @using DerailValleyPlanner.Data
 @using Microsoft.EntityFrameworkCore
+@using System.Collections.ObjectModel
+@using System.Collections.Specialized
 @inject ISnackbar Snackbar
 @*
 - Will list all Yards and the summary for each (total jobs, wagons, length, mass and money totalled) load and unload
@@ -37,20 +39,34 @@
         <MudTh>Yard</MudTh>
         <MudTh>Type</MudTh>
         <MudTh>Note</MudTh>
-        <MudTh>Mass</MudTh>
-        <MudTh>Length</MudTh>
-        <MudTh>Wagons</MudTh>
-        <MudTh>Pay</MudTh>
+        @if (!CurrentlyEditing)
+        {
+            <MudTh>Mass</MudTh>
+            <MudTh>Length</MudTh>
+            <MudTh>Wagons</MudTh>
+            <MudTh>Pay</MudTh>
+        }
+        else
+        {
+            <MudTh>Current Jobs</MudTh>
+        }
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="Index">@context.Index</MudTd>
         <MudTd DataLabel="Yard">@context.Yard</MudTd>
         <MudTd DataLabel="Type">@context.Type</MudTd>
         <MudTd DataLabel="Note">@context.Note</MudTd>
-        <MudTd DataLabel="TotalMass">@context.TotalMass</MudTd>
-        <MudTd DataLabel="TotalLength">@context.TotalLength</MudTd>
-        <MudTd DataLabel="TotalWagons">@context.TotalWagons</MudTd>
-        <MudTd DataLabel="TotalPay">@context.TotalPay</MudTd>
+        @if (!CurrentlyEditing)
+        {
+            <MudTd DataLabel="TotalMass">@context.TotalMass</MudTd>
+            <MudTd DataLabel="TotalLength">@context.TotalLength</MudTd>
+            <MudTd DataLabel="TotalWagons">@context.TotalWagons</MudTd>
+            <MudTd DataLabel="TotalPay">@context.TotalPay</MudTd>
+        }
+        else
+        {
+            <MudTd DataLabel="CurrentJobs">Jobs</MudTd>
+        }
     </RowTemplate>
     <RowEditingTemplate>
         <MudTd DataLabel="Index">
@@ -61,7 +77,7 @@
         </MudTd>
         <MudTd DataLabel="Type">Dropdown</MudTd>
         <MudTd DataLabel="Note">Text box</MudTd>
-        <MudTd>Job Selector</MudTd>
+        <MudTd DataLabel="CurrentJobs">Job Selector</MudTd>
     </RowEditingTemplate>
     <EditButtonContent Context="button">
         <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" Class="pa-0" OnClick="@button.ButtonAction" Disabled="@button.ButtonDisabled" />
@@ -77,9 +93,10 @@
 
     private bool ReadOnly = true;
 
+    private bool CurrentlyEditing = false;
     private Stop selectedItem;
     private Stop EditCache;
-    private IndexedList<Stop> _stops;
+    private ObservableCollection<Stop> _stops = new();
     
     protected override async Task OnInitializedAsync()
     {
@@ -88,13 +105,38 @@
 
     async Task GetStops()
     {
-        var data = await PlannerContext.Stops.OrderBy(s => s.Index).ToListAsync();
-        _stops = new IndexedList<Stop>(data);
+        await PlannerContext.Stops.OrderBy(s => s.Index).ForEachAsync(s =>
+        {
+            s.PropertyChanging += ItemOnPropertyChanging;
+            _stops.Add(s);
+        });
+
+        _stops.CollectionChanged += (sender, args) =>
+        {
+            if (args.Action != NotifyCollectionChangedAction.Move) return;
+            Console.WriteLine($"Item at index {args.OldStartingIndex} moved to index {args.NewStartingIndex}");
+
+            var (oldI, newI) = (args.OldStartingIndex, args.NewStartingIndex);
+
+            var start = newI > oldI ? oldI : newI;
+
+            if (sender is not ObservableCollection<Stop> newItems || newItems.Count == 0) return;
+            for (var i = start; i < newItems.Count; i++)
+            {
+                var item = newItems[i];
+                if (item != null && item.Index == i && item.Index != start) return;
+                item.Index = i;
+            }
+        };
     }
 
     private void BackupItem(object stopObj)
     {
+        CurrentlyEditing = true;
         var stop = (Stop)stopObj;
+        
+        _stops[stop.Index].PropertyChanging -= ItemOnPropertyChanging;
+
         EditCache = new Stop
         {
             Index = stop.Index,
@@ -109,16 +151,14 @@
 
     private async void ItemHasBeenCommitted(object stopObj)
     {
+        CurrentlyEditing = false;
         var oldStop = EditCache;
         var newStop = (Stop)stopObj;
+        _stops[oldStop.Index].PropertyChanging += ItemOnPropertyChanging;
 
         if (oldStop.Index != newStop.Index)
         {
             _stops.Move(oldStop.Index, newStop.Index);
-            _stops.ActionOnUpdatedIndex(s =>
-            {
-                PlannerContext.Stops.Update(s);
-            });
         }
         else
         {
@@ -132,15 +172,26 @@
 
     private void ResetItemToOriginalValues(object stopObj)
     {
+        CurrentlyEditing = false;
         var stop = (Stop)stopObj;
+        
         stop.Index = EditCache.Index;
         stop.StopId = EditCache.StopId;
         stop.Type = EditCache.Type;
         stop.Jobs = EditCache.Jobs;
         stop.Yard = EditCache.Yard;
         stop.Note = EditCache.Note;
+        
+        _stops[stop.Index].PropertyChanging += ItemOnPropertyChanging;
         StateHasChanged();
     }
-    
-    
+
+    private void ItemOnPropertyChanging(object? sender, ValueChanged e)
+    {
+        Console.WriteLine($"{e.OldValue} changed to {e.NewValue}");
+
+        if (sender is not Stop stop) return;
+        
+        PlannerContext.Stops.Update(stop);
+    }
 }
