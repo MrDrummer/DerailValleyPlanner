@@ -3,12 +3,12 @@
 @using DerailValleyPlanner.Models
 @using System.Collections.ObjectModel
 @* SelectedValuesChanged="JobsChanged" *@
-@* <MudSelect T="IEnumerable<Job>" Label="@Label" @bind-SelectedValues="@Jobs" MultiSelection="true" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter"> *@
-@*     @foreach (var job in _jobList) *@
-@*     { *@
-@*         <MudSelectItem Value="@job.JobId">@job.ConsistId</MudSelectItem> *@
-@*     } *@
-@* </MudSelect> *@
+<MudSelect T="Job" Label="@Label" @bind-SelectedValues="@Jobs" MultiSelection="true" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter">
+    @foreach (var job in _jobList)
+    {
+        <MudSelectItem Value="@job.JobId">@job.ConsistId</MudSelectItem>
+    }
+</MudSelect>
 
 @code {
     [Inject]
