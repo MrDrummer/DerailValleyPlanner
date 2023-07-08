@@ -34,7 +34,7 @@ public class Stop : Indexed
     [MaxLength(1000)]
     public string Note { get; set; }
     
-    public List<Job> Jobs { get; set; }
+    public IEnumerable<Job> Jobs { get; set; }
     
     public int? TotalMass
     {
