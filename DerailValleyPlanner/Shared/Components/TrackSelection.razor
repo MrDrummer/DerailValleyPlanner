@@ -22,18 +22,18 @@
     [Parameter]
     public EventCallback<string> TrackChanged { get; set; }
 
-    private string YardCache { get; set; }
+    private string _yardCache;
     private List<string> _trackList = new();
 
     protected override void OnInitialized()
     {
-        YardCache = Yard;
+        _yardCache = Yard;
         SetTrackList();
     }
 
     protected override void OnParametersSet()
     {
-        if (YardCache != Yard)
+        if (_yardCache != Yard)
         {
             SetTrackList();
         }
