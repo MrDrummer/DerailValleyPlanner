@@ -72,7 +72,7 @@
     </RowTemplate>
     <RowEditingTemplate>
         <MudTd DataLabel="Index">
-            <IndexSelection Label="Position" @bind-Index="@context.Index" Count="@_stops.Count"></IndexSelection>
+            <StopIndexSelection Label="Position" @bind-Index="@context.Index" Count="@_stops.Count"></StopIndexSelection>
         </MudTd>
         <MudTd DataLabel="Yard">
             <YardSelection @bind-Yard="@context.Yard"></YardSelection>
