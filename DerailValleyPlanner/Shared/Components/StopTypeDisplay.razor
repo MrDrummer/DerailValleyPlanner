@@ -1,0 +1,55 @@
+﻿@using DerailValleyPlanner.Services
+@using DerailValleyPlanner.Models
+
+
+<MudChip Style="@($"background-color: {Colors.Red.Default};")">
+    <MudIcon Icon="@($"fas {Icon}")" Style="@($"color: {Color};")"/>
+    @Label (@Type.ToString())
+</MudChip>
+
+@code {
+    [Parameter]
+    public Stop.Kind Type { get; set; }
+
+    private string Color
+    {
+        get
+        {
+            return Type switch
+            {
+                Stop.Kind.Load => Colors.Green.Default,
+                Stop.Kind.Via => Colors.Amber.Default,
+                Stop.Kind.Unload => Colors.Red.Default,
+                _ => throw new ArgumentOutOfRangeException()
+            };
+        }
+    }
+
+    private string Label
+    {
+        get
+        {
+            return Type switch
+            {
+                Stop.Kind.Load => "Load",
+                Stop.Kind.Via => "Via",
+                Stop.Kind.Unload => "Unload",
+                _ => throw new ArgumentOutOfRangeException()
+                };
+        }
+    }
+
+    private string Icon
+    {
+        get
+        {
+            return Type switch
+            {
+                Stop.Kind.Load => "arrow-down-from-bracket",
+                Stop.Kind.Via => "arrow-right-from-line",
+                Stop.Kind.Unload => "arrow-up-from-bracket",
+                _ => throw new ArgumentOutOfRangeException()
+                };
+        }
+    }
+}

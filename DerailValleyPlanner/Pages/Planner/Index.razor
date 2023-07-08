@@ -56,7 +56,9 @@
         <MudTd DataLabel="Yard">
             <YardDisplay YardCode="@context.Yard"></YardDisplay>
         </MudTd>
-        <MudTd DataLabel="Type">@context.Type</MudTd>
+        <MudTd DataLabel="Type">
+            <StopTypeDisplay Type="@context.Type"></StopTypeDisplay>
+        </MudTd>
         <MudTd DataLabel="Note">@context.Note</MudTd>
         @if (!CurrentlyEditing)
         {
@@ -77,7 +79,9 @@
         <MudTd DataLabel="Yard">
             <YardSelection @bind-Yard="@context.Yard"></YardSelection>
         </MudTd>
-        <MudTd DataLabel="Type">Dropdown</MudTd>
+        <MudTd DataLabel="Type">
+            <StopTypeSelection @bind-Type="@context.Type"></StopTypeSelection>
+        </MudTd>
         <MudTd DataLabel="Note">Text box</MudTd>
         <MudTd DataLabel="CurrentJobs">
             <JobSelection @bind-Jobs="@context.Jobs" Type="@context.Type" Yard="@context.Yard" Label="Jobs"></JobSelection>
