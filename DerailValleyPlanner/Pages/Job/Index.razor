@@ -27,9 +27,19 @@ else
         <Columns>
             <PropertyColumn Property="j => j.JobId" Title="Internal ID" />
             <PropertyColumn Property="j => j.ConsistId" Title="Consist ID"/>
-            <PropertyColumn Property="j => j.FromYard" Title="From Yard"/>
+            @* <PropertyColumn Property="j => j.FromYard" Title="From Yard"/> *@
+            <TemplateColumn>
+                <CellTemplate>
+                    <YardDisplay YardCode="@context.Item.FromYard"></YardDisplay>
+                </CellTemplate>
+            </TemplateColumn>
             <PropertyColumn Property="j => j.FromTrack" Title="From Track"/>
-            <PropertyColumn Property="j => j.ToYard" Title="To Yard"/>
+            @* <PropertyColumn Property="j => j.ToYard" Title="To Yard"/> *@
+            <TemplateColumn>
+                <CellTemplate>
+                    <YardDisplay YardCode="@context.Item.ToYard"></YardDisplay>
+                </CellTemplate>
+            </TemplateColumn>
             <PropertyColumn Property="j => j.ToTrack" Title="To Track"/>
             <PropertyColumn Property="j => j.Mass.ToString() + 't'" Title="Mass"/>
             <PropertyColumn Property="j => j.Length.ToString() + 'm'" Title="Length"/>
@@ -52,7 +62,7 @@ else
     private IEnumerable<Job> _jobs;
 
     [Inject]
-    private PlannerContext Context { get; set; }
+    private PlannerContext PlannerContext { get; set; }
     
     protected override async Task OnInitializedAsync()
     {
@@ -61,7 +71,7 @@ else
 
     async Task GetJobs()
     {
-        _jobs = await Context.Jobs.ToListAsync();
+        _jobs = await PlannerContext.Jobs.ToListAsync();
     }
 
     void GoToCreatePage()
