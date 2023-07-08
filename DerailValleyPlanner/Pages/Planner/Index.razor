@@ -1,4 +1,4 @@
-@page "/planner"
+﻿@page "/planner"
 @* @page "/planner/{EditMode}" *@
 
 @using DerailValleyPlanner.Models
@@ -35,7 +35,7 @@
     EditTrigger="@TableEditTrigger.EditButton"
 >
     <HeaderContent>
-        <MudTh>Index</MudTh>
+        <MudTh>Position</MudTh>
         <MudTh>Yard</MudTh>
         <MudTh>Type</MudTh>
         <MudTh>Note</MudTh>
@@ -72,7 +72,7 @@
     </RowTemplate>
     <RowEditingTemplate>
         <MudTd DataLabel="Index">
-            <MudNumericField Label="Index" @bind-Value="@context.Index"></MudNumericField>
+            <IndexSelection Label="Position" @bind-Index="@context.Index" Count="@_stops.Count"></IndexSelection>
         </MudTd>
         <MudTd DataLabel="Yard">
             <YardSelection @bind-Yard="@context.Yard"></YardSelection>
@@ -80,12 +80,49 @@
         <MudTd DataLabel="Type">Dropdown</MudTd>
         <MudTd DataLabel="Note">Text box</MudTd>
         <MudTd DataLabel="CurrentJobs">
-            @* <JobSelection @bind-Jobs="@context.Jobs" Type="@context.Type" Yard="@context.Yard" Label="Jobs"></JobSelection> *@
+            <JobSelection @bind-Jobs="@context.Jobs" Type="@context.Type" Yard="@context.Yard" Label="Jobs"></JobSelection>
         </MudTd>
     </RowEditingTemplate>
     <EditButtonContent Context="button">
         <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" Class="pa-0" OnClick="@button.ButtonAction" Disabled="@button.ButtonDisabled" />
     </EditButtonContent>
+    <ChildRowContent>
+        @* <MudTr> *@
+        @*     <MudText Typo="Typo.body1">@context.Jobs?.Count()</MudText> *@
+        @* </MudTr> *@
+        @if (context.Jobs != null)
+        {
+            @foreach (var job in context.Jobs)
+            {
+                <MudTr>
+                    <MudTd colspan="3"></MudTd>
+                    <MudTd>
+                        <MudChip Color="Color.Dark">@job.ConsistId</MudChip>
+                    </MudTd>
+                    <MudTd>@job.Mass</MudTd>
+                    <MudTd>@job.Length</MudTd>
+                    <MudTd>@job.Wagons</MudTd>
+                    <MudTd>@job.Pays</MudTd>
+                </MudTr>
+            }
+        }
+        @*     <MudTr> *@
+        @*         <td colspan="9"> *@
+        @*             <MudTable Items="@context.Jobs" Context="JobContext"> *@
+        @*                 <RowTemplate> *@
+        @*                     <MudSpacer></MudSpacer> *@
+        @*                     <MudTd> *@
+        @*                         <MudChip Color="Color.Dark">@JobContext.ConsistId</MudChip> *@
+        @*                     </MudTd> *@
+        @*                     <MudTd>@JobContext.Mass</MudTd> *@
+        @*                     <MudTd>@JobContext.Length</MudTd> *@
+        @*                     <MudTd>@JobContext.Wagons</MudTd> *@
+        @*                     <MudTd>@JobContext.Pays</MudTd> *@
+        @*                 </RowTemplate> *@
+        @*             </MudTable> *@
+        @*         </td> *@
+        @*     </MudTr> *@
+    </ChildRowContent>
 </MudTable>
 
 @code {
