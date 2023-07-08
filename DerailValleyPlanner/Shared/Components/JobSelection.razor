@@ -2,11 +2,16 @@
 @using DerailValleyPlanner.Data
 @using DerailValleyPlanner.Models
 @using System.Collections.ObjectModel
+@using System.Linq
+
+
 @* SelectedValuesChanged="JobsChanged" *@
-<MudSelect T="Job" Label="@Label" @bind-SelectedValues="@Jobs" MultiSelection="true" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter">
+@* @bind-SelectedValues="@Jobs" *@
+<MudSelect T="Job" ToStringFunc="@_converter" Label="@Label" SelectedValues="@Jobs" SelectedValuesChanged="@JobsChanged" MultiSelection="true" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter">
+@* <MudSelect T="Job" ToStringFunc="@_converter" Label="@Label" @bind-SelectedValues="@TempJobs" MultiSelection="true" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter"> *@
     @foreach (var job in _jobList)
     {
-        <MudSelectItem Value="@job.JobId">@job.ConsistId</MudSelectItem>
+        <MudSelectItem T="Job" Value="@job">@job.ConsistId</MudSelectItem>
     }
 </MudSelect>
 
@@ -22,6 +27,8 @@
 
     [Parameter]
     public IEnumerable<Job> Jobs { get; set; }
+
+    private IEnumerable<Job> TempJobs { get; set; }
     
     [Parameter]
     public string Yard { get; set; }
@@ -29,7 +36,7 @@
     [Parameter]
     public EventCallback<IEnumerable<Job>> JobsChanged { get; set; }
 
-    private IEnumerable<Job> _jobList;
+    private IEnumerable<Job> _jobList = new HashSet<Job>();
 
     
     protected override async Task OnInitializedAsync()
@@ -39,10 +46,26 @@
 
     async Task GetJobs()
     {
-        // _jobList = await PlannerContext.Jobs.Where(j =>
-        //     Type == Stop.Kind.Load
-        //         ? j.FromYard == Yard
-        //         : j.ToYard == Yard
-        //     ).ToListAsync();
+        var jobs = PlannerContext.Jobs;
+        IQueryable<Job> query;
+        
+        switch (Type)
+        {
+            case Stop.Kind.Load:
+                query = jobs.Where(j => j.FromYard == Yard);
+                break;
+            case Stop.Kind.Unload:
+                query = jobs.Where(j => j.ToYard == Yard);
+                break;
+            case Stop.Kind.Via:
+            default:
+                _jobList = new HashSet<Job>();
+                return;
+        }
+        
+        _jobList = await query.ToListAsync();
+        // _jobList = await PlannerContext.Jobs.ToListAsync();
     }
+    
+    Func<Job, string> _converter = p => p?.ConsistId;
 }
