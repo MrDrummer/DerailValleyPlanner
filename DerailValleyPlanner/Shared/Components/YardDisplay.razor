@@ -1,0 +1,27 @@
+﻿@using DerailValleyPlanner.Services
+@using DerailValleyPlanner.Models
+
+@inject ConfigService Config
+
+<MudChip Style="@($"background-color: {_yard.Color};")">
+    <MudIcon Icon="fas fa-location-dot" Style="@($"color: {Colors.Red.Default};")"/>
+    @_yard.Name (@_yard.Code)
+</MudChip>
+
+@code {
+    [Parameter]
+    public string YardCode { get; set; }
+
+    private Yard _yard;
+
+    protected override void OnInitialized()
+    {
+        SetYard();
+    }
+
+    private void SetYard()
+    {
+        _yard = Config.Yards
+            .Find(y => y.Code == YardCode);
+    }
+}

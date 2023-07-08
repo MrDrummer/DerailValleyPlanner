@@ -1,4 +1,4 @@
-﻿@page "/planner"
+@page "/planner"
 @* @page "/planner/{EditMode}" *@
 
 @using DerailValleyPlanner.Models
@@ -52,8 +52,10 @@
         }
     </HeaderContent>
     <RowTemplate>
-        <MudTd DataLabel="Index">@context.Index</MudTd>
-        <MudTd DataLabel="Yard">@context.Yard</MudTd>
+        <MudTd DataLabel="Index">@(@context.Index + 1)</MudTd>
+        <MudTd DataLabel="Yard">
+            <YardDisplay YardCode="@context.Yard"></YardDisplay>
+        </MudTd>
         <MudTd DataLabel="Type">@context.Type</MudTd>
         <MudTd DataLabel="Note">@context.Note</MudTd>
         @if (!CurrentlyEditing)
