@@ -43,7 +43,9 @@ public class Stop : Indexed
             return Jobs?.Sum(j => j.Mass);
         }
     }
-    
+
+    public int? ChangeMass => Type == Kind.Unload ? TotalMass * -1 : TotalMass;
+
     public int? TotalLength
     {
         get
@@ -52,6 +54,8 @@ public class Stop : Indexed
         }
     }
     
+    public int? ChangeLength => Type == Kind.Unload ? TotalLength * -1 : TotalLength;
+    
     public int? TotalWagons
     {
         get
@@ -59,6 +63,8 @@ public class Stop : Indexed
             return Jobs?.Sum(j => j.Wagons);
         }
     }
+    
+    public int? ChangeWagons => Type == Kind.Unload ? TotalWagons * -1 : TotalWagons;
     
     public int? TotalPay
     {

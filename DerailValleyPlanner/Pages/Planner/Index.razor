@@ -26,7 +26,7 @@
     ReadOnly="@(!ReadOnly)"
     @bind-SelectedItem="selectedItem"
     CommitEditTooltip="Commit Edit"
-    OnCommitEditClick="@(() => Snackbar.Add("Commit Edit Handler Invoked"))"
+    FixedHeader="true"
     RowEditPreview="BackupItem"
     RowEditCancel="ResetItemToOriginalValues"
     RowEditCommit="ItemHasBeenCommitted"
@@ -35,24 +35,33 @@
     EditTrigger="@TableEditTrigger.EditButton"
 >
     <HeaderContent>
-        <MudTh>Position</MudTh>
+        @if (CurrentlyEditing)
+        {
+            <MudTh>Position</MudTh>
+        }
         <MudTh>Yard</MudTh>
         <MudTh>Type</MudTh>
         <MudTh>Note</MudTh>
         @if (!CurrentlyEditing)
         {
-            <MudTh>Mass</MudTh>
-            <MudTh>Length</MudTh>
-            <MudTh>Wagons</MudTh>
-            <MudTh>Pay</MudTh>
+            <MudTh>Mass Change</MudTh>
+            <MudTh>Total Mass</MudTh>
+            <MudTh>Length Change</MudTh>
+            <MudTh>Total Length</MudTh>
+            <MudTh>Wagons Change</MudTh>
+            <MudTh>Total Wagons</MudTh>
+            <MudTh>Total Pay</MudTh>
         }
         else
         {
-            <MudTh>Current Jobs</MudTh>
+            <MudTh></MudTh>
         }
     </HeaderContent>
     <RowTemplate>
-        <MudTd DataLabel="Index">@(@context.Index + 1)</MudTd>
+        @if(CurrentlyEditing)
+        {
+            <MudTd DataLabel="Index">@(@context.Index + 1)</MudTd>
+        }
         <MudTd DataLabel="Yard">
             <YardDisplay YardCode="@context.Yard"></YardDisplay>
         </MudTd>
@@ -62,14 +71,33 @@
         <MudTd DataLabel="Note">@context.Note</MudTd>
         @if (!CurrentlyEditing)
         {
-            <MudTd DataLabel="TotalMass">@context.TotalMass</MudTd>
-            <MudTd DataLabel="TotalLength">@context.TotalLength</MudTd>
-            <MudTd DataLabel="TotalWagons">@context.TotalWagons</MudTd>
-            <MudTd DataLabel="TotalPay">@context.TotalPay</MudTd>
+            @if (context.Jobs != null && context.Jobs.Any())
+            {
+                <MudTd DataLabel="MassChange" Style="text-align: right"><strong>@context.ChangeMass t</strong></MudTd>
+                <MudTd DataLabel="TotalMass" Style="text-align: right"><strong>@context.TotalMass t</strong></MudTd>
+
+                <MudTd DataLabel="LengthChange" Style="text-align: right"><strong>@context.ChangeLength m</strong></MudTd>
+                <MudTd DataLabel="TotalLength" Style="text-align: right"><strong>@context.TotalLength m</strong></MudTd>
+
+                <MudTd DataLabel="WagonsChange" Style="text-align: right"><strong>@context.ChangeWagons</strong></MudTd>
+                <MudTd DataLabel="TotalWagons" Style="text-align: right"><strong>@context.TotalWagons</strong></MudTd>
+                @if (context.Type == Stop.Kind.Unload)
+                {
+                    <MudTd DataLabel="TotalPay" Style="text-align: right"><strong>$ @context.TotalPay</strong></MudTd>
+                }
+                else
+                {
+                    <MudTd></MudTd>
+                }
+            }
+            else
+            {
+                <MudTd colspan="7"></MudTd>
+            }
         }
         else
         {
-            <MudTd DataLabel="CurrentJobs">Jobs</MudTd>
+            <MudTd></MudTd>
         }
     </RowTemplate>
     <RowEditingTemplate>
@@ -77,14 +105,16 @@
             <StopIndexSelection Label="Position" @bind-Index="@context.Index" Count="@_stops.Count"></StopIndexSelection>
         </MudTd>
         <MudTd DataLabel="Yard">
-            <YardSelection @bind-Yard="@context.Yard"></YardSelection>
+            <YardSelection Label="Yard" @bind-Yard="@context.Yard"></YardSelection>
         </MudTd>
         <MudTd DataLabel="Type">
-            <StopTypeSelection @bind-Type="@context.Type"></StopTypeSelection>
+            <StopTypeSelection Label="Stop Type" @bind-Type="@context.Type"></StopTypeSelection>
         </MudTd>
-        <MudTd DataLabel="Note">Text box</MudTd>
+        <MudTd DataLabel="Note">
+            <MudTextField Label="Note" T="string" @bind-Text="@context.Note" Lines="2"></MudTextField>
+        </MudTd>
         <MudTd DataLabel="CurrentJobs">
-            <JobSelection @bind-Jobs="@context.Jobs" Type="@context.Type" Yard="@context.Yard" Label="Jobs"></JobSelection>
+            <JobSelection Label="Jobs" @bind-Jobs="@context.Jobs" Type="@context.Type" Yard="@context.Yard"></JobSelection>
         </MudTd>
     </RowEditingTemplate>
     <EditButtonContent Context="button">
@@ -94,38 +124,35 @@
         @* <MudTr> *@
         @*     <MudText Typo="Typo.body1">@context.Jobs?.Count()</MudText> *@
         @* </MudTr> *@
-        @if (context.Jobs != null)
+        @if (context.Jobs != null  && context.Jobs.Any() && !CurrentlyEditing)
         {
             @foreach (var job in context.Jobs)
             {
+                var negative = context.Type == Stop.Kind.Unload ? "-" : "";
                 <MudTr>
-                    <MudTd colspan="3"></MudTd>
+                    <MudTd></MudTd>
                     <MudTd>
                         <MudChip Color="Color.Dark">@job.ConsistId</MudChip>
                     </MudTd>
-                    <MudTd>@job.Mass</MudTd>
-                    <MudTd>@job.Length</MudTd>
-                    <MudTd>@job.Wagons</MudTd>
-                    <MudTd>@job.Pays</MudTd>
+                    <MudTd>@job.Description</MudTd>
+                    <MudTd Style="text-align: right">@negative@job.Mass t</MudTd>
+                    <MudTd></MudTd>
+                    <MudTd Style="text-align: right">@negative@job.Length m</MudTd>
+                    <MudTd></MudTd>
+                    <MudTd Style="text-align: right">@negative@job.Wagons</MudTd>
+                    <MudTd></MudTd>
+                    @if(context.Type == Stop.Kind.Unload)
+                    {
+                        <MudTd Style="text-align: right">$ @job.Pays</MudTd>
+                    }
+                    else
+                    {
+                        <MudTd Style="text-align: center">-</MudTd>
+                    }
+                    <MudTd></MudTd>
                 </MudTr>
             }
         }
-        @*     <MudTr> *@
-        @*         <td colspan="9"> *@
-        @*             <MudTable Items="@context.Jobs" Context="JobContext"> *@
-        @*                 <RowTemplate> *@
-        @*                     <MudSpacer></MudSpacer> *@
-        @*                     <MudTd> *@
-        @*                         <MudChip Color="Color.Dark">@JobContext.ConsistId</MudChip> *@
-        @*                     </MudTd> *@
-        @*                     <MudTd>@JobContext.Mass</MudTd> *@
-        @*                     <MudTd>@JobContext.Length</MudTd> *@
-        @*                     <MudTd>@JobContext.Wagons</MudTd> *@
-        @*                     <MudTd>@JobContext.Pays</MudTd> *@
-        @*                 </RowTemplate> *@
-        @*             </MudTable> *@
-        @*         </td> *@
-        @*     </MudTr> *@
     </ChildRowContent>
 </MudTable>
 
@@ -231,7 +258,7 @@
         StateHasChanged();
     }
 
-    private void ItemOnPropertyChanging(object? sender, ValueChanged e)
+    private void ItemOnPropertyChanging(object sender, ValueChanged e)
     {
         Console.WriteLine($"{e.OldValue} changed to {e.NewValue}");
 

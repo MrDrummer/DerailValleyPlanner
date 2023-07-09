@@ -2,9 +2,9 @@
 @using DerailValleyPlanner.Models
 
 
-<MudChip Style="@($"background-color: {Colors.Red.Default};")">
-    <MudIcon Icon="@($"fas {Icon}")" Style="@($"color: {Color};")"/>
-    @Label (@Type.ToString())
+<MudChip Style="@($"background-color: {Color};")">
+    <MudIcon Icon="@($"fas fa-{Icon}")"/>
+    @Label
 </MudChip>
 
 @code {
@@ -17,10 +17,10 @@
         {
             return Type switch
             {
-                Stop.Kind.Load => Colors.Green.Default,
-                Stop.Kind.Via => Colors.Amber.Default,
-                Stop.Kind.Unload => Colors.Red.Default,
-                _ => throw new ArgumentOutOfRangeException()
+                Stop.Kind.Load => Colors.Green.Lighten2,
+                Stop.Kind.Via => Colors.Amber.Lighten2,
+                Stop.Kind.Unload => Colors.Red.Lighten2,
+                _ => Colors.Red.Default
             };
         }
     }
@@ -34,7 +34,7 @@
                 Stop.Kind.Load => "Load",
                 Stop.Kind.Via => "Via",
                 Stop.Kind.Unload => "Unload",
-                _ => throw new ArgumentOutOfRangeException()
+                _ => "Unknown"
                 };
         }
     }
@@ -45,10 +45,10 @@
         {
             return Type switch
             {
-                Stop.Kind.Load => "arrow-down-from-bracket",
+                Stop.Kind.Load => "arrow-down-to-bracket",
                 Stop.Kind.Via => "arrow-right-from-line",
                 Stop.Kind.Unload => "arrow-up-from-bracket",
-                _ => throw new ArgumentOutOfRangeException()
+                _ => "circle-question"
                 };
         }
     }

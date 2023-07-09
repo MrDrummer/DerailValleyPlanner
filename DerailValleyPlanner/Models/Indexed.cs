@@ -12,9 +12,9 @@ public class Indexed
 {
     private int _index;
 
-    public delegate void ValueChangedEventHandler(object? sender, ValueChanged e);
+    public delegate void ValueChangedEventHandler(object sender, ValueChanged e);
 
-    public event ValueChangedEventHandler? PropertyChanging;
+    public event ValueChangedEventHandler PropertyChanging;
     
     public int Index
     {

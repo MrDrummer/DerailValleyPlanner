@@ -3,12 +3,9 @@
 @using DerailValleyPlanner.Models
 @using System.Collections.ObjectModel
 @using System.Linq
+@using ABI.System.Collections.Generic
 
-
-@* SelectedValuesChanged="JobsChanged" *@
-@* @bind-SelectedValues="@Jobs" *@
 <MudSelect T="Job" ToStringFunc="@_converter" Label="@Label" SelectedValues="@Jobs" SelectedValuesChanged="@JobsChanged" MultiSelection="true" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter">
-@* <MudSelect T="Job" ToStringFunc="@_converter" Label="@Label" @bind-SelectedValues="@TempJobs" MultiSelection="true" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter"> *@
     @foreach (var job in _jobList)
     {
         <MudSelectItem T="Job" Value="@job">@job.ConsistId</MudSelectItem>
@@ -21,9 +18,9 @@
     
     [Parameter]
     public string Label { get; set; }
-    
+
     [Parameter]
-    public Stop.Kind Type { get; set; }
+    public Stop.Kind? Type { get; set; }
 
     [Parameter]
     public IEnumerable<Job> Jobs { get; set; }
@@ -38,9 +35,20 @@
 
     private IEnumerable<Job> _jobList = new HashSet<Job>();
 
+    private string _yardCache;
+    private Stop.Kind? _typeCache = null;
     
-    protected override async Task OnInitializedAsync()
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     await GetJobs();
+    // }
+    
+
+    protected override async void OnParametersSet()
     {
+        if (_yardCache == Yard || _typeCache == Type) return;
+        _yardCache = Yard;
+        _typeCache = Type;
         await GetJobs();
     }
 
@@ -60,6 +68,7 @@
             case Stop.Kind.Via:
             default:
                 _jobList = new HashSet<Job>();
+                await JobsChanged.InvokeAsync(new HashSet<Job>(jobs));
                 return;
         }
         
