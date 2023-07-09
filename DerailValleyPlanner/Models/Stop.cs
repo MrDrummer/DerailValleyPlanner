@@ -36,41 +36,41 @@ public class Stop : Indexed
     
     public IEnumerable<Job> Jobs { get; set; }
     
-    public int? TotalMass
+    public int TotalMass
     {
         get
         {
-            return Jobs?.Sum(j => j.Mass);
+            return Jobs?.Sum(j => j.Mass) ?? 0;
         }
     }
 
-    public int? ChangeMass => Type == Kind.Unload ? TotalMass * -1 : TotalMass;
+    public int ChangeMass => Type == Kind.Unload ? TotalMass * -1 : TotalMass;
 
-    public int? TotalLength
+    public int TotalLength
     {
         get
         {
-            return Jobs?.Sum(j => j.Length);
+            return Jobs?.Sum(j => j.Length) ?? 0;
         }
     }
     
-    public int? ChangeLength => Type == Kind.Unload ? TotalLength * -1 : TotalLength;
+    public int ChangeLength => Type == Kind.Unload ? TotalLength * -1 : TotalLength;
     
-    public int? TotalWagons
+    public int TotalWagons
     {
         get
         {
-            return Jobs?.Sum(j => j.Wagons);
+            return Jobs?.Sum(j => j.Wagons) ?? 0;
         }
     }
     
-    public int? ChangeWagons => Type == Kind.Unload ? TotalWagons * -1 : TotalWagons;
+    public int ChangeWagons => Type == Kind.Unload ? TotalWagons * -1 : TotalWagons;
     
-    public int? TotalPay
+    public int TotalPay
     {
         get
         {
-            return Jobs?.Sum(j => j.Pays);
+            return Jobs?.Sum(j => j.Pays) ?? 0;
         }
     }
 }

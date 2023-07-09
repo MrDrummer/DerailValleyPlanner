@@ -38,13 +38,13 @@
 
     private IEnumerable<Job> _jobList = new HashSet<Job>();
 
-    private string _yardCache;
+    private string _yardCache = null;
     private Stop.Kind? _typeCache = null;
     
-    // protected override async Task OnInitializedAsync()
-    // {
-    //     await GetJobs();
-    // }
+    protected override async Task OnInitializedAsync()
+    {
+        if (_yardCache == null) await GetJobs();
+    }
     
 
     protected override async void OnParametersSet()
@@ -71,7 +71,7 @@
             case Stop.Kind.Via:
             default:
                 _jobList = new HashSet<Job>();
-                await JobsChanged.InvokeAsync(new HashSet<Job>(jobs));
+                await JobsChanged.InvokeAsync(new HashSet<Job>());
                 return;
         }
         

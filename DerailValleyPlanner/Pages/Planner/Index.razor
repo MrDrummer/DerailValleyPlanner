@@ -74,13 +74,13 @@
             @if (context.Jobs != null && context.Jobs.Any())
             {
                 <MudTd DataLabel="MassChange" Style="text-align: right"><strong>@context.ChangeMass t</strong></MudTd>
-                <MudTd DataLabel="TotalMass" Style="text-align: right"><strong>@context.TotalMass t</strong></MudTd>
+                <MudTd DataLabel="TotalMass" Style="text-align: right"><strong>@StatsMap[context.StopId].Mass t</strong></MudTd>
 
                 <MudTd DataLabel="LengthChange" Style="text-align: right"><strong>@context.ChangeLength m</strong></MudTd>
-                <MudTd DataLabel="TotalLength" Style="text-align: right"><strong>@context.TotalLength m</strong></MudTd>
+                <MudTd DataLabel="TotalLength" Style="text-align: right"><strong>@StatsMap[context.StopId].Length m</strong></MudTd>
 
                 <MudTd DataLabel="WagonsChange" Style="text-align: right"><strong>@context.ChangeWagons</strong></MudTd>
-                <MudTd DataLabel="TotalWagons" Style="text-align: right"><strong>@context.TotalWagons</strong></MudTd>
+                <MudTd DataLabel="TotalWagons" Style="text-align: right"><strong>@StatsMap[context.StopId].Wagons</strong></MudTd>
                 @if (context.Type == Stop.Kind.Unload)
                 {
                     <MudTd DataLabel="TotalPay" Style="text-align: right"><strong>$ @context.TotalPay</strong></MudTd>
@@ -131,18 +131,17 @@
         {
             @foreach (var job in context.Jobs)
             {
-                var negative = context.Type == Stop.Kind.Unload ? "-" : "";
                 <MudTr>
                     <MudTd></MudTd>
                     <MudTd>
                         <MudChip Color="Color.Dark">@job.ConsistId</MudChip>
                     </MudTd>
                     <MudTd>@job.Description</MudTd>
-                    <MudTd Style="text-align: right">@negative@job.Mass t</MudTd>
+                    <MudTd Style="text-align: right">@job.Mass t</MudTd>
                     <MudTd></MudTd>
-                    <MudTd Style="text-align: right">@negative@job.Length m</MudTd>
+                    <MudTd Style="text-align: right">@job.Length m</MudTd>
                     <MudTd></MudTd>
-                    <MudTd Style="text-align: right">@negative@job.Wagons</MudTd>
+                    <MudTd Style="text-align: right">@job.Wagons</MudTd>
                     <MudTd></MudTd>
                     @if(context.Type == Stop.Kind.Unload)
                     {
@@ -164,25 +163,23 @@
             <MudTd colspan="3"></MudTd>
             <MudTd>Max Mass:</MudTd>
             <MudTd>
-                Max Mass Here
+                @(StatsMap.MaxBy(s => s.Value.Mass).Value.Mass)
             </MudTd>
             <MudTd>Max Length:</MudTd>
             <MudTd>
-                Max Length Here
-                @* @(_stops.MaxBy(s => s.TotalLength)) *@
+                @(StatsMap.MaxBy(s => s.Value.Length).Value.Length)
             </MudTd>
             <MudTd>Max Wagons:</MudTd>
             <MudTd>
-                Max Wagons Here
-                @* @(_stops.MaxBy(s => s.TotalWagons)) *@
+                @(StatsMap.MaxBy(s => s.Value.Wagons).Value.Length)
             </MudTd>
             <MudTd>Total Income:</MudTd>
             @* </MudTr> *@
             @* <MudTr> *@
             @*     <MudTd colspan="9"></MudTd> *@
-            @*     <MudTd> *@
-            @*         @(_stops.Sum(s => s.TotalPay)) *@
-            @*     </MudTd> *@
+            <MudTd>
+                @(_stops.Sum(s => s.TotalPay))
+            </MudTd>
         }
     </FooterContent>
 </MudTable>
@@ -201,6 +198,44 @@
     private Stop EditCache;
     // TODO: For each entry, get the last entry's total plus the difference for this entry
     private ObservableCollection<Stop> _stops = new();
+
+    private class Stats
+    {
+        public int Mass { get; set; }
+        public int Length { get; set; }
+        public int Wagons { get; set; }
+    }
+
+    private Dictionary<int, Stats> StatsMap
+    {
+        get
+        {
+            var statsList = new Dictionary<int, Stats>();
+
+            var baseStat = new Stats
+            {
+                Mass = 0,
+                Length = 0,
+                Wagons = 0
+            };
+
+            foreach (var stop in _stops)
+            {
+                var lastStats = statsList.Any() ? statsList.Last().Value : baseStat;
+
+                var stats = new Stats
+                {
+                    Mass = lastStats.Mass + stop.ChangeMass,
+                    Length = lastStats.Length + stop.ChangeLength,
+                    Wagons = lastStats.Wagons + stop.ChangeWagons
+                };
+                
+                statsList.Add(stop.StopId, stats);
+            }
+
+            return statsList;
+        }
+    }
     
     protected override async Task OnInitializedAsync()
     {
