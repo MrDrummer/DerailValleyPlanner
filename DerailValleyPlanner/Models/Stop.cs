@@ -46,7 +46,7 @@ public class Stop : Indexed
 
     public int ChangeMass => Type == Kind.Unload ? TotalMass * -1 : TotalMass;
 
-    public int TotalLength
+    public double TotalLength
     {
         get
         {
@@ -54,7 +54,7 @@ public class Stop : Indexed
         }
     }
     
-    public int ChangeLength => Type == Kind.Unload ? TotalLength * -1 : TotalLength;
+    public double ChangeLength => Type == Kind.Unload ? TotalLength * -1 : TotalLength;
     
     public int TotalWagons
     {

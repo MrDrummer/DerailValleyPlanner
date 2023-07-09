@@ -52,7 +52,7 @@ public class Job
     [Range(10, 10000, 
         ErrorMessage = "Value for {0} must be between {1} and {2}.")]
     [DisplayName("Length")]
-    public int Length { get; set; }
+    public double Length { get; set; }
     
     [Required]
     [Range(1, 200, 
