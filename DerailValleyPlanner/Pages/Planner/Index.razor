@@ -44,13 +44,13 @@
         <MudTh>Note</MudTh>
         @if (!CurrentlyEditing)
         {
-            <MudTh>Mass Change</MudTh>
-            <MudTh>Total Mass</MudTh>
-            <MudTh>Length Change</MudTh>
-            <MudTh>Total Length</MudTh>
-            <MudTh>Wagons Change</MudTh>
-            <MudTh>Total Wagons</MudTh>
-            <MudTh>Total Pay</MudTh>
+            <MudTh Style="text-align: right">Mass Change</MudTh>
+            <MudTh Style="text-align: right">Total Mass</MudTh>
+            <MudTh Style="text-align: right">Length Change</MudTh>
+            <MudTh Style="text-align: right">Total Length</MudTh>
+            <MudTh Style="text-align: right">Wagons Change</MudTh>
+            <MudTh Style="text-align: right">Total Wagons</MudTh>
+            <MudTh Style="text-align: right">Total Pay</MudTh>
         }
         else
         {
@@ -161,24 +161,24 @@
         {
             @* <MudTr> *@
             <MudTd colspan="3"></MudTd>
-            <MudTd>Max Mass:</MudTd>
-            <MudTd>
-                @(StatsMap.MaxBy(s => s.Value.Mass).Value.Mass)
+            <MudTd Style="text-align: right">Max Mass:</MudTd>
+            <MudTd Style="text-align: right">
+                @(StatsMap.MaxBy(s => s.Value.Mass).Value.Mass) t
             </MudTd>
-            <MudTd>Max Length:</MudTd>
-            <MudTd>
-                @(StatsMap.MaxBy(s => s.Value.Length).Value.Length)
+            <MudTd Style="text-align: right">Max Length:</MudTd>
+            <MudTd Style="text-align: right">
+                @(StatsMap.MaxBy(s => s.Value.Length).Value.Length) m
             </MudTd>
-            <MudTd>Max Wagons:</MudTd>
-            <MudTd>
-                @(StatsMap.MaxBy(s => s.Value.Wagons).Value.Length)
+            <MudTd Style="text-align: right">Max Wagons:</MudTd>
+            <MudTd Style="text-align: right">
+                @(StatsMap.MaxBy(s => s.Value.Wagons).Value.Wagons)
             </MudTd>
-            <MudTd>Total Income:</MudTd>
+            <MudTd Style="text-align: right">Total Income:</MudTd>
             @* </MudTr> *@
             @* <MudTr> *@
             @*     <MudTd colspan="9"></MudTd> *@
-            <MudTd>
-                @(_stops.Sum(s => s.TotalPay))
+            <MudTd Style="text-align: right">
+                $ @(_stops.Sum(s => s.TotalPay))
             </MudTd>
         }
     </FooterContent>
@@ -202,7 +202,7 @@
     private class Stats
     {
         public int Mass { get; set; }
-        public int Length { get; set; }
+        public double Length { get; set; }
         public int Wagons { get; set; }
     }
 
