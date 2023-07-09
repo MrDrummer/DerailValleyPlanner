@@ -63,10 +63,10 @@
             <MudTd DataLabel="Index">@(@context.Index + 1)</MudTd>
         }
         <MudTd DataLabel="Yard">
-            <YardDisplay YardCode="@context.Yard"></YardDisplay>
+            <YardDisplay YardCode="@context.Yard" />
         </MudTd>
         <MudTd DataLabel="Type">
-            <StopTypeDisplay Type="@context.Type"></StopTypeDisplay>
+            <StopTypeDisplay Type="@context.Type" />
         </MudTd>
         <MudTd DataLabel="Note">@context.Note</MudTd>
         @if (!CurrentlyEditing)
@@ -101,20 +101,23 @@
         }
     </RowTemplate>
     <RowEditingTemplate>
+        @{
+            var disableChange = context.Jobs != null && context.Jobs.Any();
+        }
         <MudTd DataLabel="Index">
-            <StopIndexSelection Label="Position" @bind-Index="@context.Index" Count="@_stops.Count"></StopIndexSelection>
+            <StopIndexSelection Label="Position" disabled="@disableChange" @bind-Index="@context.Index" Count="@_stops.Count" />
         </MudTd>
         <MudTd DataLabel="Yard">
-            <YardSelection Label="Yard" @bind-Yard="@context.Yard"></YardSelection>
+            <YardSelection Label="Yard" disabled="@disableChange" @bind-Yard="@context.Yard" />
         </MudTd>
         <MudTd DataLabel="Type">
-            <StopTypeSelection Label="Stop Type" @bind-Type="@context.Type"></StopTypeSelection>
+            <StopTypeSelection Label="Stop Type" disabled="@disableChange" @bind-Type="@context.Type" />
         </MudTd>
         <MudTd DataLabel="Note">
-            <MudTextField Label="Note" T="string" @bind-Text="@context.Note" Lines="2"></MudTextField>
+            <MudTextField Label="Note" T="string" @bind-Text="@context.Note" Lines="2" />
         </MudTd>
         <MudTd DataLabel="CurrentJobs">
-            <JobSelection Label="Jobs" @bind-Jobs="@context.Jobs" Type="@context.Type" Yard="@context.Yard"></JobSelection>
+            <JobSelection Label="Jobs" @bind-Jobs="@context.Jobs" Type="@context.Type" Yard="@context.Yard" />
         </MudTd>
     </RowEditingTemplate>
     <EditButtonContent Context="button">
@@ -154,6 +157,34 @@
             }
         }
     </ChildRowContent>
+    <FooterContent>
+        @if (!CurrentlyEditing)
+        {
+            @* <MudTr> *@
+            <MudTd colspan="3"></MudTd>
+            <MudTd>Max Mass:</MudTd>
+            <MudTd>
+                Max Mass Here
+            </MudTd>
+            <MudTd>Max Length:</MudTd>
+            <MudTd>
+                Max Length Here
+                @* @(_stops.MaxBy(s => s.TotalLength)) *@
+            </MudTd>
+            <MudTd>Max Wagons:</MudTd>
+            <MudTd>
+                Max Wagons Here
+                @* @(_stops.MaxBy(s => s.TotalWagons)) *@
+            </MudTd>
+            <MudTd>Total Income:</MudTd>
+            @* </MudTr> *@
+            @* <MudTr> *@
+            @*     <MudTd colspan="9"></MudTd> *@
+            @*     <MudTd> *@
+            @*         @(_stops.Sum(s => s.TotalPay)) *@
+            @*     </MudTd> *@
+        }
+    </FooterContent>
 </MudTable>
 
 @code {
@@ -168,6 +199,7 @@
     private bool CurrentlyEditing = false;
     private Stop selectedItem;
     private Stop EditCache;
+    // TODO: For each entry, get the last entry's total plus the difference for this entry
     private ObservableCollection<Stop> _stops = new();
     
     protected override async Task OnInitializedAsync()

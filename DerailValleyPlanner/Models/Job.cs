@@ -83,4 +83,6 @@ public class Job
 
     // Note: this is important so the select can compare pizzas
     public override int GetHashCode() => JobId.GetHashCode();
+
+    public override string ToString() => ConsistId;
 }

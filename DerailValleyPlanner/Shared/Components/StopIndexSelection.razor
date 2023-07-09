@@ -1,6 +1,6 @@
 ﻿
 
-<MudSelect T="int" Label="@Label" Value="Index" ValueChanged="IndexChanged" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter">
+<MudSelect T="int" Label="@Label" Value="Index" ValueChanged="IndexChanged" Disabled="@Disabled" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter">
     @for (var index = 0; index < Count; index++)
     {
         var i = index;
@@ -11,6 +11,9 @@
 @code {
     [Parameter]
     public string Label { get; set; }
+    
+    [Parameter]
+    public bool Disabled { get; set; }
     
     [Parameter]
     public int Exclude { get; set; }
