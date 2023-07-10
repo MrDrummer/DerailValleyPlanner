@@ -4,6 +4,8 @@
 @using DerailValleyPlanner.Models
 @using DerailValleyPlanner.Data
 @using Microsoft.EntityFrameworkCore
+@using System.Collections.ObjectModel
+@using System.Collections.Specialized
 @inject ISnackbar Snackbar
 @*
 - Will list all Yards and the summary for each (total jobs, wagons, length, mass and money totalled) load and unload
@@ -24,7 +26,7 @@
     ReadOnly="@(!ReadOnly)"
     @bind-SelectedItem="selectedItem"
     CommitEditTooltip="Commit Edit"
-    OnCommitEditClick="@(() => Snackbar.Add("Commit Edit Handler Invoked"))"
+    FixedHeader="true"
     RowEditPreview="BackupItem"
     RowEditCancel="ResetItemToOriginalValues"
     RowEditCommit="ItemHasBeenCommitted"
@@ -33,39 +35,154 @@
     EditTrigger="@TableEditTrigger.EditButton"
 >
     <HeaderContent>
-        <MudTh>Index</MudTh>
+        @if (CurrentlyEditing)
+        {
+            <MudTh>Position</MudTh>
+        }
         <MudTh>Yard</MudTh>
         <MudTh>Type</MudTh>
         <MudTh>Note</MudTh>
-        <MudTh>Mass</MudTh>
-        <MudTh>Length</MudTh>
-        <MudTh>Wagons</MudTh>
-        <MudTh>Pay</MudTh>
+        @if (!CurrentlyEditing)
+        {
+            <MudTh Style="text-align: right">Mass Change</MudTh>
+            <MudTh Style="text-align: right">Total Mass</MudTh>
+            <MudTh Style="text-align: right">Length Change</MudTh>
+            <MudTh Style="text-align: right">Total Length</MudTh>
+            <MudTh Style="text-align: right">Wagons Change</MudTh>
+            <MudTh Style="text-align: right">Total Wagons</MudTh>
+            <MudTh Style="text-align: right">Total Pay</MudTh>
+        }
+        else
+        {
+            <MudTh></MudTh>
+        }
     </HeaderContent>
     <RowTemplate>
-        <MudTd DataLabel="Index">@context.Index</MudTd>
-        <MudTd DataLabel="Yard">@context.Yard</MudTd>
-        <MudTd DataLabel="Type">@context.Type</MudTd>
+        @if(CurrentlyEditing)
+        {
+            <MudTd DataLabel="Index">@(@context.Index + 1)</MudTd>
+        }
+        <MudTd DataLabel="Yard">
+            <YardDisplay YardCode="@context.Yard" />
+        </MudTd>
+        <MudTd DataLabel="Type">
+            <StopTypeDisplay Type="@context.Type" />
+        </MudTd>
         <MudTd DataLabel="Note">@context.Note</MudTd>
-        <MudTd DataLabel="TotalMass">@context.TotalMass</MudTd>
-        <MudTd DataLabel="TotalLength">@context.TotalLength</MudTd>
-        <MudTd DataLabel="TotalWagons">@context.TotalWagons</MudTd>
-        <MudTd DataLabel="TotalPay">@context.TotalPay</MudTd>
+        @if (!CurrentlyEditing)
+        {
+            @if (context.Jobs != null && context.Jobs.Any())
+            {
+                <MudTd DataLabel="MassChange" Style="text-align: right"><strong>@context.ChangeMass t</strong></MudTd>
+                <MudTd DataLabel="TotalMass" Style="text-align: right"><strong>@StatsMap[context.StopId].Mass t</strong></MudTd>
+
+                <MudTd DataLabel="LengthChange" Style="text-align: right"><strong>@context.ChangeLength m</strong></MudTd>
+                <MudTd DataLabel="TotalLength" Style="text-align: right"><strong>@StatsMap[context.StopId].Length m</strong></MudTd>
+
+                <MudTd DataLabel="WagonsChange" Style="text-align: right"><strong>@context.ChangeWagons</strong></MudTd>
+                <MudTd DataLabel="TotalWagons" Style="text-align: right"><strong>@StatsMap[context.StopId].Wagons</strong></MudTd>
+                @if (context.Type == Stop.Kind.Unload)
+                {
+                    <MudTd DataLabel="TotalPay" Style="text-align: right"><strong>$ @context.TotalPay</strong></MudTd>
+                }
+                else
+                {
+                    <MudTd></MudTd>
+                }
+            }
+            else
+            {
+                <MudTd colspan="7"></MudTd>
+            }
+        }
+        else
+        {
+            <MudTd></MudTd>
+        }
     </RowTemplate>
     <RowEditingTemplate>
+        @{
+            // var disableChange = context.Jobs != null && context.Jobs.Any();
+            const bool disableChange = false;
+        }
         <MudTd DataLabel="Index">
-            <MudNumericField Label="Index" @bind-Value="@context.Index"></MudNumericField>
+            <StopIndexSelection Label="Position" disabled="@disableChange" @bind-Index="@context.Index" Count="@_stops.Count" />
         </MudTd>
         <MudTd DataLabel="Yard">
-            <YardSelection @bind-Yard="@context.Yard"></YardSelection>
+            <YardSelection Label="Yard" disabled="@disableChange" @bind-Yard="@context.Yard" />
         </MudTd>
-        <MudTd DataLabel="Type">Dropdown</MudTd>
-        <MudTd DataLabel="Note">Text box</MudTd>
-        <MudTd>Job Selector</MudTd>
+        <MudTd DataLabel="Type">
+            <StopTypeSelection Label="Stop Type" disabled="@disableChange" @bind-Type="@context.Type" />
+        </MudTd>
+        <MudTd DataLabel="Note">
+            <MudTextField Label="Note" T="string" @bind-Text="@context.Note" Lines="2" />
+        </MudTd>
+        <MudTd DataLabel="CurrentJobs">
+            <JobSelection Label="Jobs" @bind-Jobs="@context.Jobs" Type="@context.Type" Yard="@context.Yard" />
+        </MudTd>
     </RowEditingTemplate>
     <EditButtonContent Context="button">
         <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" Class="pa-0" OnClick="@button.ButtonAction" Disabled="@button.ButtonDisabled" />
     </EditButtonContent>
+    <ChildRowContent>
+        @* <MudTr> *@
+        @*     <MudText Typo="Typo.body1">@context.Jobs?.Count()</MudText> *@
+        @* </MudTr> *@
+        @if (context.Jobs != null  && context.Jobs.Any() && !CurrentlyEditing)
+        {
+            @foreach (var job in context.Jobs)
+            {
+                <MudTr>
+                    <MudTd></MudTd>
+                    <MudTd>
+                        <JobChipDisplay Job="@job"></JobChipDisplay>
+                    </MudTd>
+                    <MudTd>@job.Description</MudTd>
+                    <MudTd Style="text-align: right">@job.Mass t</MudTd>
+                    <MudTd></MudTd>
+                    <MudTd Style="text-align: right">@job.Length m</MudTd>
+                    <MudTd></MudTd>
+                    <MudTd Style="text-align: right">@job.Wagons</MudTd>
+                    <MudTd></MudTd>
+                    @if(context.Type == Stop.Kind.Unload)
+                    {
+                        <MudTd Style="text-align: right">$ @job.Pays</MudTd>
+                    }
+                    else
+                    {
+                        <MudTd Style="text-align: center">-</MudTd>
+                    }
+                    <MudTd></MudTd>
+                </MudTr>
+            }
+        }
+    </ChildRowContent>
+    <FooterContent>
+        @if (!CurrentlyEditing)
+        {
+            @* <MudTr> *@
+            <MudTd colspan="3"></MudTd>
+            <MudTd Style="text-align: right">Max Mass:</MudTd>
+            <MudTd Style="text-align: right">
+                @(StatsMap.MaxBy(s => s.Value.Mass).Value.Mass) t
+            </MudTd>
+            <MudTd Style="text-align: right">Max Length:</MudTd>
+            <MudTd Style="text-align: right">
+                @(StatsMap.MaxBy(s => s.Value.Length).Value.Length) m
+            </MudTd>
+            <MudTd Style="text-align: right">Max Wagons:</MudTd>
+            <MudTd Style="text-align: right">
+                @(StatsMap.MaxBy(s => s.Value.Wagons).Value.Wagons)
+            </MudTd>
+            <MudTd Style="text-align: right">Total Income:</MudTd>
+            @* </MudTr> *@
+            @* <MudTr> *@
+            @*     <MudTd colspan="9"></MudTd> *@
+            <MudTd Style="text-align: right">
+                $ @(_stops.Sum(s => s.TotalPay))
+            </MudTd>
+        }
+    </FooterContent>
 </MudTable>
 
 @code {
@@ -77,9 +194,49 @@
 
     private bool ReadOnly = true;
 
+    private bool CurrentlyEditing = false;
     private Stop selectedItem;
     private Stop EditCache;
-    private IndexedList<Stop> _stops;
+    // TODO: For each entry, get the last entry's total plus the difference for this entry
+    private ObservableCollection<Stop> _stops = new();
+
+    private class Stats
+    {
+        public int Mass { get; set; }
+        public double Length { get; set; }
+        public int Wagons { get; set; }
+    }
+
+    private Dictionary<int, Stats> StatsMap
+    {
+        get
+        {
+            var statsList = new Dictionary<int, Stats>();
+
+            var baseStat = new Stats
+            {
+                Mass = 0,
+                Length = 0,
+                Wagons = 0
+            };
+
+            foreach (var stop in _stops)
+            {
+                var lastStats = statsList.Any() ? statsList.Last().Value : baseStat;
+
+                var stats = new Stats
+                {
+                    Mass = lastStats.Mass + stop.ChangeMass,
+                    Length = lastStats.Length + stop.ChangeLength,
+                    Wagons = lastStats.Wagons + stop.ChangeWagons
+                };
+                
+                statsList.Add(stop.StopId, stats);
+            }
+
+            return statsList;
+        }
+    }
     
     protected override async Task OnInitializedAsync()
     {
@@ -88,13 +245,38 @@
 
     async Task GetStops()
     {
-        var data = await PlannerContext.Stops.OrderBy(s => s.Index).ToListAsync();
-        _stops = new IndexedList<Stop>(data);
+        await PlannerContext.Stops.OrderBy(s => s.Index).ForEachAsync(s =>
+        {
+            s.PropertyChanging += ItemOnPropertyChanging;
+            _stops.Add(s);
+        });
+
+        _stops.CollectionChanged += (sender, args) =>
+        {
+            if (args.Action != NotifyCollectionChangedAction.Move) return;
+            Console.WriteLine($"Item at index {args.OldStartingIndex} moved to index {args.NewStartingIndex}");
+
+            var (oldI, newI) = (args.OldStartingIndex, args.NewStartingIndex);
+
+            var start = newI > oldI ? oldI : newI;
+
+            if (sender is not ObservableCollection<Stop> newItems || newItems.Count == 0) return;
+            for (var i = start; i < newItems.Count; i++)
+            {
+                var item = newItems[i];
+                if (item != null && item.Index == i && item.Index != start) return;
+                item.Index = i;
+            }
+        };
     }
 
     private void BackupItem(object stopObj)
     {
+        CurrentlyEditing = true;
         var stop = (Stop)stopObj;
+        
+        _stops[stop.Index].PropertyChanging -= ItemOnPropertyChanging;
+
         EditCache = new Stop
         {
             Index = stop.Index,
@@ -109,16 +291,14 @@
 
     private async void ItemHasBeenCommitted(object stopObj)
     {
+        CurrentlyEditing = false;
         var oldStop = EditCache;
         var newStop = (Stop)stopObj;
+        _stops[oldStop.Index].PropertyChanging += ItemOnPropertyChanging;
 
         if (oldStop.Index != newStop.Index)
         {
             _stops.Move(oldStop.Index, newStop.Index);
-            _stops.ActionOnUpdatedIndex(s =>
-            {
-                PlannerContext.Stops.Update(s);
-            });
         }
         else
         {
@@ -132,15 +312,26 @@
 
     private void ResetItemToOriginalValues(object stopObj)
     {
+        CurrentlyEditing = false;
         var stop = (Stop)stopObj;
+        
         stop.Index = EditCache.Index;
         stop.StopId = EditCache.StopId;
         stop.Type = EditCache.Type;
         stop.Jobs = EditCache.Jobs;
         stop.Yard = EditCache.Yard;
         stop.Note = EditCache.Note;
+        
+        _stops[stop.Index].PropertyChanging += ItemOnPropertyChanging;
         StateHasChanged();
     }
-    
-    
+
+    private void ItemOnPropertyChanging(object sender, ValueChanged e)
+    {
+        Console.WriteLine($"{e.OldValue} changed to {e.NewValue}");
+
+        if (sender is not Stop stop) return;
+        
+        PlannerContext.Stops.Update(stop);
+    }
 }

@@ -2,7 +2,7 @@
 
 @inject ConfigService Config
 
-<MudSelect T="string" Label="@Label" Value="Yard" ValueChanged="YardChanged" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter">
+<MudSelect T="string" Label="@Label" Value="Yard" ValueChanged="YardChanged" Disabled="@Disabled" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter">
     @foreach (var yard in _yardList)
     {
         <MudSelectItem Value="@yard.Code" Disabled="@(yard.Code == Exclude)">@yard.Name (@yard.Code)</MudSelectItem>
@@ -12,6 +12,9 @@
 @code {
     [Parameter]
     public string Label { get; set; }
+    
+    [Parameter]
+    public bool Disabled { get; set; }
     
     [Parameter]
     public string Exclude { get; set; }

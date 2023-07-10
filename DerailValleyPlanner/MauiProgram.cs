@@ -52,11 +52,11 @@ public static class MauiProgram
         var app = builder.Build();
 
         using var scope = app.Services.CreateScope();
-        var services = scope.ServiceProvider;
+        // var services = scope.ServiceProvider;
 
-        var context = services.GetRequiredService<PlannerContext>();
-        context.Database.EnsureDeleted();
-        context.Database.EnsureCreated();
+        // var context = services.GetRequiredService<PlannerContext>();
+        // context.Database.EnsureDeleted();
+        // context.Database.EnsureCreated();
 
         return app;
     }

@@ -1,0 +1,55 @@
+﻿@using DerailValleyPlanner.Services
+@using DerailValleyPlanner.Models
+
+
+<MudChip Style="@($"background-color: {Color};")">
+    <MudIcon Icon="@($"fas fa-{Icon}")"/>
+    @Label
+</MudChip>
+
+@code {
+    [Parameter]
+    public Stop.Kind Type { get; set; }
+
+    private string Color
+    {
+        get
+        {
+            return Type switch
+            {
+                Stop.Kind.Load => Colors.Green.Lighten2,
+                Stop.Kind.Via => Colors.Amber.Lighten2,
+                Stop.Kind.Unload => Colors.Red.Lighten2,
+                _ => Colors.Red.Default
+            };
+        }
+    }
+
+    private string Label
+    {
+        get
+        {
+            return Type switch
+            {
+                Stop.Kind.Load => "Load",
+                Stop.Kind.Via => "Via",
+                Stop.Kind.Unload => "Unload",
+                _ => "Unknown"
+                };
+        }
+    }
+
+    private string Icon
+    {
+        get
+        {
+            return Type switch
+            {
+                Stop.Kind.Load => "arrow-down-to-bracket",
+                Stop.Kind.Via => "arrow-right-from-line",
+                Stop.Kind.Unload => "arrow-up-from-bracket",
+                _ => "circle-question"
+                };
+        }
+    }
+}

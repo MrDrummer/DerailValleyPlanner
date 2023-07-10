@@ -1,0 +1,22 @@
+﻿@using DerailValleyPlanner.Models
+
+
+<MudSelect T="Stop.Kind" Label="@Label" Value="Type" ValueChanged="TypeChanged" Disabled="@Disabled" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter">
+    <MudSelectItem Value="Stop.Kind.Load">Load</MudSelectItem>
+    <MudSelectItem Value="Stop.Kind.Via">Via</MudSelectItem>
+    <MudSelectItem Value="Stop.Kind.Unload">Unload</MudSelectItem>
+</MudSelect>
+
+@code {
+    [Parameter]
+    public string Label { get; set; }
+    
+    [Parameter]
+    public bool Disabled { get; set; }
+    
+    [Parameter]
+    public Stop.Kind Type { get; set; }
+    
+    [Parameter]
+    public EventCallback<Stop.Kind> TypeChanged { get; set; }
+}
