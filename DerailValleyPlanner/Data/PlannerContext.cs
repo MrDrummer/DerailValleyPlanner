@@ -329,6 +329,14 @@ public class PlannerContext : DbContext
         modelBuilder.Entity<Stop>().HasData(
             new Stop
             {
+                StopId = 15,
+                Index = 0,
+                Type = Stop.Kind.Unload,
+                Yard = "CSW",
+                Note = ""
+            },
+            new Stop
+            {
                 StopId = 1,
                 Index = 1,
                 Type = Stop.Kind.Load,
