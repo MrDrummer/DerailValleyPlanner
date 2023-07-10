@@ -73,7 +73,7 @@ public class Job
     [DisplayName("Description")]
     public string Description { get; set; }
     
-    public IEnumerable<Job> Stops { get; set; }
+    public IEnumerable<Stop> Stops { get; set; }
 
     // Note: this is important so the select can compare pizzas
     public override bool Equals(object o) {

@@ -29,6 +29,7 @@ else
             <PropertyColumn Property="j => j.ConsistId" Title="Consist ID"/>
             @* <PropertyColumn Property="j => j.FromYard" Title="From Yard"/> *@
             <TemplateColumn>
+                <HeaderTemplate>From Yard</HeaderTemplate>
                 <CellTemplate>
                     <YardDisplay YardCode="@context.Item.FromYard"></YardDisplay>
                 </CellTemplate>
@@ -36,6 +37,7 @@ else
             <PropertyColumn Property="j => j.FromTrack" Title="From Track"/>
             @* <PropertyColumn Property="j => j.ToYard" Title="To Yard"/> *@
             <TemplateColumn>
+                <HeaderTemplate>To Yard</HeaderTemplate>
                 <CellTemplate>
                     <YardDisplay YardCode="@context.Item.ToYard"></YardDisplay>
                 </CellTemplate>
