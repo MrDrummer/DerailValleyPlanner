@@ -52,7 +52,7 @@ public class Job
     [Range(10, 10000, 
         ErrorMessage = "Value for {0} must be between {1} and {2}.")]
     [DisplayName("Length")]
-    public int Length { get; set; }
+    public double Length { get; set; }
     
     [Required]
     [Range(1, 200, 
@@ -64,6 +64,7 @@ public class Job
     [Range(10, 100000, 
         ErrorMessage = "Value for {0} must be between {1} and {2}.")]
     [DisplayName("Pays")]
+    [DisplayFormat(DataFormatString = "{0:C0}")]
     public int Pays { get; set; }
     
     // Free-form text to help identify the wagons.
@@ -72,5 +73,16 @@ public class Job
     [DisplayName("Description")]
     public string Description { get; set; }
     
-    public ICollection<StopJob> Stops { get; set; }
+    public IEnumerable<Stop> Stops { get; set; }
+
+    // Note: this is important so the select can compare pizzas
+    public override bool Equals(object o) {
+        var other = o as Job;
+        return other?.JobId==JobId;
+    }
+
+    // Note: this is important so the select can compare pizzas
+    public override int GetHashCode() => JobId.GetHashCode();
+
+    public override string ToString() => ConsistId;
 }

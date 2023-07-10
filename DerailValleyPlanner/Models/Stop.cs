@@ -20,9 +20,9 @@ public class Stop : Indexed
     [Key]
     public int StopId { set; get; }
     
-    [Required]
-    // TODO: Clarify if this "new" will allow the IndexedList to work?
-    public new int Index { get; set; }
+    // [Required]
+    // TODO: Clarify if this "new" will allow the Index in the base class to work?
+    // public int Index { get; set; }
     
     [Required]
     public string Yard { get; set; }
@@ -34,37 +34,43 @@ public class Stop : Indexed
     [MaxLength(1000)]
     public string Note { get; set; }
     
-    public ICollection<StopJob> Jobs { get; set; }
+    public IEnumerable<Job> Jobs { get; set; }
     
-    public int? TotalMass
+    public int TotalMass
     {
         get
         {
-            return Jobs?.Sum(j => j.Job.Mass);
+            return Jobs?.Sum(j => j.Mass) ?? 0;
+        }
+    }
+
+    public int ChangeMass => Type == Kind.Unload ? TotalMass * -1 : TotalMass;
+
+    public double TotalLength
+    {
+        get
+        {
+            return Jobs?.Sum(j => j.Length) ?? 0;
         }
     }
     
-    public int? TotalLength
+    public double ChangeLength => Type == Kind.Unload ? TotalLength * -1 : TotalLength;
+    
+    public int TotalWagons
     {
         get
         {
-            return Jobs?.Sum(j => j.Job.Length);
+            return Jobs?.Sum(j => j.Wagons) ?? 0;
         }
     }
     
-    public int? TotalWagons
-    {
-        get
-        {
-            return Jobs?.Sum(j => j.Job.Wagons);
-        }
-    }
+    public int ChangeWagons => Type == Kind.Unload ? TotalWagons * -1 : TotalWagons;
     
-    public int? TotalPay
+    public int TotalPay
     {
         get
         {
-            return Jobs?.Sum(j => j.Job.Pays);
+            return Jobs?.Sum(j => j.Pays) ?? 0;
         }
     }
 }
