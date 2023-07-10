@@ -13,7 +13,8 @@ public class PlannerContext : DbContext
         _config = Config;
     }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    // protected override void OnModelCreating(ModelBuilder modelBuilder)
+    public void Disabled(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Job>().HasData(
             new Job
