@@ -72,6 +72,7 @@
             default:
                 _jobList = new HashSet<Job>();
                 await JobsChanged.InvokeAsync(new HashSet<Job>());
+                StateHasChanged();
                 return;
         }
         

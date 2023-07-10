@@ -102,7 +102,8 @@
     </RowTemplate>
     <RowEditingTemplate>
         @{
-            var disableChange = context.Jobs != null && context.Jobs.Any();
+            // var disableChange = context.Jobs != null && context.Jobs.Any();
+            const bool disableChange = false;
         }
         <MudTd DataLabel="Index">
             <StopIndexSelection Label="Position" disabled="@disableChange" @bind-Index="@context.Index" Count="@_stops.Count" />
