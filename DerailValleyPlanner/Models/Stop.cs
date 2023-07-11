@@ -50,7 +50,8 @@ public class Stop : Indexed
     {
         get
         {
-            return Jobs?.Sum(j => j.Length) ?? 0;
+            if (Jobs == null) return 0;
+            return Math.Round(Jobs.Sum(j => j.Length), 2);
         }
     }
     

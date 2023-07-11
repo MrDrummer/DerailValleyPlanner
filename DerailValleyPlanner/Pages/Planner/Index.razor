@@ -71,7 +71,7 @@
         <MudTd DataLabel="Note">@context.Note</MudTd>
         @if (!CurrentlyEditing)
         {
-            @if (context.Jobs != null && context.Jobs.Any())
+            @if (context.Jobs != null && context.Jobs.Any() && StatsMap.Any())
             {
                 <MudTd DataLabel="MassChange" Style="text-align: right"><strong>@context.ChangeMass t</strong></MudTd>
                 <MudTd DataLabel="TotalMass" Style="text-align: right"><strong>@StatsMap[context.StopId].Mass t</strong></MudTd>
@@ -158,7 +158,7 @@
         }
     </ChildRowContent>
     <FooterContent>
-        @if (!CurrentlyEditing)
+        @if (!CurrentlyEditing && StatsMap.Any())
         {
             @* <MudTr> *@
             <MudTd colspan="3"></MudTd>
@@ -220,6 +220,8 @@
                 Wagons = 0
             };
 
+            if (!_stops.Any()) return new Dictionary<int, Stats>();
+
             foreach (var stop in _stops)
             {
                 var lastStats = statsList.Any() ? statsList.Last().Value : baseStat;
@@ -227,7 +229,7 @@
                 var stats = new Stats
                 {
                     Mass = lastStats.Mass + stop.ChangeMass,
-                    Length = lastStats.Length + stop.ChangeLength,
+                    Length = Math.Round(lastStats.Length + stop.ChangeLength, 2),
                     Wagons = lastStats.Wagons + stop.ChangeWagons
                 };
                 
