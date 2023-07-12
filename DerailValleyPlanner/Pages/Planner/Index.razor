@@ -247,7 +247,7 @@
 
     async Task GetStops()
     {
-        await PlannerContext.Stops.OrderBy(s => s.Index).ForEachAsync(s =>
+        await PlannerContext.Stops.Include(s => s.Jobs).OrderBy(s => s.Index).ForEachAsync(s =>
         {
             s.PropertyChanging += ItemOnPropertyChanging;
             _stops.Add(s);
