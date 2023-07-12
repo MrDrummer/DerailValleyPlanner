@@ -20,7 +20,8 @@ public static class MauiProgram
         
         // const Environment.SpecialFolder folder = Environment.SpecialFolder.LocalApplicationData;
         // var path = Environment.GetFolderPath(folder);
-        var path = AppDomain.CurrentDomain.BaseDirectory;
+        // var path = AppDomain.CurrentDomain.BaseDirectory;
+        const string path = "./";
         var dbPath = Path.Join(path, "dvp.db");
         
         Console.WriteLine($"dbPath : {dbPath}");
