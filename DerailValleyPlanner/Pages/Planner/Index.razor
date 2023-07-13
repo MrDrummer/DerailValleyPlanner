@@ -13,10 +13,12 @@
  *@
 <MudText Typo="Typo.h3">Journey Planner</MudText>
 <MudSwitch @bind-Checked="@ReadOnly">Edit Mode</MudSwitch>
-@if (!ReadOnly)
-{
-    
-}
+@* @if (!ReadOnly) *@
+@* { *@
+<MudButton
+    OnClick="AddButton"
+>Add Stop</MudButton>
+@* } *@
 <MudTable
     Items="@_stops"
     T="Stop"
@@ -122,13 +124,16 @@
         </MudTd>
     </RowEditingTemplate>
     <EditButtonContent Context="button">
-        <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" Class="pa-0" OnClick="@button.ButtonAction" Disabled="@button.ButtonDisabled" />
+        <MudMenu Icon="fad fa-ellipsis-vertical" AnchorOrigin="Origin.BottomLeft" TransformOrigin="Origin.TopLeft">
+            <MudMenuItem OnClick="@button.ButtonAction" Disabled="@button.ButtonDisabled" Icon="fa-solid fa-pencil" IconSize="Size.Small">Edit</MudMenuItem>
+            <MudMenuItem>Delete</MudMenuItem>
+        </MudMenu>
     </EditButtonContent>
     <ChildRowContent>
         @* <MudTr> *@
         @*     <MudText Typo="Typo.body1">@context.Jobs?.Count()</MudText> *@
         @* </MudTr> *@
-        @if (context.Jobs != null  && context.Jobs.Any() && !CurrentlyEditing)
+        @if (context.Jobs?.Any() == true && !CurrentlyEditing)
         {
             @foreach (var job in context.Jobs)
             {
@@ -270,6 +275,27 @@
                 item.Index = i;
             }
         };
+    }
+
+    private async Task AddButton()
+    {
+        await AddItem(null);
+    }
+    
+    private async Task AddItem(Stop? _stop)
+    {
+        var stop = _stop ?? new Stop
+        {
+            Index = _stops.Count,
+            Type = Stop.Kind.Via,
+            Yard = "MB",
+            Jobs = null,
+            Note = ""
+        };
+        PlannerContext.Stops.Add(stop);
+        await PlannerContext.SaveChangesAsync();
+        _stops.Add(stop);
+        StateHasChanged();
     }
 
     private void BackupItem(object stopObj)
