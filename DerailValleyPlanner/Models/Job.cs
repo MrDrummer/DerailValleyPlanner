@@ -75,6 +75,10 @@ public class Job
 
     public double MassPerWagon => Math.Round((double)Mass / Wagons, 2);
 
+    public int? FromIndex => Stops.FirstOrDefault(s => s.Type == Stop.Kind.Load)?.StopId;
+    
+    public int? ToIndex => Stops.FirstOrDefault(s => s.Type == Stop.Kind.Unload)?.StopId;
+
     public IEnumerable<Stop> Stops { get; set; }
 
     // Note: this is important so the select can compare pizzas
