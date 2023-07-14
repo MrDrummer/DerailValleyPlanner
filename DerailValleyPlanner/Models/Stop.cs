@@ -71,7 +71,7 @@ public class Stop : Indexed
     {
         get
         {
-            return Jobs?.Sum(j => j.Pays) ?? 0;
+            return Jobs.Any() && Type == Kind.Unload ? Jobs.Sum(j => j.Pays) : 0;
         }
     }
 }
