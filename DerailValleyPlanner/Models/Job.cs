@@ -72,7 +72,9 @@ public class Job
     [MaxLength(1000)]
     [DisplayName("Description")]
     public string Description { get; set; }
-    
+
+    public double MassPerWagon => Math.Round((double)Mass / Wagons, 2);
+
     public IEnumerable<Stop> Stops { get; set; }
 
     // Note: this is important so the select can compare pizzas

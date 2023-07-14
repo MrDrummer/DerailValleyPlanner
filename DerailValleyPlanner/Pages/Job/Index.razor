@@ -27,34 +27,28 @@ else
             @* <PropertyColumn Property="j => j.JobId" Title="Internal ID" /> *@
             <PropertyColumn Property="j => j.ConsistId" Title="Consist ID"/>
             @* <PropertyColumn Property="j => j.FromYard" Title="From Yard"/> *@
-            <TemplateColumn SortBy="@(j => j.FromYard)">
-                <HeaderTemplate>From Yard</HeaderTemplate>
+            <PropertyColumn Property="@(j => j.Stops.FirstOrDefault(s => s.Type == Stop.Kind.Load).StopId)" Title="Stop Index"/>
+            <PropertyColumn Property="j => j.FromYard" Title="From Yard">
+                @* <HeaderTemplate>From Yard</HeaderTemplate> *@
                 <CellTemplate>
                     <YardDisplay YardCode="@context.Item.FromYard"></YardDisplay>
                 </CellTemplate>
-            </TemplateColumn>
+            </PropertyColumn>
             <PropertyColumn Property="j => j.FromTrack" Title="From Track"/>
             @* <PropertyColumn Property="j => j.ToYard" Title="To Yard"/> *@
-            <TemplateColumn SortBy="@(j => j.ToYard)">
-                <HeaderTemplate>To Yard</HeaderTemplate>
+            <PropertyColumn Property="j => j.ToYard" Title="To Yard">
+                @* <HeaderTemplate>To Yard</HeaderTemplate> *@
                 <CellTemplate>
                     <YardDisplay YardCode="@context.Item.ToYard"></YardDisplay>
                 </CellTemplate>
-            </TemplateColumn>
+            </PropertyColumn>
             <PropertyColumn Property="j => j.ToTrack" Title="To Track"/>
             <PropertyColumn Property="j => j.Mass.ToString() + 't'" Title="Mass"/>
             <PropertyColumn Property="j => j.Length.ToString() + 'm'" Title="Length"/>
             <PropertyColumn Property="j => j.Wagons" Title="Wagon Count"/>
             <PropertyColumn Property="j => '$' + j.Pays.ToString()" Title="Pays"/>
             <PropertyColumn Property="j => j.Description" Title="Description"/>
-            <TemplateColumn SortBy="@(j => j.Mass / j.Wagons)">
-                <HeaderTemplate>
-                    Mass Per Wagon
-                </HeaderTemplate>
-                <CellTemplate>
-                    @(context.Item.Mass / context.Item.Wagons) t
-                </CellTemplate>
-            </TemplateColumn>
+            <PropertyColumn Property="j => j.MassPerWagon.ToString() + 't'" Title="Mass Per Wagon"/>
             <TemplateColumn CellClass="d-flex justify-end">
                 <CellTemplate>
                     <MudMenu Icon="fad fa-ellipsis-vertical" AnchorOrigin="Origin.BottomLeft" TransformOrigin="Origin.TopLeft">
@@ -80,7 +74,7 @@ else
 
     async Task GetJobs()
     {
-        _jobs = await PlannerContext.Jobs.ToListAsync();
+        _jobs = await PlannerContext.Jobs.Include(j => j.Stops).ToListAsync();
     }
 
     void GoToCreatePage()
