@@ -22,7 +22,7 @@ public static class MauiProgram
         var path = Environment.GetFolderPath(folder);
         // var path = AppDomain.CurrentDomain.BaseDirectory;
         // const string path = "./";
-        var dbPath = Path.Combine(path, "dvp.db");
+        var dbPath = Path.Combine(path, "data.dvp");
         
         Console.WriteLine($"dbPath : {dbPath}");
 
@@ -56,7 +56,7 @@ public static class MauiProgram
         var services = scope.ServiceProvider;
 
         var context = services.GetRequiredService<PlannerContext>();
-        // context.Database.EnsureDeleted();
+        context.Database.EnsureDeleted();
         context.Database.EnsureCreated();
 
         return app;
