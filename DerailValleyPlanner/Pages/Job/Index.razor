@@ -49,7 +49,7 @@ else
                 <CellTemplate>
                     <MudMenu Icon="fad fa-ellipsis-vertical" AnchorOrigin="Origin.BottomLeft" TransformOrigin="Origin.TopLeft">
                         <MudMenuItem OnClick="() => GoToEditPage(context)" Icon="fas fa-pencil" IconSize="Size.Small">Edit</MudMenuItem>
-                        <MudMenuItem OnClick="() => DeleteJob(context)" Icon="fad fa-trash" IconSize="Size.Small" Disabled="@context.Item.Stops.Any()">Delete</MudMenuItem>
+                        <MudMenuItem OnClick="() => DeleteJob(context)" Icon="fad fa-trash" IconSize="Size.Small" Disabled="@(context.Item.Stops?.Any() == true)">Delete</MudMenuItem>
                     </MudMenu>
                 </CellTemplate>
             </TemplateColumn>
@@ -77,6 +77,7 @@ else
     {
         PlannerContext.Jobs.Remove(context.Item);
         await PlannerContext.SaveChangesAsync();
+        _jobs = _jobs.ToList().Where(j => j.JobId != context.Item.JobId);
         StateHasChanged();
     }
 
