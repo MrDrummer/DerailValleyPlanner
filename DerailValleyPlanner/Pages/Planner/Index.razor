@@ -22,10 +22,11 @@
 <MudTable
     Items="@_stops"
     T="Stop"
+    @ref="StopsTable"
     Dense="true"
     Hover="true"
     CanCancelEdit="true"
-    ReadOnly="@(!ReadOnly)"
+    ReadOnly="@(ReadOnly)"
     @bind-SelectedItem="selectedItem"
     CommitEditTooltip="Commit Edit"
     FixedHeader="true"
@@ -53,6 +54,10 @@
             <MudTh Style="text-align: right">Wagons Change</MudTh>
             <MudTh Style="text-align: right">Total Wagons</MudTh>
             <MudTh Style="text-align: right">Total Pay</MudTh>
+            @if (!ReadOnly)
+            {
+                <MudTh></MudTh>
+            }
         }
         else
         {
@@ -62,7 +67,7 @@
     <RowTemplate>
         @if(CurrentlyEditing)
         {
-            <MudTd DataLabel="Index">@(@context.Index + 1)</MudTd>
+            <MudTd DataLabel="Index">@(context.Index + 1)</MudTd>
         }
         <MudTd DataLabel="Yard">
             <YardDisplay YardCode="@context.Yard" />
@@ -73,7 +78,7 @@
         <MudTd DataLabel="Note">@context.Note</MudTd>
         @if (!CurrentlyEditing)
         {
-            @if (context.Jobs != null && context.Jobs.Any() && StatsMap.Any())
+            @if (context.Jobs?.Any() == true && StatsMap.Any())
             {
                 <MudTd DataLabel="MassChange" Style="text-align: right"><strong>@context.ChangeMass t</strong></MudTd>
                 <MudTd DataLabel="TotalMass" Style="text-align: right"><strong>@StatsMap[context.StopId].Mass t</strong></MudTd>
@@ -96,6 +101,12 @@
             {
                 <MudTd colspan="7"></MudTd>
             }
+            @if (!ReadOnly)
+            {
+                <MudTd>
+                    <MudButton OnClick="() => DeleteStop(context)" Disabled="@(context.Jobs?.Any() == true)" StartIcon="fad fa-trash" IconSize="Size.Small"/>
+                </MudTd>
+            }
         }
         else
         {
@@ -104,7 +115,7 @@
     </RowTemplate>
     <RowEditingTemplate>
         @{
-            // var disableChange = context.Jobs != null && context.Jobs.Any();
+            // var disableChange = context.Jobs != null && context.Jobs?.Any();
             const bool disableChange = false;
         }
         <MudTd DataLabel="Index">
@@ -124,15 +135,9 @@
         </MudTd>
     </RowEditingTemplate>
     <EditButtonContent Context="button">
-        <MudMenu Icon="fad fa-ellipsis-vertical" AnchorOrigin="Origin.BottomLeft" TransformOrigin="Origin.TopLeft">
-            <MudMenuItem OnClick="@button.ButtonAction" Disabled="@button.ButtonDisabled" Icon="fas fa-pencil" IconSize="Size.Small">Edit</MudMenuItem>
-            <MudMenuItem Icon="fad fa-trash" IconSize="Size.Small" Disabled="true">Delete</MudMenuItem>
-        </MudMenu>
+        <MudButton OnClick="@button.ButtonAction" Disabled="@button.ButtonDisabled" StartIcon="fad fa-pencil" IconSize="Size.Small"/>
     </EditButtonContent>
     <ChildRowContent>
-        @* <MudTr> *@
-        @*     <MudText Typo="Typo.body1">@context.Jobs?.Count()</MudText> *@
-        @* </MudTr> *@
         @if (context.Jobs?.Any() == true && !CurrentlyEditing)
         {
             @foreach (var job in context.Jobs)
@@ -157,7 +162,7 @@
                     {
                         <MudTd Style="text-align: center">-</MudTd>
                     }
-                    <MudTd></MudTd>
+                    <MudTd colspan="2"></MudTd>
                 </MudTr>
             }
         }
@@ -180,9 +185,6 @@
                 @(StatsMap.MaxBy(s => s.Value.Wagons).Value.Wagons)
             </MudTd>
             <MudTd Style="text-align: right">Total Income:</MudTd>
-            @* </MudTr> *@
-            @* <MudTr> *@
-            @*     <MudTd colspan="9"></MudTd> *@
             <MudTd Style="text-align: right">
                 $ @(_stops.Sum(s => s.TotalPay))
             </MudTd>
@@ -195,9 +197,7 @@
     [Inject]
     private PlannerContext PlannerContext { get; set; }
     
-    // [Parameter] public string EditMode { get; set; }
-
-    private bool ReadOnly = true;
+    private bool ReadOnly { get; set; } = false;
 
     private bool CurrentlyEditing = false;
     private Stop selectedItem;
@@ -211,6 +211,8 @@
         public double Length { get; set; }
         public int Wagons { get; set; }
     }
+
+    private MudTable<Stop> StopsTable;
 
     private Dictionary<int, Stats> StatsMap
     {
@@ -277,18 +279,26 @@
         };
     }
 
+    private async Task DeleteStop(Stop stop)
+    {
+        PlannerContext.Stops.Remove(stop);
+        await PlannerContext.SaveChangesAsync();
+        _stops.Remove(stop);
+        StateHasChanged();
+    }
+
     private async Task AddButton()
     {
         await AddItem(null);
     }
     
-    private async Task AddItem(Stop? _stop)
+    private async Task AddItem(Stop? stop)
     {
-        var stop = _stop ?? new Stop
+        stop ??= new Stop
         {
             Index = _stops.Count,
             Type = Stop.Kind.Via,
-            Yard = "MB",
+            Yard = "SM",
             Jobs = null,
             Note = ""
         };
