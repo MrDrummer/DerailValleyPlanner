@@ -67,8 +67,4 @@
         </None>
     </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\IndexedList\IndexedList.csproj" />
-    </ItemGroup>
-
 </Project>
