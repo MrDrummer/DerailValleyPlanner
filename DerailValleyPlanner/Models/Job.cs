@@ -66,6 +66,8 @@ public class Job
     [DisplayName("Pays")]
     [DisplayFormat(DataFormatString = "{0:C0}")]
     public int Pays { get; set; }
+
+    public bool Complete { get; set; } = false;
     
     // Free-form text to help identify the wagons.
     [MinLength(0)]
