@@ -18,7 +18,7 @@ public class Job
     // ID as seen in-game
     [Required]
     [StringLength(10, ErrorMessage = "Format: XXX-YY-NN")]
-    [RegularExpression("\\w{2,3}-\\w{2}-\\d{1,2}")]
+    [RegularExpression("\\w+-\\w{2}-\\d{1,2}")]
     [DisplayName("Consist ID")]
     public string ConsistId { get; set; }
     
@@ -61,7 +61,7 @@ public class Job
     public int Wagons { get; set; }
     
     [Required]
-    [Range(10, 100000, 
+    [Range(10, 1000000, 
         ErrorMessage = "Value for {0} must be between {1} and {2}.")]
     [DisplayName("Pays")]
     [DisplayFormat(DataFormatString = "{0:C0}")]
