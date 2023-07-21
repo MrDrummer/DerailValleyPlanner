@@ -56,7 +56,7 @@ public static class MauiProgram
         var services = scope.ServiceProvider;
 
         var context = services.GetRequiredService<PlannerContext>();
-        context.Database.EnsureDeleted();
+        // context.Database.EnsureDeleted();
         context.Database.EnsureCreated();
 
         return app;
