@@ -1,12 +1,10 @@
 # This workflow will build a .NET project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
 
-name: Build .NET MAUI App (CI)
+name: Build & Generate Artefact
 
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
     branches: [ "master" ]
 
 jobs:
@@ -32,12 +30,6 @@ jobs:
         
       - name: Debug
         run: tree
-
-#      Upload a Build Artifact
-
-#      - uses: montudor/action-zip@v1
-#        with:
-#          args: zip -qq -r dir.zip dir
 
       - name: Upload assets
         uses: actions/upload-artifact@v3
