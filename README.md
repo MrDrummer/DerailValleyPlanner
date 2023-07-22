@@ -1,6 +1,6 @@
 # DerailValleyPlanner
 
-[![Build .NET NAUI App (CI)](https://github.com/MrDrummer/DerailValleyPlanner/actions/workflows/dotnet.yml/badge.svg?branch=master&event=release)](https://github.com/MrDrummer/DerailValleyPlanner/actions/workflows/dotnet.yml)
+[![Build & Generate Artifact](https://github.com/MrDrummer/DerailValleyPlanner/actions/workflows/release.yml/badge.svg)](https://github.com/MrDrummer/DerailValleyPlanner/actions/workflows/release.yml)
 
 
 ## TODO
