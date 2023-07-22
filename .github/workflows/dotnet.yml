@@ -27,9 +27,11 @@ jobs:
 
 #      - name: Restore NuGet packages
 #        run: dotnet restore ${{ env.PROJECT_PATH }} --ignore-failed-sources
-        
       - name: Build
         run: dotnet build DerailValleyPlanner/DerailValleyPlanner.csproj -c Release -f net7.0-windows10.0.19041.0
+        
+      - name: Debug
+        run: tree
 
 #      Upload a Build Artifact
 
@@ -41,4 +43,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: Zipped
-          path: .\**\publish\**\*.*
+          path: ./**/publish/**/*.*
