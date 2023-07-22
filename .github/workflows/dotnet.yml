@@ -33,11 +33,12 @@ jobs:
 
 #      Upload a Build Artifact
 
-
-#      - name: Upload installer assets
-#        uses: actions/upload-artifact@v3
+#      - uses: montudor/action-zip@v1
 #        with:
-#          name: Assets
-#          path: |
-#            Installer/Assets/*
-#          retention-days: 60
+#          args: zip -qq -r dir.zip dir
+
+      - name: Upload assets
+        uses: actions/upload-artifact@v3
+        with:
+          name: Zipped
+          path: .\**\publish\**\*.*
