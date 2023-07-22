@@ -43,4 +43,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: Derail Valley Planner (Portable)
-          path: ./bin/**/win10-x64/**/*.*
+          path: ./DerailValleyPlanner/bin/**/win10-x64/**/*.*
