@@ -15,9 +15,7 @@
 <MudSwitch @bind-Checked="@ReadOnly">Edit Mode</MudSwitch>
 @* @if (!ReadOnly) *@
 @* { *@
-<MudButton
-    OnClick="AddButton"
->Add Stop</MudButton>
+<MudButton OnClick="AddButton" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Add Stop</MudButton>
 @* } *@
 <MudTable
     Items="@_stops"
