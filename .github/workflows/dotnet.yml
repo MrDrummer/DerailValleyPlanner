@@ -23,18 +23,24 @@ jobs:
           dotnet-version: 7.0.x
 
       - name: Install .NET Maui
-        run: dotnet workload install maui
+        run: dotnet workload install maui-windows
 
 #      - name: Restore NuGet packages
 #        run: dotnet restore ${{ env.PROJECT_PATH }} --ignore-failed-sources
-        
       - name: Build
         run: dotnet build DerailValleyPlanner/DerailValleyPlanner.csproj -c Release -f net7.0-windows10.0.19041.0
+        
+      - name: Debug
+        run: tree
 
-#      - name: Upload installer assets
-#        uses: actions/upload-artifact@v3
+#      Upload a Build Artifact
+
+#      - uses: montudor/action-zip@v1
 #        with:
-#          name: Assets
-#          path: |
-#            Installer/Assets/*
-#          retention-days: 60
+#          args: zip -qq -r dir.zip dir
+
+      - name: Upload assets
+        uses: actions/upload-artifact@v3
+        with:
+          name: Derail Valley Planner (Portable)
+          path: ./DerailValleyPlanner/bin/**/win10-x64/**/*.*

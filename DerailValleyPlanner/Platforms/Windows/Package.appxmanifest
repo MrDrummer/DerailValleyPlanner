@@ -6,13 +6,13 @@
   xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
   IgnorableNamespaces="uap rescap">
 
-  <Identity Name="maui-package-name-placeholder" Publisher="CN=User Name" Version="0.0.0.0" />
+  <Identity Name="derail-valley-planner" Publisher="CN=MrDrummer25" Version="0.0.1.0" />
 
   <mp:PhoneIdentity PhoneProductId="F29D1B67-985E-4746-91BC-D01C208D2779" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>$placeholder$</DisplayName>
-    <PublisherDisplayName>User Name</PublisherDisplayName>
+    <PublisherDisplayName>MrDrummer25</PublisherDisplayName>
     <Logo>$placeholder$.png</Logo>
   </Properties>
 

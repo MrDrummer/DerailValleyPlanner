@@ -1,6 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using IndexedList;
-using Microsoft.EntityFrameworkCore;
 
 namespace DerailValleyPlanner.Models;
 
@@ -20,10 +18,6 @@ public class Stop : Indexed
     [Key]
     public int StopId { set; get; }
     
-    // [Required]
-    // TODO: Clarify if this "new" will allow the Index in the base class to work?
-    // public int Index { get; set; }
-    
     [Required]
     public string Yard { get; set; }
     
@@ -33,6 +27,8 @@ public class Stop : Indexed
     [MinLength(0)]
     [MaxLength(1000)]
     public string Note { get; set; }
+
+    public override string ToString() => StopId.ToString();
     
     public IEnumerable<Job> Jobs { get; set; }
     
@@ -71,7 +67,7 @@ public class Stop : Indexed
     {
         get
         {
-            return Jobs?.Sum(j => j.Pays) ?? 0;
+            return (Jobs != null && Jobs.Any() && Type == Kind.Unload) ? Jobs.Sum(j => j.Pays) : 0;
         }
     }
 }

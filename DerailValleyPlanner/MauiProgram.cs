@@ -18,11 +18,11 @@ public static class MauiProgram
 
         builder.Services.AddMauiBlazorWebView();
         
-        // const Environment.SpecialFolder folder = Environment.SpecialFolder.LocalApplicationData;
-        // var path = Environment.GetFolderPath(folder);
+        const Environment.SpecialFolder folder = Environment.SpecialFolder.MyDocuments;
+        var path = Environment.GetFolderPath(folder);
         // var path = AppDomain.CurrentDomain.BaseDirectory;
-        const string path = "./";
-        var dbPath = Path.Join(path, "dvp.db");
+        // const string path = "./";
+        var dbPath = Path.Combine(path, "data.dvp");
         
         Console.WriteLine($"dbPath : {dbPath}");
 

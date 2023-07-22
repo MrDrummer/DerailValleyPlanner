@@ -3,14 +3,34 @@
 
 @inject ConfigService Config
 
-<MudChip Style="@($"background-color: {_yard.Color};")">
-    <MudIcon Icon="fas fa-location-dot" Style="@($"color: {Colors.Red.Default};")"/>
-    @_yard.Name (@_yard.Code)
-</MudChip>
+@if(Short)
+{
+    <MudTooltip Placement="Placement.Left" Arrow="true" Color="Color.Dark">
+        <ChildContent>
+            <MudChip Style="@($"background-color: {_yard.Color};")">
+                <MudIcon Icon="fas fa-location-dot" Style="@($"color: {Colors.Red.Default};")"/>
+                @_yard.Code
+            </MudChip>
+        </ChildContent>
+        <TooltipContent>
+            @_yard.Name
+        </TooltipContent>
+    </MudTooltip>
+}
+else
+{
+    <MudChip Style="@($"background-color: {_yard.Color};")">
+        <MudIcon Icon="fas fa-location-dot" Style="@($"color: {Colors.Red.Default};")"/>
+        @_yard.Name (@_yard.Code)
+    </MudChip>
+}
 
 @code {
     [Parameter]
     public string YardCode { get; set; }
+
+    [Parameter]
+    public bool Short { get; set; } = false;
 
     private Yard _yard;
 

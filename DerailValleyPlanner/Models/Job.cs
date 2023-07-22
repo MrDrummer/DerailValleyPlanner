@@ -18,7 +18,7 @@ public class Job
     // ID as seen in-game
     [Required]
     [StringLength(10, ErrorMessage = "Format: XXX-YY-NN")]
-    [RegularExpression("\\w{2,3}-\\w{2}-\\d{1,2}")]
+    [RegularExpression("\\w+-\\w{2}-\\d{1,2}")]
     [DisplayName("Consist ID")]
     public string ConsistId { get; set; }
     
@@ -61,18 +61,26 @@ public class Job
     public int Wagons { get; set; }
     
     [Required]
-    [Range(10, 100000, 
+    [Range(10, 1000000, 
         ErrorMessage = "Value for {0} must be between {1} and {2}.")]
     [DisplayName("Pays")]
     [DisplayFormat(DataFormatString = "{0:C0}")]
     public int Pays { get; set; }
+
+    public bool Complete { get; set; } = false;
     
     // Free-form text to help identify the wagons.
     [MinLength(0)]
     [MaxLength(1000)]
     [DisplayName("Description")]
     public string Description { get; set; }
+
+    public double MassPerWagon => Math.Round((double)Mass / Wagons, 2);
+
+    public int? FromIndex => Stops.FirstOrDefault(s => s.Type == Stop.Kind.Load)?.StopId;
     
+    public int? ToIndex => Stops.FirstOrDefault(s => s.Type == Stop.Kind.Unload)?.StopId;
+
     public IEnumerable<Stop> Stops { get; set; }
 
     // Note: this is important so the select can compare pizzas

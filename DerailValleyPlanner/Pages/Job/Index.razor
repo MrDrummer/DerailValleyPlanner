@@ -11,48 +11,47 @@
 @if (_jobs == null)
 {
     <p>
-        <em>Loading...</em>
+        <em>Loading Jobs...</em>
     </p>
 }
 else
 {
-    // Filterable="true"
-    // SortMode="SortMode.Multiple"
+    <MudSwitch @bind-Checked="@_showComplete">Show Complete Jobs</MudSwitch>
     <MudDataGrid
+        Filterable="true"
         Items="@_jobs"
         T="Job"
         Groupable="false"
-        Dense="true"
-    >
+        Dense="true">
         <Columns>
             @* <PropertyColumn Property="j => j.JobId" Title="Internal ID" /> *@
             <PropertyColumn Property="j => j.ConsistId" Title="Consist ID"/>
-            @* <PropertyColumn Property="j => j.FromYard" Title="From Yard"/> *@
-            <TemplateColumn>
-                <HeaderTemplate>From Yard</HeaderTemplate>
+            <PropertyColumn Property="j => j.FromIndex" Title="From Index"/>
+            <PropertyColumn Property="j => j.FromYard" Title="From Yard">
                 <CellTemplate>
-                    <YardDisplay YardCode="@context.Item.FromYard"></YardDisplay>
+                    <YardDisplay YardCode="@context.Item.FromYard" Short="true"></YardDisplay>
                 </CellTemplate>
-            </TemplateColumn>
+            </PropertyColumn>
             <PropertyColumn Property="j => j.FromTrack" Title="From Track"/>
-            @* <PropertyColumn Property="j => j.ToYard" Title="To Yard"/> *@
-            <TemplateColumn>
-                <HeaderTemplate>To Yard</HeaderTemplate>
+            <PropertyColumn Property="j => j.ToIndex" Title="To Index"/>
+            <PropertyColumn Property="j => j.ToYard" Title="To Yard">
                 <CellTemplate>
-                    <YardDisplay YardCode="@context.Item.ToYard"></YardDisplay>
+                    <YardDisplay YardCode="@context.Item.ToYard" Short="true"></YardDisplay>
                 </CellTemplate>
-            </TemplateColumn>
+            </PropertyColumn>
             <PropertyColumn Property="j => j.ToTrack" Title="To Track"/>
             <PropertyColumn Property="j => j.Mass.ToString() + 't'" Title="Mass"/>
             <PropertyColumn Property="j => j.Length.ToString() + 'm'" Title="Length"/>
             <PropertyColumn Property="j => j.Wagons" Title="Wagon Count"/>
             <PropertyColumn Property="j => '$' + j.Pays.ToString()" Title="Pays"/>
             <PropertyColumn Property="j => j.Description" Title="Description"/>
-            <TemplateColumn CellClass="d-flex justify-end">
+            <PropertyColumn Property="j => j.MassPerWagon.ToString() + 't'" Title="Mass Per Wagon"/>
+            <TemplateColumn CellClass="d-flex justify-end" Sortable="false" Filterable="false">
                 <CellTemplate>
                     <MudMenu Icon="fad fa-ellipsis-vertical" AnchorOrigin="Origin.BottomLeft" TransformOrigin="Origin.TopLeft">
-                        <MudMenuItem OnClick="() => GoToEditPage(context)">Edit</MudMenuItem>
-                        <MudMenuItem>Delete</MudMenuItem>
+                        <MudMenuItem OnClick="() => GoToEditPage(context)" Icon="fas fa-pencil" IconSize="Size.Small">Edit</MudMenuItem>
+                        <MudMenuItem OnClick="() => ToggleDoneStatus(context)" Icon="@("fad fa-square" + (context.Item.Complete ? "" : "-check"))" IconSize="Size.Small">@(context.Item.Complete ? "Incomplete" : "Complete")</MudMenuItem>
+                        <MudMenuItem OnClick="() => DeleteJob(context)" Icon="fad fa-trash" IconSize="Size.Small" Disabled="@(context.Item.Stops?.Any() == true)">Delete</MudMenuItem>
                     </MudMenu>
                 </CellTemplate>
             </TemplateColumn>
@@ -65,6 +64,8 @@ else
 
     [Inject]
     private PlannerContext PlannerContext { get; set; }
+
+    private bool _showComplete = false;
     
     protected override async Task OnInitializedAsync()
     {
@@ -73,7 +74,24 @@ else
 
     async Task GetJobs()
     {
-        _jobs = await PlannerContext.Jobs.ToListAsync();
+        _jobs = await PlannerContext.Jobs.Include(j => j.Stops).ToListAsync();
+    }
+
+    async Task DeleteJob(CellContext<Job> context)
+    {
+        PlannerContext.Jobs.Remove(context.Item);
+        await PlannerContext.SaveChangesAsync();
+        _jobs = _jobs.ToList().Where(j => j.JobId != context.Item.JobId);
+        StateHasChanged();
+    }
+    
+    async Task ToggleDoneStatus(CellContext<Job> context)
+    {
+        context.Item.Complete = !context.Item.Complete;
+        PlannerContext.Jobs.Update(context.Item);
+        await PlannerContext.SaveChangesAsync();
+        await GetJobs();
+        StateHasChanged();
     }
 
     void GoToCreatePage()
@@ -83,6 +101,8 @@ else
 
     void GoToEditPage(CellContext<Job> context)
     {
+        
         NavManager.NavigateTo($"/job/edit/{context.Item.JobId}");
     }
+
 }
