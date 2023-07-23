@@ -6,6 +6,9 @@ name: Build & Generate Artifact
 on:
   push:
     branches: [ "master" ]
+  release:
+    types:
+      - published
 
 jobs:
   build:
