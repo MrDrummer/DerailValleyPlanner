@@ -26,14 +26,14 @@ else
         <Columns>
             @* <PropertyColumn Property="j => j.JobId" Title="Internal ID" /> *@
             <PropertyColumn Property="j => j.ConsistId" Title="Consist ID"/>
-            <PropertyColumn Property="j => j.FromIndex" Title="From Index"/>
+            <PropertyColumn Property="j => j.FromIndex + 1" Title="From Index"/>
             <PropertyColumn Property="j => j.FromYard" Title="From Yard">
                 <CellTemplate>
                     <YardDisplay YardCode="@context.Item.FromYard" Short="true"></YardDisplay>
                 </CellTemplate>
             </PropertyColumn>
             <PropertyColumn Property="j => j.FromTrack" Title="From Track"/>
-            <PropertyColumn Property="j => j.ToIndex" Title="To Index"/>
+            <PropertyColumn Property="j => j.ToIndex + 1" Title="To Index"/>
             <PropertyColumn Property="j => j.ToYard" Title="To Yard">
                 <CellTemplate>
                     <YardDisplay YardCode="@context.Item.ToYard" Short="true"></YardDisplay>
