@@ -77,9 +77,9 @@ public class Job
 
     public double MassPerWagon => Math.Round((double)Mass / Wagons, 2);
 
-    public int? FromIndex => Stops.FirstOrDefault(s => s.Type == Stop.Kind.Load)?.StopId;
+    public int? FromIndex => Stops.FirstOrDefault(s => s.Type == Stop.Kind.Load)?.Index;
     
-    public int? ToIndex => Stops.FirstOrDefault(s => s.Type == Stop.Kind.Unload)?.StopId;
+    public int? ToIndex => Stops.FirstOrDefault(s => s.Type == Stop.Kind.Unload)?.Index;
 
     public IEnumerable<Stop> Stops { get; set; }
 
