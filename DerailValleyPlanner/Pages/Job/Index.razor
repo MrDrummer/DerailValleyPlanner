@@ -46,7 +46,7 @@ else
             <PropertyColumn Property="j => '$' + j.Pays.ToString()" Title="Pays"/>
             <PropertyColumn Property="j => j.Description" Title="Description"/>
             <PropertyColumn Property="j => j.MassPerWagon.ToString() + 't'" Title="Mass Per Wagon"/>
-            <PropertyColumn Property="j => j.Complete" Title="" CellClass="d-flex justify-end" Sortable="true" Filterable="true">
+            <PropertyColumn Property="j => j.Complete" Title="Completed" CellClass="d-flex justify-end" Sortable="true" Filterable="true">
                 <CellTemplate>
                     <MudMenu Icon="fad fa-ellipsis-vertical" AnchorOrigin="Origin.BottomLeft" TransformOrigin="Origin.TopLeft">
                         <MudMenuItem OnClick="() => GoToEditPage(context)" Icon="fas fa-pencil" IconSize="Size.Small">Edit</MudMenuItem>
