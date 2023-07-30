@@ -16,7 +16,7 @@
 }
 else
 {
-    <MudSwitch @bind-Checked="@_showComplete">Show Complete Jobs</MudSwitch>
+    @* <MudSwitch @bind-Checked="@_showComplete">Show Complete Jobs</MudSwitch> *@
     <MudDataGrid
         Filterable="true"
         Items="@_jobs"
@@ -46,7 +46,7 @@ else
             <PropertyColumn Property="j => '$' + j.Pays.ToString()" Title="Pays"/>
             <PropertyColumn Property="j => j.Description" Title="Description"/>
             <PropertyColumn Property="j => j.MassPerWagon.ToString() + 't'" Title="Mass Per Wagon"/>
-            <TemplateColumn CellClass="d-flex justify-end" Sortable="false" Filterable="false">
+            <PropertyColumn Property="j => j.Complete" Title="Completed" CellClass="d-flex justify-end" Sortable="true" Filterable="true">
                 <CellTemplate>
                     <MudMenu Icon="fad fa-ellipsis-vertical" AnchorOrigin="Origin.BottomLeft" TransformOrigin="Origin.TopLeft">
                         <MudMenuItem OnClick="() => GoToEditPage(context)" Icon="fas fa-pencil" IconSize="Size.Small">Edit</MudMenuItem>
@@ -54,7 +54,7 @@ else
                         <MudMenuItem OnClick="() => DeleteJob(context)" Icon="fad fa-trash" IconSize="Size.Small" Disabled="@(context.Item.Stops?.Any() == true)">Delete</MudMenuItem>
                     </MudMenu>
                 </CellTemplate>
-            </TemplateColumn>
+            </PropertyColumn>
         </Columns>
     </MudDataGrid>
 }
